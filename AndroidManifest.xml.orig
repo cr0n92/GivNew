@@ -3,10 +3,13 @@
     package="com.givmed.android"
     android:installLocation="preferExternal">
 
+<<<<<<< HEAD
+=======
     <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="23"/>
 
 
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -16,6 +19,11 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
 
+<<<<<<< HEAD
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_givmed_logo"
+=======
 
     <!-- [START gcm_permission] -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -30,12 +38,15 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_givmed_logo"
+        android:icon="@mipmap/ic_launcher"
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name="com.givmed.android.AnalyticsApplication" >
 
+<<<<<<< HEAD
+=======
 
         <!-- [START gcm_receiver] -->
         <receiver
@@ -82,6 +93,7 @@
 
         <receiver android:name="com.givmed.android.NotificationPublisher" />
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
         <activity
             android:name="com.givmed.android.TwoButtons"
             android:label="two_buttons"
@@ -98,6 +110,7 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
+<<<<<<< HEAD
             android:name="com.givmed.android.Number"
             android:label="number"
             android:theme="@style/AppTheme.NoActionBar" >
@@ -118,6 +131,8 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
+=======
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
             android:name="com.givmed.android.BarcodeScanner"
             android:label="barcode_scanner"
             android:theme="@style/AppTheme.NoActionBar" >
@@ -177,8 +192,13 @@
             android:name="com.givmed.android.VerifyService"
             android:exported="false" />
         <activity
+<<<<<<< HEAD
             android:name="com.givmed.android.Communication"
             android:label="communication"
+=======
+            android:name="com.givmed.android.Email"
+            android:label="email"
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>

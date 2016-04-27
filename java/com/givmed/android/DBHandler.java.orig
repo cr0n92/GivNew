@@ -22,9 +22,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // Table names
     private static final String TABLE_NEEDS = "need";
+<<<<<<< HEAD
     private static final String TABLE_MEDS = "med";
     private static final String TABLE_DONATIONS = "donations";
     private static final String TABLE_NAMES = "names";
+=======
+    public static final String TABLE_MEDS = "med";
+    private static final String TABLE_DONATIONS = "donations";
+    public static final String TABLE_NAMES = "names";
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 
     // Needs Table Columns names
     private static final String KEY_PHONE = "phone";
@@ -35,7 +41,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // Meds Table Columns names
     private static final String KEY_BARCODE = "barcode";
+<<<<<<< HEAD
     private static final String KEY_NAME = "name";
+=======
+    public static final String KEY_NAME = "name";
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
     private static final String KEY_EXP_DATE = "expDate";
     private static final String KEY_PRICE = "price";
     private static final String KEY_NOTES = "notes";
@@ -54,8 +64,13 @@ public class DBHandler extends SQLiteOpenHelper {
 //    private static final String KEY_CATEG = "category";
 
     // Meds Names Table Columns names
+<<<<<<< HEAD
     private static final String KEY_COUNT = "count";
     private static final String KEY_S_DATE = "sDate";
+=======
+    public static final String KEY_COUNT = "count";
+    public static final String KEY_S_DATE = "sDate";
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 
     // Table Create Statements
     private static final String CREATE_NEEDS_TABLE = "CREATE TABLE " + TABLE_NEEDS + "("
@@ -116,6 +131,8 @@ public class DBHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+<<<<<<< HEAD
+=======
     public void deleteMeds() {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -135,6 +152,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
     /*---------------- needs functions ----------------------------*/
     // Adding new need
     public void addNeed(Need need) {
@@ -465,7 +483,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
+<<<<<<< HEAD
+=======
+        //Log.e("cursor rows 2", "" + cursor.getCount());
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 
         // looping through all rows and adding to adapter
         if (cursor.moveToFirst()) {
@@ -487,4 +509,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
         return count;
     }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 }

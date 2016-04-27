@@ -1,7 +1,6 @@
 package com.givmed.android;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,21 +8,27 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+<<<<<<< HEAD
 import com.givmed.android.R;
 
+=======
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 import java.util.ArrayList;
 import java.util.List;
 
-public class MedNameAdapter extends BaseAdapter {
+/**
+ * Created by agroikos on 29/11/2015.
+ */
+public class MedicineAdapter extends BaseAdapter {
 
-    public final List<MedName> mItems = new ArrayList<MedName>();
+    public final List<Medicine> mItems = new ArrayList<Medicine>();
     private final Context mContext;
 
-    public MedNameAdapter(Context context) {
+    public MedicineAdapter(Context context) {
         mContext = context;
     }
 
-    public void add(MedName item) {
+    public void add(Medicine item) {
         mItems.add(item);
         notifyDataSetChanged();
     }
@@ -39,21 +44,19 @@ public class MedNameAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    // Returns the number of Medicine Name
+    // Returns the number of Medicine
     @Override
     public int getCount() {
-        Log.e("count",""+mItems.size());
-
         return mItems.size();
     }
 
-    // Retrieve the number of the Medicine Name
+    // Retrieve the number of the Medicine
     @Override
     public Object getItem(int pos) {
         return mItems.get(pos);
     }
 
-    // Get the ID for the Medicine Name
+    // Get the ID for the Medicine
     // In this case it's just the position
     @Override
     public long getItemId(int pos) {
@@ -62,24 +65,28 @@ public class MedNameAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) { //called after setAdapter,notifyDataSetChanged
-        final MedName name = (MedName) getItem(position);
-        String num = "";
+        final Medicine med = (Medicine) getItem(position);
 
-        // from medName.xml
+        // from medicine.xml
         LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(mContext).inflate(
-                R.layout.med_name, parent, false);
+                R.layout.medicine, parent, false);
 
-        // Fill in specific MedName data
+        // Fill in specific Medicine data
         // Remember that the data that goes in this View
         // corresponds to the user interface elements defined
         // in the layout file
 
         final TextView titleView = (TextView) itemLayout.findViewById(R.id.titleView);
-        if (!name.getCount().equals("1")) num = " (" + name.getCount() + ")";
-        titleView.setText(name.getName() + num);
+        titleView.setText(med.getName());
+
+        final TextView quantity = (TextView) itemLayout.findViewById(R.id.quantityView);
+        quantity.setText(med.getPrice());
 
         final TextView dateView = (TextView) itemLayout.findViewById(R.id.dateView);
-        dateView.setText(name.getDate());
+        dateView.setText(med.getDate());
+
+        final TextView barcodeView = (TextView) itemLayout.findViewById(R.id.barcodeView);
+        barcodeView.setText(med.getBarcode());
 
         // Return the View you just created
         return itemLayout;

@@ -1,10 +1,14 @@
 package com.givmed.android;
 
 import android.app.Application;
+<<<<<<< HEAD
+
+import com.givmed.android.R;
+=======
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
-import com.givmed.android.R;
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -27,9 +31,12 @@ public class AnalyticsApplication extends Application {
         }
         return mTracker;
     }
+<<<<<<< HEAD
+=======
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 }
 

@@ -13,8 +13,6 @@ import com.givmed.android.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 public class NeedAdapter extends BaseAdapter {
 
     public final List<Need> mItems = new ArrayList<Need>();
@@ -73,7 +71,6 @@ public class NeedAdapter extends BaseAdapter {
         // in the layout file
 
         final TextView titleView = (TextView) itemLayout.findViewById(R.id.nameView);
-        Log.i("kkakaka", ""+ titleView);
         titleView.setText(toDoItem.getNeedName());
 
         final TextView dateView = (TextView) itemLayout.findViewById(R.id.regionView);

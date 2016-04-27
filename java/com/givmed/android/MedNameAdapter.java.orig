@@ -1,7 +1,10 @@
 package com.givmed.android;
 
 import android.content.Context;
+<<<<<<< HEAD
+=======
 import android.util.Log;
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +12,11 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+<<<<<<< HEAD
 import com.givmed.android.R;
 
+=======
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,8 +48,11 @@ public class MedNameAdapter extends BaseAdapter {
     // Returns the number of Medicine Name
     @Override
     public int getCount() {
+<<<<<<< HEAD
+=======
         Log.e("count",""+mItems.size());
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
         return mItems.size();
     }
 

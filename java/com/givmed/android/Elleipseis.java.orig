@@ -1,5 +1,10 @@
 package com.givmed.android;
 
+<<<<<<< HEAD
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
+=======
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,10 +22,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+<<<<<<< HEAD
+import com.givmed.android.R;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+=======
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +53,16 @@ public class Elleipseis extends HelperActivity
     private static Button nameButton, regionButton;
     DBHandler db;
 
+<<<<<<< HEAD
+    private Tracker mTracker;
+
+    public static void changeButtonsLayout(Button pressed, Button unpressed, int presDraw, int unpresDraw) {
+        pressed.setTextColor(Color.WHITE);
+        pressed.setBackgroundResource(presDraw);
+        unpressed.setTextColor(Color.BLACK);
+        unpressed.setBackgroundResource(unpresDraw);
+    }
+=======
 
     private Tracker mTracker;
 
@@ -54,6 +76,7 @@ public class Elleipseis extends HelperActivity
 
 
     //!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!1
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +84,8 @@ public class Elleipseis extends HelperActivity
         super.setMenu(R.menu.menu_main_simple);
         super.helperOnCreate(R.layout.eleipseis, R.string.elleipseis, false);
 
+<<<<<<< HEAD
+=======
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         pref = new PrefManager(getApplicationContext());
 
@@ -95,6 +120,7 @@ public class Elleipseis extends HelperActivity
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
         msgView = (TextView) findViewById(R.id.secondMes);
         nameButton = (Button) findViewById(R.id.nameButton);
         regionButton = (Button) findViewById(R.id.regionButton);
@@ -105,9 +131,12 @@ public class Elleipseis extends HelperActivity
             @Override
             public void onClick(View v) {
                 changeButtonsLayout(nameButton, regionButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right);
+<<<<<<< HEAD
+=======
                 mAdapter.clear();
                 db.getAllNeeds(mAdapter, "needName");
                 pref.setNotificationPermission(false);
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
             }
         });
 
@@ -116,10 +145,13 @@ public class Elleipseis extends HelperActivity
             @Override
             public void onClick(View v) {
                 changeButtonsLayout(regionButton, nameButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left);
+<<<<<<< HEAD
+=======
                 mAdapter.clear();
                 db.getAllNeeds(mAdapter, "region");
                 pref.setNotificationPermission(true);
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
             }
         });
 
@@ -146,6 +178,16 @@ public class Elleipseis extends HelperActivity
 
         if (isOnline())
             new HttpGetTask().execute();
+<<<<<<< HEAD
+        else
+            ;
+
+        int count = db.getAllNeeds(mAdapter, "region");
+        int right_msg = (count == 1) ? R.string.need_right_half_msg_single : R.string.need_right_half_msg_plural;
+        msgView.setText(getResources().getString(R.string.need_left_half_msg) + " " + count + " " + getResources().getString(right_msg));
+    }
+
+=======
         else {
             int count = db.getAllNeeds(mAdapter, "region");
             int right_msg = (count == 1) ? R.string.need_right_half_msg_single : R.string.need_right_half_msg_plural;
@@ -204,6 +246,7 @@ public class Elleipseis extends HelperActivity
     }
     //!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
     private class HttpGetTask extends AsyncTask<Void, Void, JSONArray> {
 
         private static final String TAG = "HttpGetTask";
@@ -261,7 +304,11 @@ public class Elleipseis extends HelperActivity
                 Toast.makeText(getApplicationContext(), (error == 1)? "No internet connection" : "Nothing to show",
                         Toast.LENGTH_LONG).show();
             } else {
+<<<<<<< HEAD
+                db.deleteAll();
+=======
                 db.deleteNeeds();
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
                 try {
                     for(int i=0; i<result.length(); i++) {
                         JSONObject json = result.getJSONObject(i);
@@ -271,6 +318,9 @@ public class Elleipseis extends HelperActivity
                         needo.setPhone(json.getString("needPhone"));
                         needo.setAddress(json.getString("needAddress"));
                         needo.setName("ellhnikou");
+<<<<<<< HEAD
+                        needo.setRegion("lelos");
+=======
                         if (i==0)
                             needo.setRegion("lelos");
                         if (i==1)
@@ -280,15 +330,19 @@ public class Elleipseis extends HelperActivity
                         if (i==3)
                             needo.setRegion("clelos");
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
                         db.addNeed(needo);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+<<<<<<< HEAD
+=======
                 int count = db.getAllNeeds(mAdapter, "needName");
                 int right_msg = (count == 1) ? R.string.need_right_half_msg_single : R.string.need_right_half_msg_plural;
                 msgView.setText(getResources().getString(R.string.need_left_half_msg) + " " + count + " " + getResources().getString(right_msg));
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
             }
         }
     }

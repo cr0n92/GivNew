@@ -8,8 +8,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+<<<<<<< HEAD
 import com.givmed.android.R;
 
+=======
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 public class Farmakeio extends HelperActivity implements AdapterView.OnItemClickListener {
 
     public static MedNameAdapter mAdapter;
@@ -25,8 +28,11 @@ public class Farmakeio extends HelperActivity implements AdapterView.OnItemClick
         super.helperOnCreate(R.layout.pharmacy_names, R.string.farmakeio, true);
 
         db = new DBHandler(getApplicationContext());
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
         msgView = (TextView) findViewById(R.id.secondMes);
         msgView.setText(getResources().getString(R.string.pharm_left_half_msg) + " (0) " + getResources().getString(R.string.pharm_right_half_msg_plural));
 
@@ -44,13 +50,18 @@ public class Farmakeio extends HelperActivity implements AdapterView.OnItemClick
         list.setFooterDividersEnabled(true);
         list.setAdapter(mAdapter);
 
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
         count = db.getAllNamesToAdapter(mAdapter);
         int right_msg = (count == 1) ? R.string.pharm_right_half_msg_single : R.string.pharm_right_half_msg_plural;
         msgView.setText(getResources().getString(R.string.pharm_left_half_msg) + " (" + count + ") " + getResources().getString(right_msg));
     }
 
+<<<<<<< HEAD
+=======
 //    @Override
 //    protected void onNewIntent (Intent intent){
 //        if (intent.hasExtra("outputter")) {
@@ -71,6 +82,7 @@ public class Farmakeio extends HelperActivity implements AdapterView.OnItemClick
 
     }
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
         MedName name = (MedName) mAdapter.getItem(position);
 

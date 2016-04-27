@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_tick"
+        android:orderInCategory="200"
+        android:title="@string/action_tick"
+<<<<<<< HEAD
+        android:icon="@drawable/ic_tick"
+=======
+        android:icon="@drawable/ic_action_tick"
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_divider"
+        android:orderInCategory="100"
+        android:title="bar"
+        android:enabled="false"
+        android:icon="@drawable/ic_bar"
+        app:showAsAction="always" />
+
+</menu>

@@ -41,10 +41,13 @@ public class PrefManager {
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_MOBILE = "mobile";
+<<<<<<< HEAD
+=======
     private static final String KEY_TOKEN = "token";
     private static final String KEY_NOTIFICATION_PERMIT = "notification_permit";
 
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 
     public PrefManager(Context context) {
         this._context = context;
@@ -70,6 +73,8 @@ public class PrefManager {
         return pref.getString(KEY_MOBILE_NUMBER, null);
     }
 
+<<<<<<< HEAD
+=======
     public String getToken() {
         return pref.getString(KEY_TOKEN, null);
     }
@@ -88,6 +93,7 @@ public class PrefManager {
         editor.commit();
     }
 
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
     public void createLogin() {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.commit();

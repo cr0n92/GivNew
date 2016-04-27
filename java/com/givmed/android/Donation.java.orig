@@ -1,5 +1,10 @@
 package com.givmed.android;
 
+<<<<<<< HEAD
+import android.content.Intent;
+
+=======
+>>>>>>> 2979fed8d513939ad12665a73d403ddb569d3af0
 public class Donation {
     public static final String ITEM_SEP = System.getProperty("line.separator");
 

@@ -1,0 +1,116 @@
+<resources>
+    <string name="app_name">GivMed</string>
+    <string name="barcode">Barcode Scanning...</string>
+
+    <!-- Ονόματα των Activities στο Tool Bar -->
+    <string name="inputter">Εισαγωγή</string>
+    <string name="outputer">Καταχώρηση</string>
+    <string name="two_buttons">Επιλογή</string>
+    <string name="elleipseis">Ελλείψεις</string>
+    <string name="dwrees">Δωρεές</string>
+    <string name="farmakeio">Φαρμακείο</string>
+    <string name="register">Eγγραφή</string>
+
+    <!-- Καταχώρηση -->
+    <string name="med_name">Όνομα Φαρμάκου</string>
+    <string name="expiration_date">Ημ. λήξης</string>
+    <string name="med_condition">Ανοιχτή συσκευασία</string>
+
+    <!-- Προσωπικό Φαρμακείο -->
+    <string name="home_message">Δες πόσα φάρμακα έχεις στο σπίτι σου, παρακάτω!</string>
+    <string name="pharm_left_half_msg">Έχεις καταχωρήσει</string>
+    <string name="pharm_right_half_msg_plural">φάρμακα!</string>
+    <string name="pharm_right_half_msg_single">φάρμακo!</string>
+    <string name="naming_caps">ΟΝΟΜΑΣΙΑ</string>
+    <string name="expire_caps">ΗΜ. ΛΗΞΗΣ</string>
+
+    <!-- Δωρεές -->
+    <string name="donation_med">φάρμακα αξίας</string>
+    <string name="donation_meds">φάρμακο αξίας</string>
+    <string name="donation_euros">ευρώ!</string>
+    <string name="donation_choose_msg">Επίλεξε ποιό θέλεις να δωρίσεις πρώτο από την παρακάτω λίστα.</string>
+    <string name="scheduled">Προγραμματισμενες</string>
+    <string name="done">Ολοκληρωμενες</string>
+    <string name="farmako_caps">ΦΑΡΜΑΚΟ</string>
+    <string name="perioxh_caps">ΠΕΡΙΟΧΗ</string>
+    <string name="date_caps">ΗΜ/ΝΙΑ</string>
+
+    <!-- Δυο κουμπιά -->
+    <string name="two_btn_first_msg">Καταχώρησε τα φαρμακά σου!</string>
+    <string name="two_btn_second_msg">Σκάναρε το barcode ή πληκτρολόγησε τον κωδικό που βρίσκεται επάνω στο κουτί!</string>
+    <string name="scan_button">Σκάναρε</string>
+    <string name="input_button">Πληκτρολόγησε</string>
+
+    <!-- Ελείψεις -->
+    <string name="region">Περιοχή</string>
+    <string name="need_your_help">Η βοήθειά σου είναι πολύ σημαντική!</string>
+    <string name="need_left_half_msg">Αυτή τη στιγμή υπάρχουν ελείψεις σε</string>
+    <string name="need_right_half_msg_plural">φάρμακα! Έχεις κάποιο από αυτά; Δωρισέ το!</string>
+    <string name="need_right_half_msg_single">φάρμακo! Άν το έχεις, δωρισέ το.</string>
+
+    <!-- Προφίλ -->
+    <string name="username">Όνομα χρήστη</string>
+    <string name="birth_date">Ημ. Γένησης</string>
+    <string name="pickup_address">Διεύθυνση</string>
+    <string name="male">Άντρας</string>
+    <string name="female">Γυναίκα</string>
+    <string name="phone">Τηλέφωνο</string>
+    <string name="email">Email</string>
+
+    <string name="err_msg_name">Enter your name</string>
+    <string name="err_msg_email">Enter valid email address</string>
+    <string name="err_msg_password">Enter the password</string>
+
+    <!-- Εγγραφή -->
+    <string name="your_phone">Συμπλήρωσε τον αριθμό σου</string>
+    <string name="accept_terms">Αποδέχομαι τους όρους</string>
+
+    <!-- Ενεργοποίηση Εγγραφής -->
+    <string name="fill_four_digit">Συμπληρώστε τον 4ψήφιο κωδικό που λάβατε με sms</string>
+    <string name="send_again">Αποστολή sms ξανά</string>
+
+    <!-- Αναζήτηση -->
+    <string name="med_name_drastikh">Όνομα Φαρμάκου/Δραστική Ουσία</string>
+
+    <!-- Share -->
+    <string name="share_first_msg">Μια ανθρώπινη ζωή μπορεί να σωθεί χάρη στα περισσευούμενα φαρμακά σου!</string>
+    <string name="share_seconf_msg">Κάλεσε τους φίλους σου να συμβάλουν και αυτοί!</string>
+    <string name="share_message">Κοινοποίηση</string>
+
+    <!-- Επικοινωνία -->
+    <string name="subject">Θέμα</string>
+    <string name="text">Περιγραφή Θέματος</string>
+
+    <string name="err_msg_subject">Εισάγετε θέμα</string>
+    <string name="err_msg_text">Εισάγετε μήνυμα</string>
+
+    <!-- Περιεχόμενα Μενού -->
+    <string name="personal_pharmacy">Προσωπικό Φαρμακείο</string>
+    <string name="register_med">Καταχώρηση Φαρμάκου</string>
+    <string name="needs">Ελλείψεις</string>
+    <string name="donations">Δωρεές</string>
+    <string name="profile">Προφίλ</string>
+    <string name="share">Κοινοποίηση</string>
+    <string name="communication">Επικοινωνία</string>
+
+    <!-- Eισαγωγή barcode -->
+    <string name="input_hint">Εισάγετε τον κωδικό</string>
+
+    <!-- Κάμερα -->
+    <string name="camera_error">Δεν μπορέσαμε να ανοίξουμε την κάμερα!</string>
+
+    <!-- Άλλα στρινγκς -->
+    <string name="action_settings">Settings</string>
+    <string name="action_tick">Send</string>
+    <string name="action_back">Back</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="input_hint1">How many?</string>
+    <string name="input_hint2">Extra comments</string>
+    <string name="add_new_todo_item_string">Add Medicine</string>
+
+    <string name="title_activity_user_evaluation">UserEvaluation</string>
+    <string name="title_activity_registration">Εγγραφή</string>
+
+</resources>

@@ -1,0 +1,52 @@
+H SQLite vash twn Elleipsewn na enhmerwnetai mono otan o xrhsths exei internet kai h vash ston server exei allaksei:
+          To django den uposthrizei kati pou na deixnei pote allakse to model.To mono pou vrhka htane ta auto_now,auto_now_add
+          ta opoia uparxoun se kathe row opote gia na ta aksiopoihsoume prepei na kanoume sorting kai na paroume to antistoixo 
+          pedio apo to prwto row.Epishs tha prepe na metrame ta rows tou table Elleipseis gia na tsekaroume an exei ginei deletion
+          kapoiou row pou o xrhsths to xei akoma sthn SQLite.
+          To mySQL exei sto information_schema ena pedio pou legetai update_time kai isws mporei na mas kanei.
+          
+          
+
+
+SMS AUTHENTICATION
+          Theloume Flash SMS?
+
+
+          
+
+Pws na kanoume search me autocomplete apo to API tou django kai na einai kai psilogrhgoro:
+    1)  http://stackoverflow.com/questions/5023645/how-do-i-use-autocompletetextview-and-populate-it-with-data-from-a-web-api
+    2)  http://stackoverflow.com/questions/19998404/dynamically-adding-data-from-server-to-auto-complete-textview
+    3)  http://www.grobmeier.de/android-autocomplete-with-json-data-served-by-struts-2-05122011.html
+
+    Na kanoume search me drastikh ousia h me onoma ara prepei sto django na psaxnoume ta rows
+    pou exoun eite sthn drastikh ousia eite sto onoma to pro8ema pou vazei o xrhsths kai na ta fernoume
+    kai ta dyo mazi se ena string. (px.  psaxnei dep...   -->  depon 100mg / paraketamolh, depon 50mg / paraketamolh, ...)
+    Ektos kai an mporoume na katalavoume an psaxnei me vash thn drastikh ousia h to onoma.
+    H na exoume 2 diaforetika search bar. (alla mpales auto)
+
+
+
+
+Genika gia to facebook kai mono yparxei mia vivliothikh pou mas epitrepei na kanoume share kai login:
+    1)  https://developers.facebook.com/docs/facebook-login/android
+    2)  http://code.tutsplus.com/tutorials/quick-tip-add-facebook-login-to-your-android-app--cms-23837
+
+    To antistoixo gia google:
+    1)  https://developers.google.com/+/mobile/android/share/
+    2)  https://developers.google.com/+/mobile/android/sign-in
+
+
+
+
+Na deixnoume to logo kai ti kanei h efarmogh mas stous xrhstes:
+    1)  https://www.bignerdranch.com/blog/splash-screens-the-right-way/
+
+
+
+
+Na kanoume verification twn dedomenwn pou mas dinei o xrhsths:
+    1)  http://www.androidhive.info/2015/09/android-material-design-floating-labels-for-edittext/
+
+    Den mporei na yparxei idio username me auto pou vazei kai na tou deixnoume error. (ta gyrnaei to django auta)
+    Epishs gia to thlefwno tou. Na tsekaroume ti 8a vazoume gia kwdiko kai pou 8a to kratame.

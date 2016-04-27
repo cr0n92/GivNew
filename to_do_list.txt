@@ -1,0 +1,31 @@
+GIVMED TO DO LIST:
+------------------
+
+-o	 SMS verification
+-a   othones gia eggrafh,login
+-a	 Ta strings sta agglika
+
+-o	 Queries kai urls gia ola(pou xreiazetai ON_CASCADE?)
+
+-    Share
+-    Deep Links
+-    google analytics
+-    
+
+
+
+Argotera alla oxi polu argotera:
+--------------------------------
+-	 Queries sto api tou gallinou -> perimenoume sunanthsh
+-o O8ones gia ola ta kinita
+-	 Na vroume server kai na xwsoume ta dika mas ekei
+-	 Anagnwrish pshfiwn kai times
+
+
+SXOLH TO DO LIST:
+-----------------
+
+- Parallhla 3	8/1
+- Kryptografia 	8/1
+- Sxedio
+

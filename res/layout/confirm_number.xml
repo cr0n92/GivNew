@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.givmed.android.ConfirmNumber">
+
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar" />
+
+    <TextView
+        android:id="@+id/firstMes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding"
+        android:layout_below="@id/tool_bar"
+        android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:text="@string/conf_welcome"
+        android:layout_centerHorizontal="true">
+    </TextView>
+
+    <TextView
+        android:id="@+id/secondMes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding"
+        android:layout_below="@id/firstMes"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:text="@string/conf_insert_pin"
+        android:layout_centerHorizontal="true" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/thirdMes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding"
+        android:layout_below="@id/secondMes"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true" >
+    </TextView>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/buttons"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/thirdMes"
+        android:padding="@dimen/padding"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true">
+
+        <EditText
+            android:id="@+id/pin0"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:maxLength="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:paddingEnd="@dimen/padding"
+            android:paddingStart="@dimen/padding"
+            android:background="@drawable/button_unpressed_left" />
+
+        <EditText
+            android:id="@+id/pin1"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:maxLength="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:paddingEnd="@dimen/padding"
+            android:paddingStart="@dimen/padding"
+            android:background="@drawable/button_unpressed_mid" />
+
+        <EditText
+            android:id="@+id/pin2"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:maxLength="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:paddingEnd="@dimen/padding"
+            android:paddingStart="@dimen/padding"
+            android:background="@drawable/button_unpressed_mid" />
+
+        <EditText
+            android:id="@+id/pin3"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:maxLength="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:paddingEnd="@dimen/padding"
+            android:paddingStart="@dimen/padding"
+            android:background="@drawable/button_unpressed_right" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/fourthMes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding"
+        android:layout_below="@id/buttons"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:text="@string/conf_send_again"
+        android:layout_centerHorizontal="true" >
+    </TextView>
+</RelativeLayout>

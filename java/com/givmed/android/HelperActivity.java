@@ -18,8 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.givmed.android.R;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

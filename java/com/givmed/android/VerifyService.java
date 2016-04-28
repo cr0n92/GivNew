@@ -5,6 +5,7 @@ package com.givmed.android;
  */
 import android.app.IntentService;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -45,7 +46,7 @@ public class VerifyService extends IntentService {
      */
     private void verifyOtp(final String otp) {
 
-        String URL = "http://147.102.236.84:8080/verify/";
+        String URL = "https://givmed.com:444/verify/";
         String data = "";
         int code;
 
@@ -65,7 +66,6 @@ public class VerifyService extends IntentService {
 
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
-            conn.setRequestMethod("PUT");
             conn.setRequestProperty("Connection", "keep-alive");
             conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
 
@@ -78,10 +78,14 @@ public class VerifyService extends IntentService {
             if (code==202) {
                 PrefManager pref = new PrefManager(getApplicationContext());
                 pref.createLogin();
-                Intent i = new Intent();
-                i.setClass(this, Elleipseis.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
+                Intent TokenIntent = new Intent("token");
+                TokenIntent.putExtra("token",otp);
+
+                LocalBroadcastManager.getInstance(this).sendBroadcast(TokenIntent);
+//                Intent i = new Intent();
+//                i.setClass(this, Elleipseis.class);
+//                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(i);
             }
 
             else{

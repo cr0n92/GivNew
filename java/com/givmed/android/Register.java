@@ -20,8 +20,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.givmed.android.R;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

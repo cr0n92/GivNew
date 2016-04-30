@@ -50,35 +50,34 @@
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/buttons"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/secondMes"
             android:padding="@dimen/padding"
             android:gravity="center_vertical|center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true" >
 
             <Button
                 android:id="@+id/nameButton"
                 android:text="@string/naming_caps"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                android:textAllCaps="false"
                 android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
                 android:paddingEnd="@dimen/padding"
                 android:paddingStart="@dimen/padding"
                 android:background="@drawable/button_pressed_left" />
 
             <Button
                 android:id="@+id/regionButton"
-                android:text="@string/region"
+                android:text="@string/perioxh_caps"
                 android:textColor="@color/black"
                 android:textSize="14sp"
-                android:textAllCaps="false"
                 android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="30dp"
                 android:paddingEnd="@dimen/padding"
                 android:paddingStart="@dimen/padding"
                 android:background="@drawable/button_unpressed_right" />

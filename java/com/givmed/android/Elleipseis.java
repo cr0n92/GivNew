@@ -107,7 +107,7 @@ public class Elleipseis extends HelperActivity
                 changeButtonsLayout(nameButton, regionButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right);
                 mAdapter.clear();
                 db.getAllNeeds(mAdapter, "needName");
-                pref.setNotificationPermission(false);
+                //pref.setNotificationPermission(false);
             }
         });
 
@@ -118,7 +118,7 @@ public class Elleipseis extends HelperActivity
                 changeButtonsLayout(regionButton, nameButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left);
                 mAdapter.clear();
                 db.getAllNeeds(mAdapter, "region");
-                pref.setNotificationPermission(true);
+                //pref.setNotificationPermission(true);
 
             }
         });

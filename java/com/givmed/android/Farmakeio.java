@@ -8,8 +8,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.givmed.android.R;
-
 public class Farmakeio extends HelperActivity implements AdapterView.OnItemClickListener {
 
     public static MedNameAdapter mAdapter;

@@ -21,8 +21,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.givmed.android.R;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,7 +42,7 @@ public class Register extends HelperActivity {
     private PrefManager pref;
     ProgressDialog dialog;
 
-    String username = "default", email = "default@default.com", date = "1992", sex = "F", phone = "";
+    String username = "", email = "", date = "", sex = "", phone = "";
     Boolean is_male = false;
 
     @Override
@@ -120,7 +118,7 @@ public class Register extends HelperActivity {
                 date = mDate.getText().toString();
 
                 dialog = new ProgressDialog(this);
-                dialog.setMessage("Loading, Please Wait...");
+                dialog.setMessage(getString(R.string.loading_msg));
                 dialog.show();
                 new HttpGetTask().execute();
             }

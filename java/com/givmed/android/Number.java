@@ -12,12 +12,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.givmed.android.R;
-
 public class Number extends AppCompatActivity {
     EditText mPhoneView;
     String phone;
     AlertDialog alert;
+    private PrefManager pref;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +28,19 @@ public class Number extends AppCompatActivity {
         mToolBar.setTitle(R.string.number);
         mToolBar.setNavigationIcon(R.drawable.ic_arrows);
         setSupportActionBar(mToolBar);
+
+        pref = new PrefManager(this);
+
+        // Checking for user session
+        // if user is already logged in, take him to elleipseis
+        if (pref.isLoggedIn()) {
+            //          pref.clearSession();
+            Intent intent = new Intent(Number.this, Elleipseis.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+            finish();
+        }
 
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +91,7 @@ public class Number extends AppCompatActivity {
             if (phone.length() != 10 || !phone.matches("[0-9]+")) {
                 alert.show();
             } else {
+
                 Intent confIntent = new Intent(getApplicationContext(), ConfirmNumber.class);
                 confIntent.putExtra("phone", phone);
                 startActivity(confIntent);
@@ -87,4 +101,7 @@ public class Number extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
 }

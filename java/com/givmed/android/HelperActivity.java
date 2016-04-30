@@ -18,8 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.givmed.android.R;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -147,9 +145,9 @@ public class HelperActivity extends AppCompatActivity
         } else if (id == R.id.nav_donations && !class_name.equals("Dwrees")) {
             startActivity(new Intent(getApplicationContext(), Dwrees.class));
             started = true;
-        } else if (id == R.id.nav_profile && !class_name.equals("Profile")) {
-            //startActivity(new Intent(getApplicationContext(), Profile.class));
-            //started = true;
+        } else if (id == R.id.nav_profile && !class_name.equals("Register")) {
+            startActivity(new Intent(getApplicationContext(), Register.class));
+            started = true;
         } else if (id == R.id.nav_communication && !class_name.equals("Communication")) {
             startActivity(new Intent(getApplicationContext(), Communication.class));
             started = true;

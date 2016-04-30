@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -35,16 +36,44 @@ public class ConfirmNumber extends AppCompatActivity {
     private String phone;
     private String token;
     private EditText pin0, pin1, pin2, pin3;
+    private TextView sendAgain;
     private PrefManager pref;
+    private Intent TimerIntent;
     ProgressDialog dialog;
+
+    private BroadcastReceiver mTimerBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            long countdown=intent.getLongExtra("countdown",1L);
+            new CountDownTimer(countdown, 1000) {
+
+                public void onTick(long millisUntilFinished) {
+                    sendAgain.setText("seconds remaining: " + millisUntilFinished / 1000);
+                }
+
+                public void onFinish() {
+                    sendAgain.setText(getString(R.string.conf_send_again));
+                    sendAgain.setPaintFlags(sendAgain.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                    sendAgain.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(getApplicationContext(), OroiXrhshs.class));
+                        }
+                    });
+                    stopService(TimerIntent);
+                    pref.setCountdown(false);
+                }
+            }.start();        }
+
+    };
 
 
     private BroadcastReceiver mTokenBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(getApplicationContext(), "received message in service..!", Toast.LENGTH_SHORT).show();
             token=intent.getStringExtra("token");
-            Log.e("Token is", "" + token);
             pin0.setText("" + token.charAt(0));
             pin1.setText(""+token.charAt(1));
             pin2.setText(""+token.charAt(2));
@@ -86,6 +115,25 @@ public class ConfirmNumber extends AppCompatActivity {
         pref = new PrefManager(this);
 
 
+        sendAgain = (TextView) findViewById(R.id.fourthMes);
+        TimerIntent = new Intent(this, TimerService.class);
+        if(pref.getCountdown())
+            startService(TimerIntent);
+        else {
+            sendAgain.setText(getString(R.string.conf_send_again));
+            sendAgain.setPaintFlags(sendAgain.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            sendAgain.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), OroiXrhshs.class));
+                }
+            });
+        }
+        //registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
+
+
+
         LocalBroadcastManager.getInstance(this).registerReceiver(mTokenBroadcastReceiver,
                 new IntentFilter("token"));
 
@@ -99,18 +147,41 @@ public class ConfirmNumber extends AppCompatActivity {
         phone = intent.getStringExtra("phone");
         number.setText("+30 " + phone);
 
-        TextView sendAgain = (TextView) findViewById(R.id.fourthMes);
-        sendAgain.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                //startActivity(new Intent(getApplicationContext(), OroiXrhshs.class));
-            }
-        });
+
+
+        //final TextView sendAgain = (TextView) findViewById(R.id.fourthMes);
+
+
         dialog = new ProgressDialog(this);
         dialog.setMessage("Loading, Please Wait...");
         dialog.show();
         new HttpGetTask().execute();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        if(pref.getCountdown())
+            LocalBroadcastManager.getInstance(this).registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();  // Always call the superclass method first
+        if(pref.getCountdown())
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(mTimerBroadcastReceiver);
+
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();  // Always call the superclass method first
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mTokenBroadcastReceiver);
+
+
     }
 
     @Override
@@ -136,7 +207,7 @@ public class ConfirmNumber extends AppCompatActivity {
 
             try {
                 url = new URL(request);
-                String urlParameters = "&userPhone="   + phone ;
+                String urlParameters = "userPhone="   + phone ;
 
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));

@@ -180,6 +180,10 @@
         <service
             android:name="com.givmed.android.VerifyService"
             android:exported="false" />
+        <!-- Intent service -->
+        <service
+            android:name="com.givmed.android.TimerService"
+            android:exported="false" />
         <activity
             android:name="com.givmed.android.Communication"
             android:label="communication"

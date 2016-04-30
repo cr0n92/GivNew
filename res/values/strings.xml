@@ -5,6 +5,7 @@
     <string name="number">Νούμερο</string>
     <string name="confirm">Επιβεβαίωση</string>
     <string name="inputter">Εισαγωγή</string>
+    <string name="scan">Σάρωση</string>
     <string name="outputer">Καταχώρηση</string>
     <string name="two_buttons">Επιλογή</string>
     <string name="elleipseis">Ελλείψεις</string>
@@ -23,9 +24,12 @@
     <string name="register_med">Καταχώρηση Φαρμάκου</string>
 
     <!-- Καταχώρηση -->
-    <string name="med_name">Όνομα Φαρμάκου</string>
-    <string name="expiration_date">Ημ. λήξης</string>
-    <string name="med_condition">Ανοιχτή συσκευασία</string>
+    <string name="out_med_name">Όνομα Φαρμάκου</string>
+    <string name="out_expiration">Ημ. λήξης</string>
+    <string name="out_barcode">Barcode</string>
+    <string name="out_condition">Κατάσταση Φαρμάκου</string>
+    <string name="out_notes">Σημειώσεις</string>
+    <string name="out_med_registered">Το φάρμακο έχει ήδη καταχωρηθεί!</string>
 
     <!-- Προσωπικό Φαρμακείο -->
     <string name="home_message">Δες πόσα φάρμακα έχεις στο σπίτι σου, παρακάτω!</string>
@@ -60,17 +64,10 @@
     <string name="need_right_half_msg_single">φάρμακo! Άν το έχεις, δωρισέ το.</string>
 
     <!-- Προφίλ -->
-    <string name="username">Όνομα χρήστη</string>
-    <string name="birth_date">Ημ. Γένησης</string>
-    <string name="pickup_address">Διεύθυνση</string>
-    <string name="male">Άντρας</string>
-    <string name="female">Γυναίκα</string>
-    <string name="phone">Τηλέφωνο</string>
-    <string name="email">Email</string>
-
-    <string name="err_msg_name">Enter your name</string>
-    <string name="err_msg_email">Enter valid email address</string>
-    <string name="err_msg_password">Enter the password</string>
+    <string name="prof_name">Όνομα</string>
+    <string name="prof_sex">Φύλο</string>
+    <string name="prof_birth_date">Έτος Γέννησης</string>
+    <string name="prof_email">Email</string>
 
     <!-- Εγγραφή -->
     <string name="your_phone">Συμπλήρωσε τον αριθμό σου</string>
@@ -101,30 +98,26 @@
     <string name="com_second_msg">Μοιράσου την γνώμη σου για το GIVMED μαζί μας!</string>
     <string name="com_phone">+30 6940984736</string>
     <string name="com_site">www.givmed.com</string>
+    <string name="com_site_full">https://www.givmed.com/</string>
     <string name="com_fb">/GIVMED</string>
     <string name="com_mail">hello@givmed.com</string>
     <string name="open_with">Άνοιγμα με:</string>
     <string name="send_with">Αποστολή με:</string>
 
     <!-- Eισαγωγή barcode -->
-    <string name="input_hint">Εισάγετε τον κωδικό</string>
+    <string name="inp_type_msg">Πληκτρολόγησε τον κωδικό που βρίσκεται πάνω στο κουτι.</string>
 
     <!-- Κάμερα -->
     <string name="camera_error">Δεν μπορέσαμε να ανοίξουμε την κάμερα!</string>
+    <string name="scan_msg">Σκάναρε το 1<sup>ο</sup> barcode</string>
 
     <!-- Άλλα στρινγκς -->
+    <string name="loading_msg">Παρακαλώ περιμένετε#8230</string>
     <string name="action_settings">Settings</string>
     <string name="action_tick">Send</string>
     <string name="action_back">Back</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="input_hint1">How many?</string>
-    <string name="input_hint2">Extra comments</string>
-    <string name="add_new_todo_item_string">Add Medicine</string>
-
-    <string name="title_activity_user_evaluation">UserEvaluation</string>
-    <string name="title_activity_registration">Εγγραφή</string>
 
     <!-- F.A.Q. -->
     <string-array name="headers">

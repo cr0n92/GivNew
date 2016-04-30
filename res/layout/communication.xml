@@ -19,113 +19,125 @@
             android:id="@+id/tool_bar"
             layout="@layout/tool_bar" />
 
-        <TextView
-            android:id="@+id/firstMes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding"
-            android:gravity="center_vertical|center_horizontal"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/com_first_msg"
-            android:layout_below="@+id/tool_bar"
-            android:layout_centerHorizontal="true">
-        </TextView>
-
-        <TextView
-            android:id="@+id/secondMes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding"
-            android:layout_below="@id/firstMes"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/com_second_msg"
-            android:layout_centerHorizontal="true">
-        </TextView>
-
-        <TextView
-            android:id="@+id/mailView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding"
-            android:layout_below="@id/secondMes"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/com_mail"
-            android:drawableStart="@drawable/ic_mail"
-            android:drawableLeft="@drawable/ic_mail" >
-        </TextView>
-
-        <View
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="10dp"
-            android:padding="@dimen/padding"
-            android:layout_below="@id/mailView"
-            android:id="@+id/line2"
-            android:background="@android:color/darker_gray"/>
-
-        <TextView
-            android:id="@+id/fbView"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/padding"
-            android:layout_below="@id/line2"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/com_fb"
-            android:drawableStart="@drawable/ic_fb"
-            android:drawableLeft="@drawable/ic_fb" >
-        </TextView>
+            android:layout_below="@id/tool_bar"
+            android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="10dp"
-            android:padding="@dimen/padding"
-            android:layout_below="@id/fbView"
-            android:id="@+id/line3"
-            android:background="@android:color/darker_gray"/>
+            <RelativeLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/siteView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding"
-            android:layout_below="@id/line3"
-            android:gravity="center_vertical|center_horizontal"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:text="@string/com_site"
-            android:drawableStart="@drawable/ic_site"
-            android:drawableLeft="@drawable/ic_site" >
-        </TextView>
+                <TextView
+                    android:id="@+id/firstMes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/com_first_msg"
+                    android:layout_centerHorizontal="true">
+                </TextView>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="10dp"
-            android:padding="@dimen/padding"
-            android:layout_below="@id/siteView"
-            android:id="@+id/line4"
-            android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:id="@+id/secondMes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding"
+                    android:layout_below="@id/firstMes"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/com_second_msg"
+                    android:layout_centerHorizontal="true">
+                </TextView>
 
+                <TextView
+                    android:id="@+id/mailView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding"
+                    android:layout_below="@id/secondMes"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/com_mail"
+                    android:drawableStart="@drawable/ic_mail"
+                    android:drawableLeft="@drawable/ic_mail" >
+                </TextView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:padding="@dimen/padding"
+                    android:layout_below="@id/mailView"
+                    android:id="@+id/line2"
+                    android:background="@android:color/darker_gray"/>
+
+                <TextView
+                    android:id="@+id/fbView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding"
+                    android:layout_below="@id/line2"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/com_fb"
+                    android:drawableStart="@drawable/ic_fb"
+                    android:drawableLeft="@drawable/ic_fb" >
+                </TextView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:padding="@dimen/padding"
+                    android:layout_below="@id/fbView"
+                    android:id="@+id/line3"
+                    android:background="@android:color/darker_gray"/>
+
+                <TextView
+                    android:id="@+id/siteView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding"
+                    android:layout_below="@id/line3"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/com_site"
+                    android:drawableStart="@drawable/ic_site"
+                    android:drawableLeft="@drawable/ic_site" >
+                </TextView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:padding="@dimen/padding"
+                    android:layout_below="@id/siteView"
+                    android:id="@+id/line4"
+                    android:background="@android:color/darker_gray"/>
+            </RelativeLayout>
+        </ScrollView>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView

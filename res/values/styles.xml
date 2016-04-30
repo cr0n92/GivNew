@@ -17,6 +17,7 @@
         <item name="colorControlNormal">@color/colorPrimaryDark</item>
         <item name="colorControlActivated">@color/colorPrimaryDark</item>
         <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@android:color/darker_gray</item>
         <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

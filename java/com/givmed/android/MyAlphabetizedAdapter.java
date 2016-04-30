@@ -1,11 +1,24 @@
-package com.givmed.android;
-
-/**
- * Created by agroikos on 22/4/2016.
- */
-public class MyAlphabetizedAdapter{
-//public abstract class MyAlphabetizedAdapter extends SimpleCursorAdapter implements SectionIndexer {
-
+//package com.givmed.android;
+//
+//import android.content.Context;
+//import android.database.Cursor;
+//import android.support.v4.widget.SimpleCursorAdapter;
+//import android.view.LayoutInflater;
+//import android.view.View;
+//import android.view.ViewGroup;
+//import android.widget.AlphabetIndexer;
+//import android.widget.SectionIndexer;
+//import android.widget.TextView;
+//
+//import java.util.HashMap;
+//import java.util.Map;
+//import java.util.TreeMap;
+//
+///**
+// * Created by agroikos on 22/4/2016.
+// */
+//public class MyAlphabetizedAdapter extends SimpleCursorAdapter implements SectionIndexer {
+//
 //    private static final int TYPE_HEADER = 1;
 //    private static final int TYPE_NORMAL = 0;
 //
@@ -172,4 +185,4 @@ public class MyAlphabetizedAdapter{
 //        }
 //        return true;
 //    }
-}
+//}

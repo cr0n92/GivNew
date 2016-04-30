@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -34,44 +35,62 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 
-public class Register extends AppCompatActivity {
-    private EditText mDate, mPhone, mEmail, mAddress, mUsername;
-    private TextInputLayout nameLayout, emailLayout, addressLayout, phoneLayout, dateLayout;
-    private RadioGroup mSexGroup;
-    private RadioButton mSexButton;
+public class Register extends HelperActivity {
+    private EditText mDate, mEmail, mUsername, mSex, male, female;
+    private TextInputLayout nameLayout, emailLayout, dateLayout;
+    private TextInputLayout femaleLayout, maleLayout;
     private PrefManager pref;
-
     ProgressDialog dialog;
 
-    String username = "", phone = "", password = "", email = "", age = "", sex = "";
+    String username = "", email = "", date = "", sex = "", phone = "";
+    Boolean is_male = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register);
-
-        Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
-        mToolBar.setTitle(R.string.register);
-        mToolBar.setNavigationIcon(R.drawable.ic_arrows);
-        setSupportActionBar(mToolBar);
+        super.setMenu(R.menu.menu_main);
+        super.helperOnCreate(R.layout.register, R.string.register, false);
 
         mUsername = (EditText) findViewById(R.id.username_text);
-        mPhone = (EditText) findViewById(R.id.phone_text);
         mEmail = (EditText) findViewById(R.id.email_text);
-        mAddress = (EditText) findViewById(R.id.pickup_addr_text);
-        mDate = (EditText) findViewById(R.id.birth_date_text);
-        mSexButton = (RadioButton) findViewById(R.id.female);
-        mSexGroup = (RadioGroup) findViewById(R.id.sexGroup);
+        mDate = (EditText) findViewById(R.id.birth_text);
+
+        mSex = (EditText) findViewById(R.id.sex_text);
+        female = (EditText) findViewById(R.id.femaleButton);
+        male = (EditText) findViewById(R.id.maleButton);
+
+        // me auth thn synarthsh den kalleite to plhktrologio otan pataei panw sto edit text
+        mSex.setKeyListener(null);
+        female.setKeyListener(null);
+        male.setKeyListener(null);
+
+        // prepei sto editText na valoume android:focusable="false" giati alliws den douleuei
+        // me to prwto click alla me to deutero kai einai ligo asxhmo (coockings)
+        female.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                is_male = false;
+                female.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_female_pressed, 0, 0, 0);
+                male.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_male, 0, 0, 0);
+            }
+        });
+
+        male.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                is_male = true;
+                male.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_male_pressed, 0, 0, 0);
+                female.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_female, 0, 0, 0);
+            }
+        });
 
         nameLayout = (TextInputLayout) findViewById(R.id.username);
-        phoneLayout = (TextInputLayout) findViewById(R.id.phone);
         emailLayout = (TextInputLayout) findViewById(R.id.email);
-        addressLayout = (TextInputLayout) findViewById(R.id.pickup_addr);
-        dateLayout = (TextInputLayout) findViewById(R.id.birth_date);
+        dateLayout = (TextInputLayout) findViewById(R.id.birth);
 
-        mUsername.addTextChangedListener(new MyTextWatcher(mUsername));
         mEmail.addTextChangedListener(new MyTextWatcher(mEmail));
-        mAddress.addTextChangedListener(new MyTextWatcher(mAddress));
 
         pref = new PrefManager(this);
 
@@ -88,43 +107,24 @@ public class Register extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_tick) {
             if (submitForm()) {
                 username = mUsername.getText().toString();
-                password = mAddress.getText().toString();
-                phone = mPhone.getText().toString();
                 email = mEmail.getText().toString();
-                age = mDate.getText().toString();
-                sex = getSex();
+                sex = (is_male) ? "M" : "F";
+                date = mDate.getText().toString();
 
                 dialog = new ProgressDialog(this);
-                dialog.setMessage("Loading, Please Wait...");
+                dialog.setMessage(getString(R.string.loading_msg));
                 dialog.show();
                 new HttpGetTask().execute();
             }
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private String getSex() {
-
-        switch (mSexGroup.getCheckedRadioButtonId()) {
-            case R.id.female:
-                return "F";
-            default:
-                return "M";
-        }
     }
 
     private class HttpGetTask extends AsyncTask<Void, Void, JSONObject> {
@@ -134,7 +134,7 @@ public class Register extends AppCompatActivity {
 
         @Override
         protected JSONObject doInBackground(Void... arg0) {
-            String URL = "http://147.102.236.84:8080/reg/";
+            String URL = server + "/reg/";
             String data = "";
             JSONObject out = new JSONObject();
 
@@ -146,10 +146,9 @@ public class Register extends AppCompatActivity {
                 url = new URL(request);
                 String urlParameters =
                         "username="     + username +
-                        "&password="    + password +
                         "&userPhone="   + phone +
                         "&userEmail="   + email +
-                        "&birthDate="   + age +
+                        "&birthDate="   + date +
                         "&sex="         + sex;
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
@@ -221,15 +220,12 @@ public class Register extends AppCompatActivity {
         if (!validateEmail())
             return false;
 
-        if (!validatePassword())
-            return false;
-
         return true;
     }
 
     private boolean validateName() {
         if (mUsername.getText().toString().trim().isEmpty()) {
-            nameLayout.setError(getString(R.string.err_msg_name));
+            //nameLayout.setError(getString(R.string.err_msg_name));
             requestFocus(mUsername);
             return false;
         } else {
@@ -243,7 +239,7 @@ public class Register extends AppCompatActivity {
         String email = mEmail.getText().toString().trim();
 
         if (email.isEmpty() || !isValidEmail(email)) {
-            emailLayout.setError(getString(R.string.err_msg_email));
+           // emailLayout.setError(getString(R.string.err_msg_email));
             requestFocus(mEmail);
             return false;
         } else {
@@ -255,18 +251,6 @@ public class Register extends AppCompatActivity {
 
     private static boolean isValidEmail(String email) {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    private boolean validatePassword() {
-        if (mAddress.getText().toString().trim().isEmpty()) {
-            addressLayout.setError(getString(R.string.err_msg_password));
-            requestFocus(mAddress);
-            return false;
-        } else {
-            addressLayout.setErrorEnabled(false);
-        }
-
-        return true;
     }
 
     private void requestFocus(View view) {
@@ -296,9 +280,6 @@ public class Register extends AppCompatActivity {
                     break;
                 case R.id.email_text:
                     validateEmail();
-                    break;
-                case R.id.pickup_addr_text:
-                    validatePassword();
                     break;
             }
         }

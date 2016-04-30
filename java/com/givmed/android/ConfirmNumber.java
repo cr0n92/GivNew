@@ -267,7 +267,7 @@ public class ConfirmNumber extends AppCompatActivity {
 
         @Override
         protected JSONObject doInBackground(Void... arg0) {
-            String URL = "https://givmed.com:444/reg/";
+            String URL = "http://givmed.com:81/reg/";
             String data = "";
             JSONObject out = new JSONObject();
 

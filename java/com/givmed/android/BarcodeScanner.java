@@ -13,8 +13,14 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import net.sourceforge.zbar.Config;
@@ -26,7 +32,7 @@ import net.sourceforge.zbar.SymbolSet;
 import com.givmed.android.R;
 import java.util.List;
 
-public class BarcodeScanner extends Activity {
+public class BarcodeScanner extends AppCompatActivity {
 
     private Camera mCamera;
     private CameraPreview mPreview;
@@ -50,6 +56,18 @@ public class BarcodeScanner extends Activity {
         setContentView(R.layout.barcode_scanner);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
+        mToolBar.setTitle(R.string.scan);
+        mToolBar.setNavigationIcon(R.drawable.ic_arrows);
+        setSupportActionBar(mToolBar);
+
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         //getActionBar().hide();
 
         autoFocusHandler = new Handler();
@@ -66,7 +84,6 @@ public class BarcodeScanner extends Activity {
             mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
             if (mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null) {
                 hasSensor = true;
-
                 enableSensorAndFlash();
             }
         }
@@ -80,7 +97,16 @@ public class BarcodeScanner extends Activity {
         FrameLayout preview = (FrameLayout)findViewById(R.id.cameraPreview);
         preview.addView(mPreview);
 
+        RelativeLayout text = (RelativeLayout) findViewById(R.id.relative);
+        text.bringToFront();
+
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_simple, menu);
+        return true;
     }
 
     /** A safe way to get an instance of the Camera object. */

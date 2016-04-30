@@ -21,27 +21,63 @@
             android:id="@+id/tool_bar"
             layout="@layout/tool_bar" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/condition"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:layout_below="@id/tool_bar">
+            android:layout_below="@id/tool_bar"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/edit1"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/input_hint"
-                android:inputType="number"
-                android:textSize="24sp"
-                android:maxLength="12"
-                android:singleLine="true"
-                android:theme="@style/MyEditTextTheme"/>
+                android:orientation="vertical">
 
-        </android.support.design.widget.TextInputLayout>
+                <TextView
+                    android:id="@+id/firstMes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:text="@string/inp_type_msg"
+                    android:layout_centerHorizontal="true" >
+                </TextView>
 
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_below="@id/firstMes"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:background="@drawable/grafo"
+                    android:layout_centerHorizontal="true"/>
+
+                <EditText
+                    android:id="@+id/edit1"
+                    android:layout_below="@id/image"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_width="250dp"
+                    android:layout_height="50dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:inputType="number"
+                    android:textSize="24sp"
+                    android:maxLength="12"
+                    android:singleLine="true"
+                    android:background="@drawable/button_simple_border"
+                    android:layout_centerHorizontal="true" />
+
+            </RelativeLayout>
+        </ScrollView>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView

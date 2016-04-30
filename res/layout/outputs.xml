@@ -21,57 +21,132 @@
             android:id="@+id/tool_bar"
             layout="@layout/tool_bar" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textView1_layout_outputer"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:layout_below="@id/tool_bar">
+            android:layout_below="@id/tool_bar"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/textView1_outputer"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/expiration_date"
-                android:textSize="24sp"
-                android:theme="@style/MyEditTextTheme">
-            </EditText>
+                android:orientation="vertical">
 
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/nameLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/textView2_layout_outputer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:layout_below="@id/textView1_layout_outputer">
+                    <EditText
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/out_med_name"
+                        android:textSize="24sp"
+                        android:drawableStart="@drawable/ic_med_name"
+                        android:drawableLeft="@drawable/ic_med_name"
+                        android:theme="@style/MyEditTextTheme">
+                    </EditText>
 
-            <EditText
-                android:id="@+id/textView2_outputer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/med_name"
-                android:textSize="24sp"
-                android:theme="@style/MyEditTextTheme">
-            </EditText>
+                </android.support.design.widget.TextInputLayout>
 
-        </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/expirationLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/nameLayout"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp">
 
-        <CheckBox
-            android:id="@+id/opend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/med_condition"
-            android:textSize="24sp"
-            android:theme="@style/MyEditTextTheme"
-            android:layout_below="@+id/textView2_layout_outputer"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="37dp"
-            android:layout_marginLeft="16dp" />
+                    <EditText
+                        android:id="@+id/expiration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/out_expiration"
+                        android:textSize="24sp"
+                        android:drawableStart="@drawable/ic_calendar"
+                        android:drawableLeft="@drawable/ic_calendar"
+                        android:theme="@style/MyEditTextTheme">
+                    </EditText>
 
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/barcodeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/expirationLayout"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp">
+
+                    <EditText
+                        android:id="@+id/barcode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/out_barcode"
+                        android:textSize="24sp"
+                        android:drawableStart="@drawable/ic_barcode"
+                        android:drawableLeft="@drawable/ic_barcode"
+                        android:theme="@style/MyEditTextTheme">
+                    </EditText>
+
+                </android.support.design.widget.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/opend"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/out_condition"
+                    android:textSize="24sp"
+                    android:theme="@style/MyEditTextTheme"
+                    android:layout_below="@+id/barcodeLayout" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/notesLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/opend"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp">
+
+                    <EditText
+                        android:id="@+id/notes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/out_notes"
+                        android:textSize="24sp"
+                        android:drawableStart="@drawable/ic_notes"
+                        android:drawableLeft="@drawable/ic_notes"
+                        android:theme="@style/MyEditTextTheme">
+                    </EditText>
+
+                </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
+        </ScrollView>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView

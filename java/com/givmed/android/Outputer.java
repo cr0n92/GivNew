@@ -28,7 +28,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 public class Outputer extends HelperActivity {
-    private EditText mEditText1, mEditText2;
+    private EditText mName, mExp, mBarcode, mNotes;
     private CheckBox mCheckBox;
     private String server_date = "", name = "", date = "", barcode = "", eofcode = "", is_it = "", price = "";
     ProgressDialog dialog;
@@ -51,7 +51,7 @@ public class Outputer extends HelperActivity {
         barcode = intent.getStringExtra("barcode");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Το φάρμακο έχει ήδη καταχωρηθεί!")
+        builder.setMessage(getString(R.string.out_med_registered))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -63,11 +63,19 @@ public class Outputer extends HelperActivity {
                 });
         alert = builder.create();
 
-        mEditText1 = (EditText) findViewById(R.id.textView1_outputer);
-        mEditText1.setText(date);
-        mEditText2 = (EditText) findViewById(R.id.textView2_outputer);
-        mEditText2.setText(name);
+        mName = (EditText) findViewById(R.id.name);
+        mExp = (EditText) findViewById(R.id.expiration);
+        mBarcode = (EditText) findViewById(R.id.barcode);
         mCheckBox = (CheckBox) findViewById(R.id.opend);
+        mNotes = (EditText) findViewById(R.id.notes);
+
+        mName.setText(name);
+        mExp.setText(date);
+        mBarcode.setText(barcode);
+
+        mName.setKeyListener(null);
+        mExp.setKeyListener(null);
+        mBarcode.setKeyListener(null);
     }
 
     @Override
@@ -83,9 +91,10 @@ public class Outputer extends HelperActivity {
             is_it = (checked) ? "2" : "1";
 
             dialog = new ProgressDialog(this);
-            dialog.setMessage("Loading, Please Wait...");
+            dialog.setMessage(getString(R.string.loading_msg));
             dialog.setCanceledOnTouchOutside(false);
             dialog.show();
+
             new HttpGetTask().execute();
         }
 

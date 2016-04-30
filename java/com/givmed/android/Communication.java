@@ -47,7 +47,7 @@ public class Communication extends HelperActivity {
 
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.com_site)));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.com_site_full)));
                 startActivity(Intent.createChooser(browserIntent, getString(R.string.open_with)));
             }
         });

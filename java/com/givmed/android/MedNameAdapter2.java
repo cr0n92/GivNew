@@ -1,8 +1,26 @@
-package com.givmed.android;
-
-public class MedNameAdapter2 {
-//public  class MedNameAdapter2 extends BaseAdapter implements SectionIndexer {
-
+//package com.givmed.android;
+//
+//import android.content.Context;
+//import android.database.Cursor;
+//import android.database.sqlite.SQLiteDatabase;
+//import android.util.Log;
+//import android.view.LayoutInflater;
+//import android.view.View;
+//import android.view.ViewGroup;
+//import android.widget.AlphabetIndexer;
+//import android.widget.BaseAdapter;
+//import android.widget.LinearLayout;
+//import android.widget.SectionIndexer;
+//import android.widget.TextView;
+//
+//import java.util.ArrayList;
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//import java.util.TreeMap;
+//
+//public class MedNameAdapter2 extends BaseAdapter implements SectionIndexer {
+//
 //    private static final int TYPE_HEADER = 1;
 //    private static final int TYPE_NORMAL = 0;
 //
@@ -221,5 +239,5 @@ public class MedNameAdapter2 {
 //        return itemLayout;
 //    }
 //
-
-}
+//
+//}

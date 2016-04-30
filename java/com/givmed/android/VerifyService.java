@@ -46,7 +46,7 @@ public class VerifyService extends IntentService {
      */
     private void verifyOtp(final String otp) {
 
-        String URL = "https://givmed.com:444/verify/";
+        String URL = "http://givmed.com:81/verify/";
         String data = "";
         int code;
 

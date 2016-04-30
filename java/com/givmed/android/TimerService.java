@@ -5,14 +5,16 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 /**
  * Created by agroikos on 29/4/2016.
  */
 public class TimerService  extends Service {
-    private static final String TAG = "BroadcastService";
     public static final String BROADCAST_ACTION = "Timer";
-    Intent intent;
+    private String data;
+    Intent TimerIntent;
 
 
 @Override
@@ -21,23 +23,29 @@ public class TimerService  extends Service {
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        intent = new Intent(BROADCAST_ACTION);
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        data=intent.getStringExtra("attempt");
+        Log.e("data",""+data);
+        TimerIntent = new Intent(BROADCAST_ACTION);
+        long duration=(data.equals("first"))?10000:30000;
 
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(duration, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
-                    intent.putExtra("countdown", millisUntilFinished);
-                    sendBroadcast(intent);
-                    }
+                TimerIntent.putExtra("countdown", millisUntilFinished);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(TimerIntent);
+            }
 
             @Override
             public void onFinish() {
             }
         }.start();
+        // We want this service to continue running until it is explicitly
+        // stopped, so return sticky.
+        return START_STICKY;
     }
+
 
 
 }

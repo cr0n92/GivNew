@@ -45,7 +45,8 @@ public class ConfirmNumber extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            long countdown=intent.getLongExtra("countdown",1L);
+            long countdown=intent.getLongExtra("countdown", 1L);
+
             new CountDownTimer(countdown, 1000) {
 
                 public void onTick(long millisUntilFinished) {
@@ -53,19 +54,40 @@ public class ConfirmNumber extends AppCompatActivity {
                 }
 
                 public void onFinish() {
+                    TimerIntent = new Intent(getApplicationContext(), TimerService.class);
+                    stopService(TimerIntent);
+                    if (pref.getCountdown().equals("firstRunning"))
+                        pref.setCountdown("second");
+                    else if (pref.getCountdown().equals("secondRunning"))
+                        pref.setCountdown("Last");
                     sendAgain.setText(getString(R.string.conf_send_again));
                     sendAgain.setPaintFlags(sendAgain.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                     sendAgain.setOnClickListener(new View.OnClickListener() {
 
                         @Override
                         public void onClick(View v) {
-                            startActivity(new Intent(getApplicationContext(), OroiXrhshs.class));
+                            if (pref.getCountdown().equals("second")) {
+
+                                pref.setCountdown("secondRunning");
+                                TimerIntent.putExtra("attempt", "second");
+                                startService(TimerIntent);
+                                sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~ Paint.UNDERLINE_TEXT_FLAG));
+
+
+                            }
+                            else
+                                pref.setCountdown("End");
+                                sendAgain.setText("Δεν έχεις δικάιωμα για άλλα μηνύματα");
+                                sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+
+
+
                         }
                     });
-                    stopService(TimerIntent);
-                    pref.setCountdown(false);
+
                 }
-            }.start();        }
+            }.start();
+        }
 
     };
 
@@ -116,20 +138,7 @@ public class ConfirmNumber extends AppCompatActivity {
 
 
         sendAgain = (TextView) findViewById(R.id.fourthMes);
-        TimerIntent = new Intent(this, TimerService.class);
-        if(pref.getCountdown())
-            startService(TimerIntent);
-        else {
-            sendAgain.setText(getString(R.string.conf_send_again));
-            sendAgain.setPaintFlags(sendAgain.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-            sendAgain.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), OroiXrhshs.class));
-                }
-            });
-        }
         //registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
 
 
@@ -150,27 +159,88 @@ public class ConfirmNumber extends AppCompatActivity {
 
 
 
-        //final TextView sendAgain = (TextView) findViewById(R.id.fourthMes);
 
 
-        dialog = new ProgressDialog(this);
-        dialog.setMessage("Loading, Please Wait...");
-        dialog.show();
-        new HttpGetTask().execute();
+//        dialog = new ProgressDialog(this);
+//        dialog.setMessage("Loading, Please Wait...");
+//        dialog.show();
+//        new HttpGetTask().execute();
     }
 
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        if(pref.getCountdown())
-            LocalBroadcastManager.getInstance(this).registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
+        Log.e("Resume", "Resume");
+        Log.e("Countdown",""+pref.getCountdown());
+
+        switch (pref.getCountdown()) {
+            case "first":
+                TimerIntent = new Intent(this, TimerService.class);
+                TimerIntent.putExtra("attempt","first");
+                pref.setCountdown("firstRunning");
+                LocalBroadcastManager.getInstance(this).registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
+                startService(TimerIntent);
+                break;
+            case "firstRunning":
+                sendAgain.setOnClickListener(null);
+                LocalBroadcastManager.getInstance(this).registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
+                break;
+            case "second":
+                Log.e("Resume","second");
+                LocalBroadcastManager.getInstance(this).registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
+                sendAgain.setText(getString(R.string.conf_send_again));
+                sendAgain.setPaintFlags(sendAgain.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                sendAgain.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                            pref.setCountdown("secondRunning");
+                            TimerIntent = new Intent(getApplicationContext(), TimerService.class);
+
+                        TimerIntent.putExtra("attempt", "second");
+                        startService(TimerIntent);
+                        sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~ Paint.UNDERLINE_TEXT_FLAG));
+                        }
+
+                });
+                break;
+
+            case "secondRunning":
+                sendAgain.setOnClickListener(null);
+                LocalBroadcastManager.getInstance(this).registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
+                break;
+            case "Last":
+                LocalBroadcastManager.getInstance(this).registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
+                sendAgain.setText(getString(R.string.conf_send_again));
+                sendAgain.setPaintFlags(sendAgain.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                sendAgain.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        pref.setCountdown("End1");
+                        sendAgain.setText("Δεν έχεις δικάιωμα για άλλα μηνύματα");
+                        sendAgain.setOnClickListener(null);
+                    }
+
+                });
+                break;
+            case "End":
+                sendAgain.setText("Δεν έχεις δικάιωμα για άλλα μηνύματα");
+                sendAgain.setOnClickListener(null);
+                break;
+
+            default:
+                break;
+        }
+
+
 
     }
 
     @Override
     public void onPause() {
         super.onPause();  // Always call the superclass method first
-        if(pref.getCountdown())
+        if(pref.getCountdown().equals("firstRunning")||pref.getCountdown().equals("secondRunning"))
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mTimerBroadcastReceiver);
 
 

@@ -72,13 +72,13 @@ public class PrefManager {
         return pref.getString(KEY_MOBILE_NUMBER, null);
     }
 
-    public void setCountdown(Boolean countdown) {
-        editor.putBoolean(KEY_COUNTDOWN, countdown);
+    public void setCountdown(String countdown) {
+        editor.putString(KEY_COUNTDOWN, countdown);
         editor.commit();
     }
 
-    public Boolean getCountdown() {
-        return pref.getBoolean(KEY_COUNTDOWN, true);
+    public String getCountdown() {
+        return pref.getString(KEY_COUNTDOWN, "first");
     }
 
     public String getToken() {

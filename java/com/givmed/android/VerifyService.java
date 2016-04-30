@@ -82,10 +82,7 @@ public class VerifyService extends IntentService {
                 TokenIntent.putExtra("token",otp);
 
                 LocalBroadcastManager.getInstance(this).sendBroadcast(TokenIntent);
-//                Intent i = new Intent();
-//                i.setClass(this, Elleipseis.class);
-//                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(i);
+
             }
 
             else{

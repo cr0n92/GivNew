@@ -43,6 +43,8 @@ public class PrefManager {
     private static final String KEY_MOBILE = "mobile";
     private static final String KEY_TOKEN = "token";
     private static final String KEY_NOTIFICATION_PERMIT = "notification_permit";
+    private static final String KEY_COUNTDOWN = "countdown";
+
 
 
 
@@ -68,6 +70,15 @@ public class PrefManager {
 
     public String getMobileNumber() {
         return pref.getString(KEY_MOBILE_NUMBER, null);
+    }
+
+    public void setCountdown(Boolean countdown) {
+        editor.putBoolean(KEY_COUNTDOWN, countdown);
+        editor.commit();
+    }
+
+    public Boolean getCountdown() {
+        return pref.getBoolean(KEY_COUNTDOWN, true);
     }
 
     public String getToken() {

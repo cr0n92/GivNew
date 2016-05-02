@@ -5,20 +5,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -33,6 +26,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Calendar;
 
 
 public class Register extends HelperActivity {
@@ -42,7 +36,9 @@ public class Register extends HelperActivity {
     private PrefManager pref;
     ProgressDialog dialog;
 
-    String username = "", email = "", date = "", sex = "", phone = "";
+    String username = "", email = "", date = "", sex = "", phone = "",mDate1="";
+    int code;
+
     Boolean is_male = false;
 
     @Override
@@ -91,19 +87,16 @@ public class Register extends HelperActivity {
         dateLayout = (TextInputLayout) findViewById(R.id.birth);
 
         mEmail.addTextChangedListener(new MyTextWatcher(mEmail));
+        mUsername.addTextChangedListener(new MyTextWatcher(mUsername));
+
+
 
         pref = new PrefManager(this);
 
-        // Checking for user session
-        // if user is already logged in, take him to elleipseis
-        if (pref.isLoggedIn()) {
-  //          pref.clearSession();
-            Intent intent = new Intent(Register.this, Elleipseis.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+        phone=pref.getMobileNumber();
 
-            finish();
-        }
+
+
     }
 
     @Override
@@ -111,17 +104,31 @@ public class Register extends HelperActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_tick) {
-            if (submitForm()) {
-                username = mUsername.getText().toString();
-                email = mEmail.getText().toString();
-                sex = (is_male) ? "M" : "F";
-                date = mDate.getText().toString();
+                if (submitForm()) {
+                    username = mUsername.getText().toString();
+                    email = mEmail.getText().toString();
+                    sex = (is_male) ? "M" : "F";
+                    mDate1 = mDate.getText().toString().trim();
+                    int year = Calendar.getInstance().get(Calendar.YEAR);
 
-                dialog = new ProgressDialog(this);
-                dialog.setMessage(getString(R.string.loading_msg));
-                dialog.show();
-                new HttpGetTask().execute();
-            }
+                    if (!(mDate1.equals(""))) {
+                        if (year - Integer.parseInt(mDate1) < 18) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.prof_age_warning),
+                                    Toast.LENGTH_LONG).show();
+                            return super.onOptionsItemSelected(item);
+
+                        }
+                        date = mDate.getText().toString().trim() + "-1-1";
+                    }
+                    if (username.equals(""))
+                        username = phone;
+
+                    dialog = new ProgressDialog(this);
+                    dialog.setMessage(getString(R.string.loading_msg));
+                    dialog.show();
+                    new HttpGetTask().execute();
+                }
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -134,7 +141,7 @@ public class Register extends HelperActivity {
 
         @Override
         protected JSONObject doInBackground(Void... arg0) {
-            String URL = server + "/reg/";
+            String URL = server + "/profile/";
             String data = "";
             JSONObject out = new JSONObject();
 
@@ -145,17 +152,26 @@ public class Register extends HelperActivity {
             try {
                 url = new URL(request);
                 String urlParameters =
-                        "username="     + username +
-                        "&userPhone="   + phone +
-                        "&userEmail="   + email +
-                        "&birthDate="   + date +
+                        //"username="     + username +
+                        "userPhone="+phone +
+                        //"&userEmail="   + email +
+                        //"&birthDate="   + date +
                         "&sex="         + sex;
-
+                if (!(username == null || username.trim().equals(""))){
+                    urlParameters+="&username="+username;
+                }
+                if (!(email == null || email.trim().equals(""))){
+                    urlParameters+="&email="+email;
+                }
+                if (!(date == null || date.trim().equals(""))){
+                    urlParameters+="&date="+date;
+                }
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 int postDataLength = postData.length;
 
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
+                conn.setRequestMethod("PUT");
                 conn.setRequestProperty("Connection", "keep-alive");
                 conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
 
@@ -163,6 +179,8 @@ public class Register extends HelperActivity {
                 wr.write(postData);
                 InputStream in = new BufferedInputStream(conn.getInputStream());
                 data = HelperActivity.readStream(in);
+                code = conn.getResponseCode();
+
                 Log.e("data", data);
 
                 //JSONObject obj = new JSONObject(data);
@@ -184,7 +202,7 @@ public class Register extends HelperActivity {
             }
             try {
                 Log.e(TAG, "phone"+phone);
-                out.put("phone",phone);
+                out.put("code",code);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -199,13 +217,22 @@ public class Register extends HelperActivity {
             }
             else {
                 try {
-                    pref.setMobileNumber(result.get("phone").toString());
+                    if(result.getInt("code")==202) {
+                        nameLayout.setError("To username uparxei hdh");
+                        requestFocus(mUsername);
+                    }
+                    else {
+                        Intent intent = new Intent(Register.this, Elleipseis.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //kanoume update thn vash tou kinitou me tis plhrofories
-                //kai ton stelnoume sto SMS validation
-                //apo8hkeuoume to kinhto tou xrhsth ston prefmanager
+
+
+
+
             }
 
             dialog.dismiss();
@@ -225,11 +252,13 @@ public class Register extends HelperActivity {
 
     private boolean validateName() {
         if (mUsername.getText().toString().trim().isEmpty()) {
-            //nameLayout.setError(getString(R.string.err_msg_name));
+            nameLayout.setError("Λάθος Όνομα");
             requestFocus(mUsername);
             return false;
         } else {
-            nameLayout.setErrorEnabled(false);
+            nameLayout.setError(null);
+
+            //nameLayout.setErrorEnabled(false);
         }
 
         return true;
@@ -238,19 +267,21 @@ public class Register extends HelperActivity {
     private boolean validateEmail() {
         String email = mEmail.getText().toString().trim();
 
-        if (email.isEmpty() || !isValidEmail(email)) {
-           // emailLayout.setError(getString(R.string.err_msg_email));
+        if (!isValidEmail(email)) {
+            emailLayout.setError("Λάθος email");
             requestFocus(mEmail);
             return false;
         } else {
-            emailLayout.setErrorEnabled(false);
+            emailLayout.setError(null);
+            //emailLayout.setErrorEnabled(false);
         }
 
         return true;
     }
 
     private static boolean isValidEmail(String email) {
-        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        if (email.isEmpty() ) return true;
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     private void requestFocus(View view) {

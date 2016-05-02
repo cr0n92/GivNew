@@ -60,6 +60,7 @@ public class ConfirmNumber extends AppCompatActivity {
                         pref.setCountdown("second");
                     else if (pref.getCountdown().equals("secondRunning"))
                         pref.setCountdown("Last");
+                    Log.e("TZA","TZA");
                     sendAgain.setText(getString(R.string.conf_send_again));
                     sendAgain.setPaintFlags(sendAgain.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
                     sendAgain.setOnClickListener(new View.OnClickListener() {
@@ -107,8 +108,9 @@ public class ConfirmNumber extends AppCompatActivity {
                 }
 
                 public void onFinish() {
-                    Intent intent = new Intent(ConfirmNumber.this, Elleipseis.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    pref.createLogin();
+                    Intent intent = new Intent(ConfirmNumber.this, Register.class);
+                    //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
             }.start();
@@ -161,10 +163,10 @@ public class ConfirmNumber extends AppCompatActivity {
 
 
 
-//        dialog = new ProgressDialog(this);
-//        dialog.setMessage("Loading, Please Wait...");
-//        dialog.show();
-//        new HttpGetTask().execute();
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading, Please Wait...");
+        dialog.show();
+        new HttpGetTask().execute();
     }
 
     @Override
@@ -219,6 +221,7 @@ public class ConfirmNumber extends AppCompatActivity {
                     public void onClick(View v) {
                         pref.setCountdown("End1");
                         sendAgain.setText("Δεν έχεις δικάιωμα για άλλα μηνύματα");
+                        sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
                         sendAgain.setOnClickListener(null);
                     }
 
@@ -226,6 +229,7 @@ public class ConfirmNumber extends AppCompatActivity {
                 break;
             case "End":
                 sendAgain.setText("Δεν έχεις δικάιωμα για άλλα μηνύματα");
+                sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
                 sendAgain.setOnClickListener(null);
                 break;
 

@@ -14,6 +14,8 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +30,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Calendar;
 
+import io.fabric.sdk.android.Fabric;
 
 public class Register extends HelperActivity {
     private EditText mDate, mEmail, mUsername, mSex, male, female;
@@ -44,6 +47,7 @@ public class Register extends HelperActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main);
         super.helperOnCreate(R.layout.register, R.string.register, false);
 
@@ -90,10 +94,10 @@ public class Register extends HelperActivity {
         mUsername.addTextChangedListener(new MyTextWatcher(mUsername));
 
 
-
         pref = new PrefManager(this);
 
         phone=pref.getMobileNumber();
+
 
 
 
@@ -189,13 +193,16 @@ public class Register extends HelperActivity {
 
             } catch (ProtocolException e) {
                 error = 1;
+                Crashlytics.logException(e);
                 Log.e(TAG, "ProtocolException");
-            } catch (MalformedURLException exception) {
+            } catch (MalformedURLException e) {
                 error = 1;
+                Crashlytics.logException(e);
                 Log.e(TAG, "MalformedURLException");
-            } catch (IOException exception) {
+            } catch (IOException e) {
                 error = 1;
-                Log.e(TAG, "IOException"+exception);
+                Crashlytics.logException(e);
+                Log.e(TAG, "IOException"+e);
             } finally {
                 if (null != conn)
                     conn.disconnect();
@@ -204,6 +211,7 @@ public class Register extends HelperActivity {
                 Log.e(TAG, "phone"+phone);
                 out.put("code",code);
             } catch (JSONException e) {
+                Crashlytics.logException(e);
                 e.printStackTrace();
             }
             return out;
@@ -227,6 +235,7 @@ public class Register extends HelperActivity {
                         startActivity(intent);
                     }
                 } catch (JSONException e) {
+                    Crashlytics.logException(e);
                     e.printStackTrace();
                 }
 

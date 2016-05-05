@@ -44,6 +44,10 @@ public class PrefManager {
     private static final String KEY_TOKEN = "token";
     private static final String KEY_NOTIFICATION_PERMIT = "notification_permit";
     private static final String KEY_COUNTDOWN = "countdown";
+    private static final String KEY_UPDATE_DONATIONS = "update_donations";
+    private static final String KEY_OLD_MONTH = "old_month";
+
+
 
 
 
@@ -98,6 +102,17 @@ public class PrefManager {
         editor.putBoolean(KEY_NOTIFICATION_PERMIT, permit);
         editor.commit();
     }
+
+    public int getOldMonth() {
+        return pref.getInt(KEY_OLD_MONTH, -1);
+    }
+
+    public void setOldMonth(int month) {
+        editor.putInt(KEY_OLD_MONTH, month);
+        editor.commit();
+    }
+
+
 
     public void createLogin() {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);

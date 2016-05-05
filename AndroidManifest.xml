@@ -27,6 +27,10 @@
     <uses-permission android:name="android.permission.C2D_MESSAGE" />
     <!-- [END gcm_permission] -->
 
+    <!-- Gia to MedAlarm -->
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
 
     <application
         android:allowBackup="true"
@@ -35,6 +39,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name="com.givmed.android.AnalyticsApplication" >
+
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
 
         <!-- [START gcm_receiver] -->
@@ -209,6 +223,21 @@
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+
+        <receiver android:name=".BootReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <service
+            android:name="com.givmed.android.AlarmService"
+            android:exported="false" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="18f2cddd629d49e015fad7e1bf7c5427e38fc35c"
+            />
     </application>
 
 </manifest>

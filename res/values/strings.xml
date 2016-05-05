@@ -85,6 +85,8 @@
     <string name="prof_sex">Φύλο</string>
     <string name="prof_birth_date">Έτος Γέννησης</string>
     <string name="prof_email">Email</string>
+    <string name="prof_age_warning">Λόγω των όρων χρήσης μας, μόνο άτομα άνω των 18 μπορούν να χρησιμοποιήσουν το GIVMED!</string>
+
 
     <!-- Εγγραφή -->
     <string name="your_phone">Συμπλήρωσε τον αριθμό σου</string>

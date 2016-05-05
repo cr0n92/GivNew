@@ -1,16 +1,24 @@
 package com.givmed.android;
 
+import android.database.Cursor;
+
 public class MedName {
-    private String mName = new String();
-    private String mCount = new String();
-    private String mDate = new String();
+    private String mName;
+    private String mCount;
+    private String mDate;
 
     MedName() { }
 
     MedName(String name, String count, String date) {
-        this.mName = name;
-        this.mCount = count;
-        this.mDate = date;
+        mName = name;
+        mCount = count;
+        mDate = date;
+    }
+
+    MedName(Cursor cursor) {
+        mName = cursor.getString(0);
+        mCount = cursor.getString(1);
+        mDate = cursor.getString(2);
     }
 
     //setters

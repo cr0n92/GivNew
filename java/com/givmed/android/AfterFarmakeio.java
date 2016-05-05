@@ -41,14 +41,6 @@ public class AfterFarmakeio extends HelperActivity {
 
         db = new DBHandler(getApplicationContext());
 
-        final FloatingActionButton floatingBut = (FloatingActionButton) findViewById(R.id.fab);
-        floatingBut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), TwoButtons.class));
-            }
-        });
-
         mAdapter = new MedicineAdapter(getApplicationContext());
         ListView list = (ListView)findViewById(R.id.list);
         list.setFooterDividersEnabled(true);
@@ -79,9 +71,9 @@ public class AfterFarmakeio extends HelperActivity {
 
         switch (item.getItemId()) {
             case MENU_DELETE:
-                AlertDialog alertDialog = new AlertDialog.Builder(getApplicationContext()).create();
-                alertDialog.setTitle("Delete entry");
-                alertDialog.setMessage("Are you sure you want to delete this entry?");
+                AlertDialog alertDialog = new AlertDialog.Builder(AfterFarmakeio.this).create();
+                alertDialog.setTitle(getString(R.string.delete_med));
+                alertDialog.setMessage(getString(R.string.delete_sure));
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -91,7 +83,7 @@ public class AfterFarmakeio extends HelperActivity {
                                 new HttpGetTask().execute(delMed.getBarcode());
                             }
                         });
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 

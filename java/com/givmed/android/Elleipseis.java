@@ -36,6 +36,7 @@ import java.net.URL;
 public class Elleipseis extends HelperActivity
 {
     private final String TAG = "Ellepseis";
+    private String right_plu, right_sin, left_sin;
     public static NeedAdapter mAdapter;
     private static TextView msgView;
     private static Button nameButton, regionButton;
@@ -61,6 +62,9 @@ public class Elleipseis extends HelperActivity
         super.setMenu(R.menu.menu_main_simple);
         super.helperOnCreate(R.layout.eleipseis, R.string.elleipseis, false);
 
+        db = new DBHandler(getApplicationContext());
+
+        new HttpGetTaskPharmacies().execute();
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         pref = new PrefManager(getApplicationContext());
 
@@ -95,10 +99,14 @@ public class Elleipseis extends HelperActivity
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+        left_sin = getResources().getString(R.string.need_left_half_msg);
+        right_plu = getResources().getString(R.string.need_right_half_msg_plural);
+        right_sin = getResources().getString(R.string.need_right_half_msg_single);
+
         msgView = (TextView) findViewById(R.id.secondMes);
         nameButton = (Button) findViewById(R.id.nameButton);
         regionButton = (Button) findViewById(R.id.regionButton);
-        msgView.setText(getResources().getString(R.string.need_left_half_msg) + " (0) " + getResources().getString(R.string.need_right_half_msg_plural));
+        msgView.setText(left_sin + " (0) " + right_plu);
 
         nameButton.setOnClickListener(new View.OnClickListener() {
 
@@ -117,7 +125,7 @@ public class Elleipseis extends HelperActivity
             public void onClick(View v) {
                 changeButtonsLayout(regionButton, nameButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left);
                 mAdapter.clear();
-                db.getAllNeeds(mAdapter, "region");
+                db.getAllNeeds(mAdapter, "pharName");
                 //pref.setNotificationPermission(true);
 
             }
@@ -142,14 +150,12 @@ public class Elleipseis extends HelperActivity
         //registerForContextMenu(getListView());
         list.setAdapter(mAdapter);
 
-        db = new DBHandler(getApplicationContext());
-
         if (isOnline())
             new HttpGetTask().execute();
         else {
-            int count = db.getAllNeeds(mAdapter, "region");
-            int right_msg = (count == 1) ? R.string.need_right_half_msg_single : R.string.need_right_half_msg_plural;
-            msgView.setText(getResources().getString(R.string.need_left_half_msg) + " " + count + " " + getResources().getString(right_msg));
+            int count = db.getAllNeeds(mAdapter, "pharName");
+            String right_msg = (count == 1) ? right_sin: right_plu;
+            msgView.setText(left_sin + " " + count + " " + right_msg);
         }
     }
 
@@ -158,8 +164,6 @@ public class Elleipseis extends HelperActivity
         super.onResume();  // Always call the superclass method first
 
         registerReceiver(); //PUSH
-
-
     }
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!
@@ -269,16 +273,6 @@ public class Elleipseis extends HelperActivity
                         Need needo = new Need();
                         needo.setNeedName(json.getString("needMedName"));
                         needo.setPhone(json.getString("needPhone"));
-                        needo.setAddress(json.getString("needAddress"));
-                        needo.setName("ellhnikou");
-                        if (i==0)
-                            needo.setRegion("lelos");
-                        if (i==1)
-                            needo.setRegion("alelos");
-                        if (i==2)
-                            needo.setRegion("blelos");
-                        if (i==3)
-                            needo.setRegion("clelos");
 
                         db.addNeed(needo);
                     }
@@ -286,9 +280,81 @@ public class Elleipseis extends HelperActivity
                     e.printStackTrace();
                 }
                 int count = db.getAllNeeds(mAdapter, "needName");
-                int right_msg = (count == 1) ? R.string.need_right_half_msg_single : R.string.need_right_half_msg_plural;
-                msgView.setText(getResources().getString(R.string.need_left_half_msg) + " " + count + " " + getResources().getString(right_msg));
+                String right_msg = (count == 1) ? right_sin: right_plu;
+                msgView.setText(left_sin + " " + count + " " + right_msg);
+            }
+        }
+    }
 
+    private class HttpGetTaskPharmacies extends AsyncTask<Void, Void, JSONArray> {
+
+        private static final String TAG = "HttpGetTask";
+        private int error = -1;
+
+        @Override
+        protected JSONArray doInBackground(Void... arg0) {
+
+            String URL = server + "/pharmacies/";
+
+            String data = "";
+            JSONArray out = null;
+
+            String request = URL;
+            java.net.URL url = null;
+            HttpURLConnection conn = null;
+
+            try {
+                url = new URL(request);
+                conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
+
+                //conn.setConnectTimeout(10* 1000);          // 10 s.
+                //conn.connect();
+
+                conn.setDoInput(true);
+
+                InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
+                data = HelperActivity.readStream(in);
+
+                out = new JSONArray(data);
+
+            } catch (JSONException e) {
+                Log.e(TAG, "JsonException");
+            } catch (ProtocolException e) {
+                error = 1;
+                Log.e(TAG, "ProtocolException");
+            } catch (MalformedURLException exception) {
+                error = 1;
+                Log.e(TAG, "MalformedURLException");
+            } catch (IOException exception) {
+                error = 1;
+                exception.printStackTrace();
+                Log.e(TAG, "IOException");
+            } finally {
+                if (null != conn)
+                    conn.disconnect();
+            }
+
+            return out;
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray result) {
+            if (error > 0) {
+                Toast.makeText(getApplicationContext(), (error == 1)? "No internet connection" : "Nothing to show",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                try {
+                    db.deletePharmacies();
+                    for(int i=0; i<result.length(); i++) {
+                        JSONObject json = result.getJSONObject(i);
+                        Log.i("etsi pou les", "" + json);
+
+                        db.addPharmacy(json.getString("pharmacyPhone"), json.getString("pharmacyAddress"),
+                                json.getString("openTime"), json.getString("pharmacyName"), json.getString("pharmacyNameGen"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

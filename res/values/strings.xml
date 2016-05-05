@@ -28,6 +28,8 @@
     <string name="out_expiration">Ημ. λήξης</string>
     <string name="out_barcode">Barcode</string>
     <string name="out_condition">Κατάσταση Φαρμάκου</string>
+    <string name="out_open">ΑΝΟΙΧΤΟ</string>
+    <string name="out_closed">ΚΛΕΙΣΤΟ</string>
     <string name="out_notes">Σημειώσεις</string>
     <string name="out_med_registered">Το φάρμακο έχει ήδη καταχωρηθεί!</string>
 
@@ -38,6 +40,8 @@
     <string name="pharm_right_half_msg_single">φάρμακo!</string>
     <string name="naming_caps">ΟΝΟΜΑΣΙΑ</string>
     <string name="expire_caps">ΗΜ. ΛΗΞΗΣ</string>
+    <string name="delete_med">Διαγραφή φαρμάκου</string>
+    <string name="delete_sure">Είστε σίγουρος οτι θέλετε να το διαγράψεται;</string>
 
     <!-- Δωρεές -->
     <string name="donation_med">φάρμακα αξίας</string>
@@ -56,6 +60,19 @@
     <string name="scan_button">Σκάναρε</string>
     <string name="input_button">Πληκτρολόγησε</string>
 
+    <!-- Όχι είμαι εντάξει -->
+    <string name="im_fine_first_msg">Αποθηκεύτηκε!</string>
+    <string name="im_fine_second_msg">Έχεις άλλα φάρμακα για καταχώρηση;</string>
+    <string name="yes">Ναι!</string>
+    <string name="no_im_good">Όχι, είμαι εντάξει!</string>
+
+    <!-- Μπλέ - Κόκκινη λίστα -->
+    <string name="br_first_msg_blue">Επέλεξε τα φάρμακα που θέλεις να δωρίσεις άμεσα με μπλέ!</string>
+    <string name="br_first_msg_red">Επέλεξε τα φάρμακα που θέλεις να δωρίσεις πρίν λήξουν με κόκκινο!</string>
+    <string name="br_donation">ΔΩΡΕΑ:</string>
+    <string name="br_now">ΑΜΕΣΗ</string>
+    <string name="br_exp">ΠΡΙΝ ΛΗΞΟΥΝ</string>
+    
     <!-- Ελείψεις -->
     <string name="region">Περιοχή</string>
     <string name="need_your_help">Η βοήθειά σου είναι πολύ σημαντική!</string>
@@ -72,6 +89,14 @@
     <!-- Εγγραφή -->
     <string name="your_phone">Συμπλήρωσε τον αριθμό σου</string>
     <string name="accept_terms">Αποδέχομαι τους όρους</string>
+
+    <!-- Ρυθμίσεις -->
+    <string name="set_msg1">Ειδοποιήσεις</string>
+    <string name="set_msg2">Να επιτρέπεται η εφαρμογή να σου στέλνει ειδοποιήσεις για τα φάρμακα</string>
+    <string name="version">Έκδοση 1.0</string>
+
+    <string name="set_yes">ΝΑΙ</string>
+    <string name="set_no">ΟΧΙ</string>
 
     <!-- Νούμερο -->
     <string name="num_are_you_ready">Είσαι έτοιμος να κάνεις την πρώτη σου δωρεά;</string>
@@ -106,18 +131,23 @@
 
     <!-- Eισαγωγή barcode -->
     <string name="inp_type_msg">Πληκτρολόγησε τον κωδικό που βρίσκεται πάνω στο κουτι.</string>
+    <string name="inp_error_msg">Το μήκος του barcode δεν είναι έγκυρο!</string>
+    <string name="inp_expired_msg">Το φάρμακο έχει λήξει!</string>
 
     <!-- Κάμερα -->
     <string name="camera_error">Δεν μπορέσαμε να ανοίξουμε την κάμερα!</string>
     <string name="scan_msg">Σκάναρε το 1<sup>ο</sup> barcode</string>
 
     <!-- Άλλα στρινγκς -->
-    <string name="loading_msg">Παρακαλώ περιμένετε#8230</string>
+    <string name="loading_msg">Παρακαλώ περιμένετε...</string>
+    <string name="no_internet">Δεν υπάρχει σύνδεση στο διαδίκτυο!</string>
+    <string name="cancel">Άκυρο</string>
     <string name="action_settings">Settings</string>
     <string name="action_tick">Send</string>
     <string name="action_back">Back</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
 
     <!-- F.A.Q. -->
     <string-array name="headers">

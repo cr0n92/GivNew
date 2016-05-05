@@ -88,6 +88,25 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
+            android:name="com.givmed.android.ImFine"
+            android:label="im_fine"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.givmed.android.BlueRedList"
+            android:label="blue_red_list"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.givmed.android.Settings"
+            android:label="settings"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
             android:name="com.givmed.android.Dwrees"
             android:label="dwrees"
             android:theme="@style/AppTheme.NoActionBar" >

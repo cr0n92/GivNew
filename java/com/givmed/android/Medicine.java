@@ -1,42 +1,47 @@
 package com.givmed.android;
 
-import android.content.Intent;
+import android.database.Cursor;
 
-/**
- * Created by agroikos on 29/11/2015.
- */
 public class Medicine {
-    public static final String ITEM_SEP = System.getProperty("line.separator");
-
-    public final static String BARCODE = "barcode";
-    public final static String NAME = "name";
-    public final static String DATE = "date";
-    public final static String PRICE = "price";
-
-    //prepei na valoume kai to state kai na kovoume to onoma kai anti gia arxeio
-    //na exoume mia vash me ta local farmaka giati mpales me autes tis mlkies
-
-    private String mBarcode = new String();
-    private String mName = new String();
-    private String mDate = new String();
-    private String mPrice = new String();
+    private String mBarcode;
+    private String mEofcode;
+    private String mName;
+    private String mDate;
+    private String mPrice;
+    private String mNotes;
+    private String mState;
+    private String mSubstance;
+    private String mCategory;
+    private String mStatus;
 
     Medicine() { }
 
-    Medicine(String barcode, String name, String date, String price) {
-        this.mBarcode = barcode;
-        this.mName = name;
-        this.mDate = date;
-        this.mPrice = price;
+    Medicine(String barcode, String eofcode, String name, String date, String price, String notes,
+             String state, String substance, String category, String status) {
+        mBarcode = barcode;
+        mEofcode = eofcode;
+        mName = name;
+        mDate = date;
+        mPrice = price;
+        mNotes = notes;
+        mState = state;
+        mSubstance = substance;
+        mCategory = category;
+        mStatus = status;
     }
 
-    // Create a new ToDoItem from data packaged in an Intent
-    Medicine(Intent intent) {
-        mBarcode = intent.getStringExtra(Medicine.BARCODE);
-        mName = intent.getStringExtra(Medicine.NAME);
-        mDate = intent.getStringExtra(Medicine.DATE);
-        mPrice = intent.getStringExtra(Medicine.PRICE);
-    }
+//    Medicine(Cursor cursor) {
+//        mBarcode = cursor.getString(0);
+//        mEofcode = cursor.getString(0);
+//        mName = cursor.getString(1);
+//        mDate = cursor.getString(2);
+//        mPrice = cursor.getString(3);
+//        mNotes = cursor.getString(4);
+//        mState = cursor.getString(5);
+//        mSubstance = cursor.getString(6);
+//        mCategory = cursor.getString(7);
+//        mStatus = cursor.getString(9);
+//    }
 
     //setters
     public void setName(String name) { mName = name; }
@@ -53,6 +58,26 @@ public class Medicine {
         mBarcode = barcode;
     }
 
+    public void setEofcode(String eofcode) {
+        mEofcode = eofcode;
+    }
+
+    public void setNotes(String notes) { mNotes = notes; }
+
+    public void setState(String state) {
+        mState = state;
+    }
+
+    public void setSubstance(String substance) {
+        mSubstance = substance;
+    }
+
+    public void setCategory(String category) {
+        mCategory = category;
+    }
+
+    public void setStatus(String status) { mStatus = status; }
+
     //getters
     public String getName() { return mName; }
 
@@ -68,17 +93,24 @@ public class Medicine {
         return mBarcode;
     }
 
-    // Take a set of String data values and
-    // package them for transport in an Intent
-    public static void packageIntent(Intent intent, String barcode, String name, String date, String price) {
-        intent.putExtra("outputter", "new_med");
-        intent.putExtra(Medicine.NAME, name);
-        intent.putExtra(Medicine.PRICE, price);
-        intent.putExtra(Medicine.DATE, date);
-        intent.putExtra(Medicine.BARCODE, barcode);
+    public String getEofcode() {
+        return mEofcode;
     }
 
-    public String toString() {
-        return mName + ITEM_SEP + mPrice + ITEM_SEP + mDate + ITEM_SEP + mBarcode;
+    public String getNotes() { return mNotes; }
+
+    public String getState() {
+        return mState;
     }
+
+    public String getSubstance() {
+        return mSubstance;
+    }
+
+    public String getCategory() {
+        return mCategory;
+    }
+
+    public String getStatus() { return mStatus; }
+
 }

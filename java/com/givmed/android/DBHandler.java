@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.json.JSONObject;
+
 
 public class DBHandler extends SQLiteOpenHelper {
 
@@ -22,59 +24,91 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // Table names
     private static final String TABLE_NEEDS = "need";
+    private static final String TABLE_PHARMACIES = "pharmacies";
     private static final String TABLE_MEDS = "med";
+    private static final String TABLE_EOFCODES = "eofcodes";
     private static final String TABLE_DONATIONS = "donations";
+    private static final String TABLE_DONE_DONATIONS = "doneDnations";
     private static final String TABLE_NAMES = "names";
 
     // Needs Table Columns names
-    private static final String KEY_PHONE = "phone";
-    private static final String KEY_PHARM_NAME = "pharmName";
-    private static final String KEY_ADDR = "address";
+    private static final String KEY_PHAR_PHONE = "pharPhone";
     private static final String KEY_NEED_NAME = "needName";
-    private static final String KEY_REGION = "region";
+
+    // Pharmacies Table Columns names
+    // private static final String KEY_PHAR_PHONE = "pharPhone";
+    private static final String KEY_PHAR_ADDRESS = "pharAddress";
+    private static final String KEY_PHAR_HOURS = "pharHours";
+    private static final String KEY_PHAR_NAME = "pharName";
+    private static final String KEY_PHAR_NAME_GEN = "pharNameGen";
 
     // Meds Table Columns names
     private static final String KEY_BARCODE = "barcode";
-    private static final String KEY_NAME = "name";
+    private static final String KEY_EOFCODE = "eofcode";
     private static final String KEY_EXP_DATE = "expDate";
-    private static final String KEY_PRICE = "price";
     private static final String KEY_NOTES = "notes";
     private static final String KEY_STATE = "state";
-    private static final String KEY_SUB = "substance";
-    private static final String KEY_CATEG = "category";
+    private static final String KEY_STATUS = "status";
     private static final String KEY_HALF_NAME = "halfName";
 
+    // Eofcodes Table Columns names
+    // private static final String KEY_EOFCODE = "eofcode";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_PRICE = "price";
+    private static final String KEY_SUB = "substance";
+    private static final String KEY_CATEG = "category";
+    private static final String KEY_COUNT = "count";
+
     // Donations Table Columns names
-//    private static final String KEY_BARCODE = "barcode";
-//    private static final String KEY_EXP_DATE = "expDate";
-//    private static final String KEY_PRICE = "price";
-//    private static final String KEY_NOTES = "notes";
-//    private static final String KEY_STATE = "state";
-//    private static final String KEY_SUB = "substance";
-//    private static final String KEY_CATEG = "category";
+    // private static final String KEY_BARCODE = "barcode";
+    // private static final String KEY_PHAR_PHONE = "pharPhone";
+    private static final String KEY_DATE1 = "date1";
+    private static final String KEY_DATE2 = "date2";
+    private static final String KEY_DATE3 = "date3";
+    private static final String KEY_VOLUNTEER = "volunteer";
+    private static final String KEY_PICK_ADDR = "pickAddr";
+
+    // Done Donations Table Columns names
+    private static final String KEY_ID = "id";
+    // private static final String KEY_PRICE = "price";
+    // private static final String KEY_NAME = "name";
+    // private static final String KEY_PHAR_NAME = "pharName";
+    private static final String KEY_DATE = "date";
 
     // Meds Names Table Columns names
-    private static final String KEY_COUNT = "count";
+    // private static final String KEY_NAME = "name";
+    // private static final String KEY_COUNT = "count";
     private static final String KEY_S_DATE = "sDate";
 
     // Table Create Statements
     private static final String CREATE_NEEDS_TABLE = "CREATE TABLE " + TABLE_NEEDS + "("
-            + KEY_PHONE + " TEXT," + KEY_PHARM_NAME + " TEXT," + KEY_ADDR + " TEXT,"
-            + KEY_NEED_NAME + " TEXT," + KEY_REGION + " TEXT, PRIMARY KEY (" + KEY_PHONE
-            + ", " + KEY_NEED_NAME + ")" + ")";
+            + KEY_PHAR_PHONE + " TEXT," + KEY_NEED_NAME + " TEXT, PRIMARY KEY (" + KEY_PHAR_PHONE + ", "
+            + KEY_NEED_NAME + ")" + ")";
 
     private static final String CREATE_MEDS_TABLE = "CREATE TABLE " + TABLE_MEDS + "("
-            + KEY_BARCODE + " TEXT PRIMARY KEY," + KEY_NAME + " TEXT," + KEY_EXP_DATE + " TEXT,"
-            + KEY_PRICE + " TEXT," + KEY_NOTES + " TEXT," + KEY_STATE + " TEXT,"
-            + KEY_SUB + " TEXT," + KEY_CATEG + " TEXT," + KEY_HALF_NAME + " TEXT" + ")";
+            + KEY_BARCODE + " TEXT PRIMARY KEY," + KEY_EOFCODE + " TEXT," + KEY_EXP_DATE + " TEXT,"
+            + KEY_NOTES + " TEXT," + KEY_STATE + " TEXT," + KEY_STATUS + " TEXT,"
+            + KEY_HALF_NAME + " TEXT" + ")";
 
-//    private static final String CREATE_DONATIONS_TABLE = "CREATE TABLE " + TABLE_MEDS + "("
-//            + KEY_BARCODE + " TEXT PRIMARY KEY," + KEY_NAME + " TEXT," + KEY_EXP_DATE + " TEXT,"
-//            + KEY_PRICE + " TEXT" + ")";
+    private static final String CREATE_PHARMACIES_TABLE = "CREATE TABLE " + TABLE_PHARMACIES + "("
+            + KEY_PHAR_PHONE + " TEXT PRIMARY KEY," + KEY_PHAR_ADDRESS + " TEXT," + KEY_PHAR_HOURS + " TEXT,"
+            + KEY_PHAR_NAME + " TEXT," + KEY_PHAR_NAME_GEN + " TEXT" + ")";
+
+    private static final String CREATE_EOFCODES_TABLE = "CREATE TABLE " + TABLE_EOFCODES + "("
+            + KEY_EOFCODE + " TEXT PRIMARY KEY," + KEY_NAME + " TEXT," + KEY_PRICE + " TEXT,"
+            + KEY_SUB + " TEXT," + KEY_CATEG + " TEXT," + KEY_COUNT + " TEXT" + ")";
+
+    private static final String CREATE_DONATIONS_TABLE = "CREATE TABLE " + TABLE_DONATIONS + "("
+            + KEY_BARCODE + " TEXT PRIMARY KEY," + KEY_PHAR_PHONE + " TEXT," + KEY_DATE1 + " TEXT,"
+            + KEY_DATE2 + " TEXT," + KEY_DATE3 + " TEXT," + KEY_VOLUNTEER + " TEXT,"
+            + KEY_PICK_ADDR + " TEXT" + ")";
+
+    private static final String CREATE_DONE_DONATIONS_TABLE = "CREATE TABLE " + TABLE_DONE_DONATIONS + "("
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + KEY_PRICE + " TEXT,"
+            + KEY_NAME + " TEXT," + KEY_PHAR_NAME + " TEXT," + KEY_DATE + " TEXT" + ")";
 
     private static final String CREATE_NAMES_TABLE = "CREATE TABLE " + TABLE_NAMES + "("
-            + KEY_NAME + " TEXT PRIMARY KEY," + KEY_COUNT + " INTEGER," + KEY_S_DATE + " TEXT"
-            + ")";
+            + KEY_NAME + " TEXT PRIMARY KEY," + KEY_COUNT + " TEXT," + KEY_S_DATE + " TEXT" + ")";
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -84,8 +118,11 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_NEEDS_TABLE);
+        db.execSQL(CREATE_PHARMACIES_TABLE);
         db.execSQL(CREATE_MEDS_TABLE);
-        //db.execSQL(CREATE_DONATIONS_TABLE);
+        db.execSQL(CREATE_EOFCODES_TABLE);
+        db.execSQL(CREATE_DONATIONS_TABLE);
+        db.execSQL(CREATE_DONE_DONATIONS_TABLE);
         db.execSQL(CREATE_NAMES_TABLE);
     }
 
@@ -95,21 +132,19 @@ public class DBHandler extends SQLiteOpenHelper {
         // An einai na kanoume update tote prepei na kanoume copy ta dedomena
         // kai meta na kanoume drop thn vash wste na mhn xa8oun
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEEDS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEDS);
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_DONATIONS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAMES);
 
         // Create tables again
-        onCreate(db);
     }
 
     public void deleteAll() {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEEDS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHARMACIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEDS);
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_DONATIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EOFCODES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DONATIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DONE_DONATIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAMES);
 
         // Create tables again
@@ -120,17 +155,20 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEDS);
-
-
         db.execSQL(CREATE_MEDS_TABLE);
+    }
+
+    public void deletePharmacies() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PHARMACIES);
+        db.execSQL(CREATE_PHARMACIES_TABLE);
     }
 
     public void deleteNeeds() {
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEEDS);
-
-
         db.execSQL(CREATE_NEEDS_TABLE);
     }
 
@@ -141,43 +179,23 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_PHONE, need.getPhone());
-        values.put(KEY_PHARM_NAME, need.getName());
-        values.put(KEY_ADDR, need.getAddress());
+        values.put(KEY_PHAR_PHONE, need.getPhone());
         values.put(KEY_NEED_NAME, need.getNeedName());
-        values.put(KEY_REGION, need.getRegion());
 
-        // Inserting Row
         db.insert(TABLE_NEEDS, null, values);
-        db.close(); // Closing database connection
+        db.close();
     }
-
-    // Getting single need
-//    public Need getNeed(int id) {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//
-//        Cursor cursor = db.query(TABLE_NEEDS, new String[]{KEY_ID,
-//                        KEY_NAME, KEY_ADDR, KEY_PH_NO}, KEY_ID + "=?",
-//                new String[]{String.valueOf(id)}, null, null, null, null);
-//        if (cursor != null)
-//            cursor.moveToFirst();
-//
-//        Need need = new Need(cursor);
-//        // return need
-//        return need;
-//    }
 
     // vazoume oles tis ellepseis ston adapter ta3hnomhmena eite ws pros to onoma/ousia h ws pros thn perioxh
     // epishs gyrizoume to plh8os twn elleipsewn
     public int getAllNeeds(NeedAdapter needAdapter, String orderingColumn) {
-        // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_NEEDS + " ORDER BY " + orderingColumn;
+        SQLiteDatabase db = this.getWritableDatabase();
         int cnt = 0;
 
-        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT " + KEY_PHAR_PHONE + "," + KEY_NEED_NAME + "," + KEY_PHAR_NAME
+                + " FROM " + TABLE_NEEDS + " NATURAL JOIN " + TABLE_PHARMACIES + " ORDER BY " + orderingColumn;
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
                 Need need = new Need(cursor);
@@ -186,9 +204,25 @@ public class DBHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
             cursor.close();
         }
+        db.close();
 
-        // return need list
         return cnt;
+    }
+
+    /*---------------- pharmacies functions ----------------------------*/
+    // Adding new pharmacy
+    public void addPharmacy(String phone, String address, String hours, String name, String nameGen) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_PHAR_PHONE, phone);
+        values.put(KEY_PHAR_ADDRESS, address);
+        values.put(KEY_PHAR_HOURS, hours);
+        values.put(KEY_PHAR_NAME, name);
+        values.put(KEY_PHAR_NAME_GEN, nameGen);
+
+        db.insert(TABLE_PHARMACIES, null, values);
+        db.close();
     }
 
     /*---------------- meds functions ----------------------------*/
@@ -217,37 +251,45 @@ public class DBHandler extends SQLiteOpenHelper {
             this.updateMedName(name);
         }
 
+        int eofcodes = this.getEofcodeCnt(med.getEofcode());
+        if (eofcodes < 0)
+            this.addEofcode(med);
+        else {
+            this.updateEofcode(med.getEofcode(), eofcodes + 1);
+        }
+
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_BARCODE, med.getBarcode());
-        values.put(KEY_NAME, med.getName()); // Med Name
-        values.put(KEY_EXP_DATE, med.getDate()); // Med Phone Number
-        values.put(KEY_PRICE, med.getPrice()); // Med Address
+        values.put(KEY_EOFCODE, med.getEofcode());
+        values.put(KEY_EXP_DATE, med.getDate());
+        values.put(KEY_NOTES, med.getNotes());
+        values.put(KEY_STATE, med.getState());
         values.put(KEY_HALF_NAME, halfName);
+        values.put(KEY_STATUS, med.getStatus());
 
-        // Inserting Row
         db.insert(TABLE_MEDS, null, values);
-        db.close(); // Closing database connection
+        db.close();
     }
 
     // Updating single med
-//    public int updateMed(Medicine med) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        ContentValues values = new ContentValues();
-//        values.put(KEY_NAME, med.getName());
-//        values.put(KEY_PH_NO, med.getPhone());
-//
-//        // updating row
-//        return db.update(TABLE_MEDS, values, KEY_ID + " = ?",
-//                new String[]{String.valueOf(med.getID())});
-//    }
+    public int updateMed(Medicine med) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NOTES, med.getNotes());
+        values.put(KEY_STATE, med.getState());
+        values.put(KEY_STATUS, med.getStatus());
+
+        // updating row
+        return db.update(TABLE_MEDS, values, KEY_BARCODE + " = ?",
+                new String[]{med.getBarcode()});
+    }
 
     // Deleting single med
     public void deleteMed(Medicine med, String halfName) {
         MedName name = this.getMedName(halfName);
-
         // an to count tou antistoixou onomatos ginei mhden tote afairoume thn eggrafh
         // kai apo ton pinaka me ta onomata, alliws apla meiwnoume to count
         if (Integer.getInteger(name.getCount()) == 1)
@@ -257,164 +299,174 @@ public class DBHandler extends SQLiteOpenHelper {
             this.updateMedName(name);
         }
 
+        int eofcodes = this.getEofcodeCnt(med.getEofcode());
+        if (eofcodes == 1)
+            this.deleteEofcode(med.getEofcode());
+        else {
+            this.updateEofcode(med.getEofcode(), eofcodes - 1);
+        }
+
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.delete(TABLE_MEDS, KEY_BARCODE + " = ?",
-                new String[]{med.getBarcode()});
+        db.delete(TABLE_MEDS, KEY_BARCODE + " = ?", new String[]{med.getBarcode()});
         db.close();
     }
 
     // Getting single med
     public Medicine getMed(String barcode) {
         SQLiteDatabase db = this.getReadableDatabase();
+        Medicine med = null;
 
         Cursor cursor = db.query(TABLE_MEDS, new String[]{KEY_BARCODE,
-                        KEY_NAME, KEY_EXP_DATE, KEY_PRICE}, KEY_BARCODE + "=?",
+                        KEY_EOFCODE, KEY_EXP_DATE, KEY_NOTES, KEY_STATE, KEY_STATUS}, KEY_BARCODE + "=?",
                 new String[]{barcode}, null, null, null, null);
-        if (cursor != null)
+
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
 
-        Medicine med = new Medicine(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
-        // return med
+            Cursor cursor2 = db.query(TABLE_EOFCODES, new String[]{KEY_EOFCODE,
+                            KEY_NAME, KEY_PRICE, KEY_SUB, KEY_CATEG}, KEY_EOFCODE + "=?",
+                    new String[]{cursor.getString(1)}, null, null, null, null);
+
+            if (cursor2 != null && cursor2.getCount() > 0) {
+                cursor2.moveToFirst();
+                med = new Medicine(cursor.getString(0), cursor2.getString(0), cursor2.getString(1), cursor.getString(1),
+                        cursor2.getString(2), cursor.getString(3), cursor.getString(4), cursor2.getString(3),
+                        cursor2.getString(4), cursor.getString(5));
+
+                cursor2.close();
+            }
+            cursor.close();
+        }
+        db.close();
+
         return med;
     }
 
     // Getting all Meds and adding them to the adapter and also
     // adding the prices and returning the summary
     public void getAllMedsToAdapter(String name, MedicineAdapter medAdapter) {
-        //List<Medicine> medList = new ArrayList<Medicine>();
-        String selectQuery = "SELECT  * FROM " + TABLE_MEDS + " WHERE " + KEY_HALF_NAME + " == '" + name + "'";
-
         SQLiteDatabase db = this.getWritableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_MEDS + " WHERE " + KEY_HALF_NAME + " == '" + name + "'";
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        // looping through all rows and adding to adapter
         if (cursor.moveToFirst()) {
             do {
-                Medicine med = new Medicine();
-                med.setBarcode(cursor.getString(0));
-                med.setName(cursor.getString(1));
-                med.setDate(cursor.getString(2));
-                med.setPrice(cursor.getString(3));
-
-                // Adding med to adapter
-                medAdapter.add(med);
+                //Medicine med = new Medicine(cursor);
+                //medAdapter.add(med);
             } while (cursor.moveToNext());
+            cursor.close();
         }
+        db.close();
     }
 
-    /*---------------- donations functions ----------------------------*/
-    // Adding new donation
-//    public void addMed(Medicine med) {
+    // Updating and matching
+//    public int updateMedAndMatch(BlueRedItem med) {
 //        SQLiteDatabase db = this.getWritableDatabase();
 //
 //        ContentValues values = new ContentValues();
-//        values.put(KEY_BARCODE, med.getBarcode());
-//        values.put(KEY_NAME, med.getName()); // Med Name
-//        values.put(KEY_EXP_DATE, med.getDate()); // Med Phone Number
-//        values.put(KEY_PRICE, med.getPrice()); // Med Address
-//
-//        // Inserting Row
-//        db.insert(TABLE_MEDS, null, values);
-//        db.close(); // Closing database connection
-//    }
-//
-//    // Getting single med
-//    public Medicine getMed(String barcode) {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//
-//        Cursor cursor = db.query(TABLE_MEDS, new String[]{KEY_BARCODE,
-//                        KEY_NAME, KEY_EXP_DATE, KEY_PRICE}, KEY_BARCODE + "=?",
-//                new String[]{barcode}, null, null, null, null);
-//        if (cursor != null)
-//            cursor.moveToFirst();
-//
-//        Medicine med = new Medicine(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
-//        // return med
-//        return med;
-//    }
-//
-//    // Getting all Meds and adding them to the adapter and also
-//    // adding the prices and returning the summary
-//    public Double getAllMedsToAdapter(MedicineAdapter medAdapter) {
-//        //List<Medicine> medList = new ArrayList<Medicine>();
-//        Double sum = 0.0;
-//
-//        // Select All Query
-//        String selectQuery = "SELECT  * FROM " + TABLE_MEDS;
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        Cursor cursor = db.rawQuery(selectQuery, null);
-//
-//        // looping through all rows and adding to adapter
-//        if (cursor.moveToFirst()) {
-//            do {
-//                Medicine med = new Medicine();
-//                med.setBarcode(cursor.getString(0));
-//                med.setName(cursor.getString(1));
-//                med.setDate(cursor.getString(2));
-//
-//                String price = cursor.getString(3);
-//                sum += Double.parseDouble(price);
-//                med.setPrice(price);
-//                // Adding med to adapter
-//                medAdapter.add(med);
-//            } while (cursor.moveToNext());
+//        switch (med.getStatus()) {
+//            case BlueRedItem.gray:
+//                values.put(KEY_STATUS, "N");
+//                break;
+//            case BlueRedItem.blue:
+//                values.put(KEY_STATUS, "Y");
+//                break;
+//            case BlueRedItem.red:
+//                values.put(KEY_STATUS, "B");
+//                break;
+//            default:
+//                values.put(KEY_STATUS, "U");
 //        }
 //
-//        // return med sum price
-//        return sum;
-//    }
-//
-//    // Getting meds Count
-//    public int getMedsCount() {
-//        String countQuery = "SELECT  * FROM " + TABLE_MEDS;
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = db.rawQuery(countQuery, null);
-//        cursor.close();
-//
-//        // return count
-//        return cursor.getCount();
-//    }
-//
-//    // Updating single med
-////    public int updateMed(Medicine med) {
-////        SQLiteDatabase db = this.getWritableDatabase();
-////
-////        ContentValues values = new ContentValues();
-////        values.put(KEY_NAME, med.getName());
-////        values.put(KEY_PH_NO, med.getPhone());
-////
-////        // updating row
-////        return db.update(TABLE_MEDS, values, KEY_ID + " = ?",
-////                new String[]{String.valueOf(med.getID())});
-////    }
-//
-//    // Deleting single med
-//    public void deleteMed(Medicine med) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        db.delete(TABLE_MEDS, KEY_BARCODE + " = ?",
-//                new String[]{String.valueOf(med.getBarcode())});
-//        db.close();
+//        db.update(TABLE_MEDS, values, KEY_BARCODE + " = ?", new String[]{med.getBarcode()});
 //    }
 
+    /*---------------- eofcodes functions ----------------------------*/
+    // Adding new eofcode
+    public void addEofcode(Medicine med) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_EOFCODE, med.getEofcode());
+        values.put(KEY_NAME, med.getName());
+        values.put(KEY_PRICE, med.getPrice());
+        values.put(KEY_SUB, med.getSubstance());
+        values.put(KEY_CATEG, med.getCategory());
+        values.put(KEY_COUNT, "1");
+
+        db.insert(TABLE_EOFCODES, null, values);
+        db.close();
+    }
+
+    // Updating single eofcode
+    public void updateEofcode(String eofcode, int cnt) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_COUNT, String.valueOf(cnt));
+
+        db.update(TABLE_EOFCODES, values, KEY_EOFCODE + " = ?", new String[]{eofcode});
+        db.close();
+    }
+
+    // Deleting single eofcode
+    public void deleteEofcode(String eofcode) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_EOFCODES, KEY_EOFCODE + " = ?", new String[]{eofcode});
+        db.close();
+    }
+
+    // Getting single eofcode
+    public int getEofcodeCnt(String eofcode) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int cnt = -1;
+
+        Cursor cursor = db.query(TABLE_EOFCODES, new String[]{KEY_COUNT}, KEY_EOFCODE + "=?",
+                new String[]{eofcode}, null, null, null, null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            cnt = cursor.getInt(0);
+            cursor.close();
+        }
+        db.close();
+
+        return cnt;
+    }
+
+    /*---------------- done donations functions ----------------------------*/
+    // Adding new done donation
+    public void addDoneDonation(String price, String name, String pharName, String date) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_PRICE, price);
+        values.put(KEY_NAME, name);
+        values.put(KEY_PHAR_NAME, pharName);
+        values.put(KEY_DATE, date);
+
+        db.insert(TABLE_DONE_DONATIONS, null, values);
+        db.close();
+    }
+
     /*---------------- names functions ----------------------------*/
-    // Adding new name
+    // Adding new med name
     public void addMedName(MedName name) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, name.getName()); // Med Half Name
-        values.put(KEY_COUNT, name.getCount()); // Med Name count
-        values.put(KEY_S_DATE, name.getDate()); // Med Name quickest expiration
+        values.put(KEY_NAME, name.getName());
+        values.put(KEY_COUNT, name.getCount());
+        values.put(KEY_S_DATE, name.getDate());
 
-        // Inserting Row
         db.insert(TABLE_NAMES, null, values);
-        db.close(); // Closing database connection
+        db.close();
     }
 
-    // Updating single med
+    // Updating single med name
     public void updateMedName(MedName name) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -422,17 +474,15 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(KEY_COUNT, name.getCount());
         values.put(KEY_S_DATE, name.getDate());
 
-        // updating row
         db.update(TABLE_NAMES, values, KEY_NAME + " = ?", new String[]{name.getName()});
         db.close();
     }
 
-    // Deleting single med
+    // Deleting single med name
     public void deleteMedName(MedName name) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.delete(TABLE_NAMES, KEY_NAME + " = ?",
-                new String[]{name.getName()});
+        db.delete(TABLE_NAMES, KEY_NAME + " = ?", new String[]{name.getName()});
         db.close();
     }
 
@@ -447,7 +497,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
-            medname = new MedName(cursor.getString(0), cursor.getString(1), cursor.getString(2));
+            medname = new MedName(cursor);
             cursor.close();
         }
         db.close();
@@ -458,16 +508,12 @@ public class DBHandler extends SQLiteOpenHelper {
     // Getting all Med Names and adding them to the adapter and also
     // adding the counts and returng the total count
     public int getAllNamesToAdapter(MedNameAdapter medNameAdapter) {
-        //List<MedName> medList = new ArrayList<MedName>();
+        SQLiteDatabase db = this.getWritableDatabase();
         int count = 0;
 
         String selectQuery = "SELECT  * FROM " + TABLE_NAMES + " ORDER BY " + KEY_NAME;
-
-        SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-
-        // looping through all rows and adding to adapter
         if (cursor.moveToFirst()) {
             do {
                 MedName name = new MedName();
@@ -478,7 +524,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 name.setCount(cnt);
                 name.setDate(cursor.getString(2));
 
-                // Adding med name to adapter
                 medNameAdapter.add(name);
             } while (cursor.moveToNext());
             cursor.close();

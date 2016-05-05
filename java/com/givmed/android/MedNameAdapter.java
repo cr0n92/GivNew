@@ -42,8 +42,6 @@ public class MedNameAdapter extends BaseAdapter {
     // Returns the number of Medicine Name
     @Override
     public int getCount() {
-        Log.e("count",""+mItems.size());
-
         return mItems.size();
     }
 

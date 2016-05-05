@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.givmed.android.R;
@@ -28,9 +30,10 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 public class Outputer extends HelperActivity {
-    private EditText mName, mExp, mBarcode, mNotes;
-    private CheckBox mCheckBox;
-    private String server_date = "", name = "", date = "", barcode = "", eofcode = "", is_it = "", price = "";
+    private EditText mName, mExp, mBarcode, mNotes, mConditionMsg;
+    private RadioGroup mConditionGroup;
+    JSONObject obj = null;
+    private String server_date = "", name = "", date = "", barcode = "", eofcode = "", state = "", price = "", notes = "";
     ProgressDialog dialog;
     AlertDialog alert;
     DBHandler db;
@@ -55,7 +58,7 @@ public class Outputer extends HelperActivity {
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent TedxIntent = new Intent(getApplicationContext(), TwoButtons.class);
+                        Intent TedxIntent = new Intent(getApplicationContext(), ImFine.class);
                         TedxIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         TedxIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(TedxIntent);
@@ -66,7 +69,8 @@ public class Outputer extends HelperActivity {
         mName = (EditText) findViewById(R.id.name);
         mExp = (EditText) findViewById(R.id.expiration);
         mBarcode = (EditText) findViewById(R.id.barcode);
-        mCheckBox = (CheckBox) findViewById(R.id.opend);
+        mConditionMsg = (EditText) findViewById(R.id.conditionMsg);
+        mConditionGroup = (RadioGroup) findViewById(R.id.conditionGroup);
         mNotes = (EditText) findViewById(R.id.notes);
 
         mName.setText(name);
@@ -76,6 +80,20 @@ public class Outputer extends HelperActivity {
         mName.setKeyListener(null);
         mExp.setKeyListener(null);
         mBarcode.setKeyListener(null);
+        mConditionMsg.setKeyListener(null);
+
+    }
+
+    private boolean isOpen() {
+
+        switch (mConditionGroup.getCheckedRadioButtonId()) {
+            case R.id.closed: {
+                return false;
+            }
+            default: {
+                return true;
+            }
+        }
     }
 
     @Override
@@ -87,40 +105,40 @@ public class Outputer extends HelperActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_tick) {
-            boolean checked = mCheckBox.isChecked();
-            is_it = (checked) ? "2" : "1";
+            if (isOnline()) {
+                dialog = new ProgressDialog(this);
+                dialog.setMessage(getString(R.string.loading_msg));
+                dialog.setCancelable(false);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
 
-            dialog = new ProgressDialog(this);
-            dialog.setMessage(getString(R.string.loading_msg));
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
-
-            new HttpGetTask().execute();
+                state = (isOpen()) ? "O" : "C";
+                notes = mNotes.getText().toString().trim();
+                new HttpOutputer().execute();
+            } else
+                Toast.makeText(getApplicationContext(), getString(R.string.no_internet), Toast.LENGTH_LONG).show();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private class HttpGetTask extends AsyncTask<Object, Void, Integer> {
+    private class HttpOutputer extends AsyncTask<Object, Void, Integer> {
 
         private static final String TAG = "HttpGetTask_Outputer";
         private int error = -1;
         private int result ;
         @Override
         protected Integer doInBackground(Object... input) {
-
             String data = "";
-
             java.net.URL url = null;
             HttpURLConnection conn2 = null;
-            String state = is_it.equals("2") ? "O" : "C";
-
             String URL = server + "/med_check/12345/";
 
             try {
                 url = new URL(URL);
                 String urlParameters =
                         "state=" + state +
+                        "&notes=" + notes +
                         "&name=" + name +
                         "&expirationDate=" + server_date +
                         "&eofcode=" + eofcode +
@@ -139,11 +157,9 @@ public class Outputer extends HelperActivity {
 
                 result = conn2.getResponseCode();
 
-                JSONObject obj;
-                if (result != 204) {
+                if (result == 201)
                     obj = new JSONObject(data);
-                    price = obj.getString("medPrice");
-                }
+
                 Log.e(TAG, "Received HTTP response: " + result);
 
             } catch (ProtocolException e) {
@@ -164,7 +180,6 @@ public class Outputer extends HelperActivity {
             } finally {
                 if (null != conn2)
                     conn2.disconnect();
-
             }
 
             return result;
@@ -183,16 +198,28 @@ public class Outputer extends HelperActivity {
                     return;
                 }
 
-                db.addMed(new Medicine(barcode, name, date, price), firstWord(name));
+                if (result == 201) {
+                    String status = "U";
+                    try {
+                        if (!obj.getBoolean("medIsDonatable") || !(state.equals("O") && !obj.getBoolean("medIsDonatableIfOpen")))
+                            status = "C";
 
-                Intent showItemIntent = new Intent(getApplicationContext(), TwoButtons.class);
-                // If set, and the activity being launched is already running in the current task, then instead of
-                // launching a new instance of that activity, all of the other activities on top of it will be closed and
-                // this Intent will be delivered to the (now on top) old activity as a new Intent.
-                showItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                // If set, the activity will not be launched if it is already running at the top of the history stack.
-                showItemIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                startActivity(showItemIntent);
+                        db.addMed(new Medicine(barcode, eofcode, name, date, obj.getString("medPrice"), notes, state,
+                            obj.getString("medSubstance"), obj.getString("medCategory"), status), firstWord(name));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Intent showItemIntent = new Intent(getApplicationContext(), ImFine.class);
+                    // If set, and the activity being launched is already running in the current task, then instead of
+                    // launching a new instance of that activity, all of the other activities on top of it will be closed and
+                    // this Intent will be delivered to the (now on top) old activity as a new Intent.
+                    showItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    // If set, the activity will not be launched if it is already running at the top of the history stack.
+                    showItemIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(showItemIntent);
+                }
             }
             dialog.dismiss();
             dialog = null;

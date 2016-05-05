@@ -62,6 +62,4 @@ public class TwoButtons extends HelperActivity
             }
         }
     }
-
-
 }

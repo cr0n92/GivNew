@@ -38,7 +38,6 @@ import java.nio.charset.Charset;
 public class Register extends HelperActivity {
     private EditText mDate, mEmail, mUsername, mSex, male, female;
     private TextInputLayout nameLayout, emailLayout, dateLayout;
-    private TextInputLayout femaleLayout, maleLayout;
     private PrefManager pref;
     ProgressDialog dialog;
 
@@ -91,19 +90,6 @@ public class Register extends HelperActivity {
         dateLayout = (TextInputLayout) findViewById(R.id.birth);
 
         mEmail.addTextChangedListener(new MyTextWatcher(mEmail));
-
-        pref = new PrefManager(this);
-
-        // Checking for user session
-        // if user is already logged in, take him to elleipseis
-        if (pref.isLoggedIn()) {
-  //          pref.clearSession();
-            Intent intent = new Intent(Register.this, Elleipseis.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-
-            finish();
-        }
     }
 
     @Override

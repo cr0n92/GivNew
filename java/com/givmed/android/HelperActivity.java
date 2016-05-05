@@ -34,7 +34,7 @@ import java.lang.reflect.Field;
 public class HelperActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
-    public String server = "http://www.givmed.com:81";
+    public String server = "http://52.29.235.81:81";
 
     public int myMenu;
 
@@ -155,8 +155,8 @@ public class HelperActivity extends AppCompatActivity
             startActivity(new Intent(getApplicationContext(), Share.class));
             started = true;
         } else if (id == R.id.nav_settings && !class_name.equals("Settings")) {
-            //startActivity(new Intent(getApplicationContext(), Settings.class));
-            //started = true;
+            startActivity(new Intent(getApplicationContext(), Settings.class));
+            started = true;
         } else if (id == R.id.nav_odhgies && !class_name.equals("Odhgies")) {
             //startActivity(new Intent(getApplicationContext(), Odhgies.class));
             //started = true;

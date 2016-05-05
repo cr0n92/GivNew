@@ -28,14 +28,6 @@ public class Farmakeio extends HelperActivity implements AdapterView.OnItemClick
         msgView = (TextView) findViewById(R.id.secondMes);
         msgView.setText(getResources().getString(R.string.pharm_left_half_msg) + " (0) " + getResources().getString(R.string.pharm_right_half_msg_plural));
 
-        final FloatingActionButton floatingBut = (FloatingActionButton) findViewById(R.id.fab);
-        floatingBut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Farmakeio.this, TwoButtons.class));
-            }
-        });
-
         mAdapter = new MedNameAdapter(getApplicationContext());
         ListView list = (ListView)findViewById(R.id.list);
         list.setOnItemClickListener(this);

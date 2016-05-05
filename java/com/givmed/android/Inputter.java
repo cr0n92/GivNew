@@ -1,9 +1,5 @@
 package com.givmed.android;
 
-/**
- * Created by agroikos on 22/11/2015.
- */
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -47,7 +43,7 @@ public class Inputter extends HelperActivity {
         mEditText = (EditText) findViewById(R.id.edit1);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Το φάρμακο έχει λήξει!")
+        builder.setMessage(getString(R.string.inp_expired_msg))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -71,22 +67,23 @@ public class Inputter extends HelperActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_tick) {
-            code = mEditText.getText().toString();
+            code = mEditText.getText().toString().trim();
 
             if (code.length() != 12) {
-                Toast.makeText(getApplicationContext(), "Το μήκος του barcode δεν είναι έγκυρο",
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.inp_error_msg), Toast.LENGTH_LONG).show();
             }
             else {
-                mEditText.setError(null);
-                dialog = new ProgressDialog(this);
-                dialog.setMessage("Loading, Please Wait...");
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.show();
-                if (isOnline())
+
+                if (isOnline()) {
+                    dialog = new ProgressDialog(this);
+                    dialog.setMessage(getString(R.string.loading_msg));
+                    dialog.setCancelable(false);
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+
                     new HttpGetTask().execute(code);
-                else
-                    Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_LONG).show();
+                } else
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_internet), Toast.LENGTH_LONG).show();
             }
         }
 
@@ -248,7 +245,6 @@ public class Inputter extends HelperActivity {
                 showItemIntent.putExtra("barcode", code);
                 showItemIntent.putExtra("eofcode", eof);
                 startActivity(showItemIntent);
-
             }
 
             dialog.dismiss();

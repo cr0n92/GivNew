@@ -16,6 +16,7 @@ import java.util.Calendar;
  */
 public class AlarmService extends Service {
     private PrefManager pref;
+    private DBHandler db;
     //compat to support older devices
     @Override
     public void onStart(Intent intent, int startId) {
@@ -35,17 +36,26 @@ public class AlarmService extends Service {
         //ta updates ginontai eite an o trexwn mhnas einaimegaluteros apo ton apo8hkeumeno eite an o palios mhnas einai 11 kai
         //o trexwn 0
         if (cur_month > pref.getOldMonth() || pref.getOldMonth() - cur_month ==11) {
-
-            //TODO edw mpainei to update twn dwrewn
+            int exp_month = (cur_month + 3) % 12 + 1;
+            int exp_year = (exp_month > 3)? calendar.get(Calendar.YEAR):calendar.get(Calendar.YEAR) + 1;
+            String three_months_later =  "" +exp_month+ "/"+exp_year;
+            Log.e("Three Months Later",""+three_months_later);
+            db = new DBHandler(getApplicationContext());
+            db.updateMedStatus(three_months_later);
 
             //enhmerwnoume ton Pref oti o eginan ta updates stis dwrees
             pref.setOldMonth(cur_month);
+
+
         }
-        //checkForTodayAlarmsAndBehaveAppropriately();
-        //arxizw asynctask ama einai stigmh na kanw to update
+
+
+
         //me ton tropo parakatw an o xrhsths kleinei to kinhto tou kathe 23 wres kai 59 lepta thn gamhsame
         Toast.makeText(getApplicationContext(), "Alarm turned on!",
                 Toast.LENGTH_LONG).show();
+        Log.e("Date", "" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR));
+
         Log.e("Alarm", "re");
 
         //reschedule me to check again tomorrow

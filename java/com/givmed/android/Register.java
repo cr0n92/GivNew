@@ -95,6 +95,8 @@ public class Register extends HelperActivity {
 
 
         pref = new PrefManager(this);
+        Log.e("USERNAME",pref.getUsername());
+
 
         phone=pref.getMobileNumber();
 

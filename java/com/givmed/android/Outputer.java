@@ -8,13 +8,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
-
-import com.givmed.android.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,6 +77,15 @@ public class Outputer extends HelperActivity {
         mExp.setKeyListener(null);
         mBarcode.setKeyListener(null);
         mConditionMsg.setKeyListener(null);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        GivmedApplication.getInstance().trackScreenView("Outputer");
+
+
 
     }
 

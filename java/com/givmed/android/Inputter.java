@@ -11,8 +11,6 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.givmed.android.R;
-
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -60,6 +58,15 @@ public class Inputter extends HelperActivity {
         if (intent.hasExtra("barcode")) {
             mEditText.setText(intent.getStringExtra("barcode"));
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        GivmedApplication.getInstance().trackScreenView("Inputter");
+
+
+
     }
 
     @Override

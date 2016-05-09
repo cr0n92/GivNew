@@ -19,6 +19,7 @@ import android.util.Log;
  */
 public class SMSReceiver extends BroadcastReceiver {
     private static final String TAG = SMSReceiver.class.getSimpleName();
+    private boolean old_user = false;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -61,6 +62,12 @@ public class SMSReceiver extends BroadcastReceiver {
 
         Intent httpIntent = new Intent(context, VerifyService.class);
         httpIntent.putExtra("otp", verificationCode);
+        if (old_user)
+            httpIntent.putExtra("oldUser", "yes");
+        else
+            httpIntent.putExtra("oldUser", "no");
+
+
         context.startService(httpIntent);
 
 
@@ -76,6 +83,13 @@ public class SMSReceiver extends BroadcastReceiver {
     private String getVerificationCode(String message) {
         String code = null;
         int index = message.indexOf(Config.OTP_DELIMITER);
+
+        String arr[] = message.split(" ", 2);
+
+        String firstWord = arr[0];
+
+        if (firstWord.equals("Welcome"))
+            old_user = true;
 
         if (index != -1) {
             int start = index + 1;

@@ -2,7 +2,6 @@ package com.givmed.android;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -51,6 +50,7 @@ public class Farmakeio extends HelperActivity implements AdapterView.OnItemClick
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
+        GivmedApplication.getInstance().trackScreenView("Farmakeio");
         mAdapter.clear();
 
         count = db.getAllNamesToAdapter(mAdapter);

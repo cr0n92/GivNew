@@ -9,8 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import org.json.JSONObject;
+import android.util.Log;
 
 
 public class DBHandler extends SQLiteOpenHelper {
@@ -287,12 +286,23 @@ public class DBHandler extends SQLiteOpenHelper {
                 new String[]{med.getBarcode()});
     }
 
+    public void updateMedStatus(String three_months_later) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_STATUS, "B");
+
+        db.update(TABLE_MEDS, values, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?",new String[]{"A",three_months_later});
+        db.close();
+
+    }
+
     // Deleting single med
     public void deleteMed(Medicine med, String halfName) {
         MedName name = this.getMedName(halfName);
         // an to count tou antistoixou onomatos ginei mhden tote afairoume thn eggrafh
         // kai apo ton pinaka me ta onomata, alliws apla meiwnoume to count
-        if (Integer.getInteger(name.getCount()) == 1)
+        if (name.getCount().equals("1"))
             this.deleteMedName(name);
         else {
             name.setCount("" + (Integer.parseInt(name.getCount()) - 1));
@@ -330,7 +340,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
             if (cursor2 != null && cursor2.getCount() > 0) {
                 cursor2.moveToFirst();
-                med = new Medicine(cursor.getString(0), cursor2.getString(0), cursor2.getString(1), cursor.getString(1),
+                med = new Medicine(cursor.getString(0), cursor2.getString(0), cursor2.getString(1), cursor.getString(2),
                         cursor2.getString(2), cursor.getString(3), cursor.getString(4), cursor2.getString(3),
                         cursor2.getString(4), cursor.getString(5));
 
@@ -354,6 +364,23 @@ public class DBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 //Medicine med = new Medicine(cursor);
+                //medAdapter.add(med);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+    }
+
+    public void printAllMeds() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_MEDS;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Log.e("Statys",""+cursor.getString(5)+"Exp.Date"+cursor.getString(2));
+
                 //medAdapter.add(med);
             } while (cursor.moveToNext());
             cursor.close();

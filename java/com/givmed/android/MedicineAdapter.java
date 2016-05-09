@@ -13,19 +13,17 @@ import com.givmed.android.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by agroikos on 29/11/2015.
- */
+
 public class MedicineAdapter extends BaseAdapter {
 
-    public final List<Medicine> mItems = new ArrayList<Medicine>();
+    public final List<String> mItems = new ArrayList<String>();
     private final Context mContext;
 
     public MedicineAdapter(Context context) {
         mContext = context;
     }
 
-    public void add(Medicine item) {
+    public void add(String item) {
         mItems.add(item);
         notifyDataSetChanged();
     }
@@ -35,26 +33,21 @@ public class MedicineAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    // Clears the list adapter of all items.
     public void clear() {
         mItems.clear();
         notifyDataSetChanged();
     }
 
-    // Returns the number of Medicine
     @Override
     public int getCount() {
         return mItems.size();
     }
 
-    // Retrieve the number of the Medicine
     @Override
     public Object getItem(int pos) {
         return mItems.get(pos);
     }
 
-    // Get the ID for the Medicine
-    // In this case it's just the position
     @Override
     public long getItemId(int pos) {
         return pos;
@@ -62,30 +55,14 @@ public class MedicineAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) { //called after setAdapter,notifyDataSetChanged
-        final Medicine med = (Medicine) getItem(position);
+        final String barcode = (String) getItem(position);
 
-        // from medicine.xml
         LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(mContext).inflate(
                 R.layout.medicine, parent, false);
 
-        // Fill in specific Medicine data
-        // Remember that the data that goes in this View
-        // corresponds to the user interface elements defined
-        // in the layout file
-
-        final TextView titleView = (TextView) itemLayout.findViewById(R.id.titleView);
-        titleView.setText(med.getName());
-
-        final TextView quantity = (TextView) itemLayout.findViewById(R.id.quantityView);
-        quantity.setText(med.getPrice());
-
-        final TextView dateView = (TextView) itemLayout.findViewById(R.id.dateView);
-        dateView.setText(med.getDate());
-
         final TextView barcodeView = (TextView) itemLayout.findViewById(R.id.barcodeView);
-        barcodeView.setText(med.getBarcode());
+        barcodeView.setText("Barcode: " + barcode);
 
-        // Return the View you just created
         return itemLayout;
     }
 }

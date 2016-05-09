@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@android:drawable/sym_def_app_icon"
+        android:src="@mipmap/ic_givmed_logo"
         android:id="@+id/imageView" />
 
     <TextView
@@ -29,7 +29,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="givmed@gmail.com"
+        android:text="SHARE MEDICINE | SHARE LIFE"
         android:id="@+id/textView" />
 
 </LinearLayout>

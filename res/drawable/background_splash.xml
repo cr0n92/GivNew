@@ -2,12 +2,14 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@color/green"/>
+        android:drawable="@android:color/white"/>
 
     <item>
         <bitmap
+            android:layout_width="300px"
+            android:layout_height="300px"
             android:gravity="center"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/ic_givmed_logo_with_msg"/>
     </item>
 
 </layer-list>

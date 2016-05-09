@@ -14,7 +14,9 @@
         android:textColor="@color/black"
         android:gravity="start"
         android:layout_weight="1"
-        android:textSize="18sp" />
+        android:ellipsize="end"
+        android:textSize="18sp"
+        android:maxLines="1"/>
 
     <TextView
         android:id="@+id/regionView"
@@ -23,5 +25,6 @@
         android:textColor="@color/black"
         android:gravity="end"
         android:layout_weight="1"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:maxLines="1"/>
 </LinearLayout>

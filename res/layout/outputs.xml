@@ -121,7 +121,7 @@
                     android:layout_marginBottom="5dp"
                     android:theme="@style/MyEditTextTheme" >
 
-                    <EditText
+                    <TextView
                         android:id="@+id/conditionMsg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                         android:drawableStart="@drawable/ic_elleipseis"
                         android:drawableLeft="@drawable/ic_elleipseis"
                         android:theme="@style/MyEditTextTheme">
-                    </EditText>
+                    </TextView>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -184,6 +184,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/out_notes"
                         android:textSize="24sp"
+                        android:maxLength="130"
                         android:drawableStart="@drawable/ic_notes"
                         android:drawableLeft="@drawable/ic_notes"
                         android:theme="@style/MyEditTextTheme" >

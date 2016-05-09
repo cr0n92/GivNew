@@ -30,7 +30,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 public class Outputer extends HelperActivity {
-    private EditText mName, mExp, mBarcode, mNotes, mConditionMsg;
+    private EditText mName, mExp, mBarcode, mNotes;
     private RadioGroup mConditionGroup;
     JSONObject obj = null;
     private String server_date = "", name = "", date = "", barcode = "", eofcode = "", state = "", price = "", notes = "";
@@ -45,6 +45,7 @@ public class Outputer extends HelperActivity {
         super.helperOnCreate(R.layout.outputs, R.string.outputer, true);
 
         db = new DBHandler(getApplicationContext());
+        dialog = new ProgressDialog(this);
 
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
@@ -69,7 +70,6 @@ public class Outputer extends HelperActivity {
         mName = (EditText) findViewById(R.id.name);
         mExp = (EditText) findViewById(R.id.expiration);
         mBarcode = (EditText) findViewById(R.id.barcode);
-        mConditionMsg = (EditText) findViewById(R.id.conditionMsg);
         mConditionGroup = (RadioGroup) findViewById(R.id.conditionGroup);
         mNotes = (EditText) findViewById(R.id.notes);
 
@@ -80,8 +80,6 @@ public class Outputer extends HelperActivity {
         mName.setKeyListener(null);
         mExp.setKeyListener(null);
         mBarcode.setKeyListener(null);
-        mConditionMsg.setKeyListener(null);
-
     }
 
     private boolean isOpen() {
@@ -105,12 +103,8 @@ public class Outputer extends HelperActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_tick) {
-            if (isOnline()) {
-                dialog = new ProgressDialog(this);
-                dialog.setMessage(getString(R.string.loading_msg));
-                dialog.setCancelable(false);
-                dialog.setCanceledOnTouchOutside(false);
-                dialog.show();
+            if (isOnline(getApplicationContext())) {
+                showDialogBox(getApplicationContext(), dialog);
 
                 state = (isOpen()) ? "O" : "C";
                 notes = mNotes.getText().toString().trim();
@@ -188,12 +182,10 @@ public class Outputer extends HelperActivity {
         @Override
         protected void onPostExecute(Integer result) {
             if (error > 0) {
-                Toast.makeText(getApplicationContext(), (error == 1) ? "No internet connection" : "Server error",
-                        Toast.LENGTH_LONG).show();
+                httpErrorToast(getApplicationContext(), error);
             } else {
                 if (result == 204) {
                     dialog.dismiss();
-                    dialog = null;
                     alert.show();
                     return;
                 }
@@ -201,14 +193,21 @@ public class Outputer extends HelperActivity {
                 if (result == 201) {
                     String status = "U";
                     try {
-                        if (!obj.getBoolean("medIsDonatable") || !(state.equals("O") && !obj.getBoolean("medIsDonatableIfOpen")))
-                            status = "C";
+                        if (!obj.getBoolean("medIsDonatable"))
+                            status = "D";
+                        else if (state.equals("O") && !obj.getBoolean("medIsDonatableIfOpen"))
+                            status = "SN";
+                        else if (obj.getBoolean("medIsDonatableIfOpen"))
+                            status = "SU";
 
                         db.addMed(new Medicine(barcode, eofcode, name, date, obj.getString("medPrice"), notes, state,
                             obj.getString("medSubstance"), obj.getString("medCategory"), status), firstWord(name));
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        dialog.dismiss();
+                        httpErrorToast(getApplicationContext(), 2);
+                        return;
                     }
 
                     Intent showItemIntent = new Intent(getApplicationContext(), ImFine.class);
@@ -222,7 +221,6 @@ public class Outputer extends HelperActivity {
                 }
             }
             dialog.dismiss();
-            dialog = null;
         }
     }
 

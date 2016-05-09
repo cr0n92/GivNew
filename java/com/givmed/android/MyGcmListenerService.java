@@ -75,7 +75,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_givmed_logo)
                 .setContentTitle("GCM Message")
                 .setContentText(message)
                 .setAutoCancel(true) //the notification disappears when user clicks on it

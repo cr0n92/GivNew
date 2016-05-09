@@ -105,10 +105,10 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/downLine"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:dividerHeight="10dp"
+                android:dividerHeight="1dp"
                 android:drawSelectorOnTop="true"
                 android:footerDividersEnabled="false"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:scrollbarStyle="outsideOverlay"
                 android:id="@+id/list">
             </ListView>

@@ -50,3 +50,7 @@ Na kanoume verification twn dedomenwn pou mas dinei o xrhsths:
 
     Den mporei na yparxei idio username me auto pou vazei kai na tou deixnoume error. (ta gyrnaei to django auta)
     Epishs gia to thlefwno tou. Na tsekaroume ti 8a vazoume gia kwdiko kai pou 8a to kratame.
+    
+    
+-Na valoume oti to barcode einai unique sta Donations
+-Na mporei na valei o xrhsths ellhniko username

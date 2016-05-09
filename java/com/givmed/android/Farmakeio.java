@@ -2,6 +2,7 @@ package com.givmed.android;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -10,9 +11,9 @@ import android.widget.TextView;
 public class Farmakeio extends HelperActivity implements AdapterView.OnItemClickListener {
 
     public static MedNameAdapter mAdapter;
-    public static MedName newMedName;
     private static TextView msgView;
     public static int count;
+    private static String right_plu, right_sin, left;
     DBHandler db;
 
     @Override
@@ -23,9 +24,11 @@ public class Farmakeio extends HelperActivity implements AdapterView.OnItemClick
 
         db = new DBHandler(getApplicationContext());
 
-
+        right_plu = getResources().getString(R.string.pharm_right_half_msg_plural);
+        right_sin = getResources().getString(R.string.pharm_right_half_msg_single);
+        left = getResources().getString(R.string.pharm_left_half_msg);
         msgView = (TextView) findViewById(R.id.secondMes);
-        msgView.setText(getResources().getString(R.string.pharm_left_half_msg) + " (0) " + getResources().getString(R.string.pharm_right_half_msg_plural));
+        msgView.setText(left + " (0) " + right_plu);
 
         mAdapter = new MedNameAdapter(getApplicationContext());
         ListView list = (ListView)findViewById(R.id.list);
@@ -33,32 +36,21 @@ public class Farmakeio extends HelperActivity implements AdapterView.OnItemClick
         list.setFooterDividersEnabled(true);
         list.setAdapter(mAdapter);
 
-
-
-        count = db.getAllNamesToAdapter(mAdapter);
-        int right_msg = (count == 1) ? R.string.pharm_right_half_msg_single : R.string.pharm_right_half_msg_plural;
-        msgView.setText(getResources().getString(R.string.pharm_left_half_msg) + " (" + count + ") " + getResources().getString(right_msg));
+        putMedsToList();
     }
 
-//    @Override
-//    protected void onNewIntent (Intent intent){
-//        if (intent.hasExtra("outputter")) {
-//            setIntent(intent);
-//        }
-//    }
+    private void putMedsToList() {
+        mAdapter.clear();
+        count = db.getAllNamesToAdapter(mAdapter);
+        String right_msg = (count == 1) ? right_sin : right_plu;
+        msgView.setText(left + " (" + count + ") " + right_msg);
+    }
 
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
-        GivmedApplication.getInstance().trackScreenView("Farmakeio");
-        mAdapter.clear();
 
-        count = db.getAllNamesToAdapter(mAdapter);
-        int right_msg = (count == 1) ? R.string.pharm_right_half_msg_single : R.string.pharm_right_half_msg_plural;
-        msgView.setText(getResources().getString(R.string.pharm_left_half_msg) + " (" + count + ") " + getResources().getString(right_msg));
-        //TODO : Na prosthetoume ta kainouria farmaka me intent (onNewIntent)
-
-
+        putMedsToList();
     }
 
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
@@ -67,8 +59,9 @@ public class Farmakeio extends HelperActivity implements AdapterView.OnItemClick
         // an einai mono ena to farmako tote na deixnoume kateu8eian tis plhrofories
         // alliws na deixnoume thn lista me ola ta farmaka
         if (name.getCount().equals("1")) {
-            Intent intent = new Intent(getApplicationContext(), AfterFarmakeio.class);
-            intent.putExtra("name", name.getName());
+            Intent intent = new Intent(getApplicationContext(), DisplayMed.class);
+            String barcode = db.getMedBarcodeByName(name.getName());
+            intent.putExtra("barcode", barcode);
             startActivity(intent);
         } else {
             Intent intent = new Intent(getApplicationContext(), AfterFarmakeio.class);

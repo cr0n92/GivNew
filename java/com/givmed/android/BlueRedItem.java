@@ -1,5 +1,6 @@
 package com.givmed.android;
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 

@@ -8,6 +8,7 @@
     <string name="scan">Σάρωση</string>
     <string name="outputer">Καταχώρηση</string>
     <string name="two_buttons">Επιλογή</string>
+    <string name="farmako">Φάρμακο</string>
     <string name="elleipseis">Ελλείψεις</string>
     <string name="dwrees">Δωρεές</string>
     <string name="farmakeio">Φαρμακείο</string>
@@ -32,6 +33,13 @@
     <string name="out_closed">ΚΛΕΙΣΤΟ</string>
     <string name="out_notes">Σημειώσεις</string>
     <string name="out_med_registered">Το φάρμακο έχει ήδη καταχωρηθεί!</string>
+
+    <!-- Φάρμακο -->
+    <string name="out_donation">Δωρεά Φαρμάκου</string>
+    <string name="out_now">ΑΜΕΣΑ</string>
+    <string name="out_before">ΠΡΙΝ ΛΗΞΕΙ</string>
+    <string name="out_category">Kατηγορία</string>
+    <string name="out_is_sirup">Δυστηχώς τα κοινωνικά φαρμακεία δεν δέχονται φάρμακα που χρειάζονται ψυγείο ή ανοιχτά σιρόπια.</string>
 
     <!-- Προσωπικό Φαρμακείο -->
     <string name="home_message">Δες πόσα φάρμακα έχεις στο σπίτι σου, παρακάτω!</string>
@@ -87,7 +95,6 @@
     <string name="prof_email">Email</string>
     <string name="prof_age_warning">Λόγω των όρων χρήσης μας, μόνο άτομα άνω των 18 μπορούν να χρησιμοποιήσουν το GIVMED!</string>
 
-
     <!-- Εγγραφή -->
     <string name="your_phone">Συμπλήρωσε τον αριθμό σου</string>
     <string name="accept_terms">Αποδέχομαι τους όρους</string>
@@ -138,7 +145,7 @@
 
     <!-- Κάμερα -->
     <string name="camera_error">Δεν μπορέσαμε να ανοίξουμε την κάμερα!</string>
-    <string name="scan_msg">Σκάναρε το 1<sup>ο</sup> barcode</string>
+    <string name="scan_msg">Τοποθέτησε τα 2 barcodes μπροστά στην κάμερα</string>
 
     <!-- Άλλα στρινγκς -->
     <string name="loading_msg">Παρακαλώ περιμένετε...</string>

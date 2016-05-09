@@ -14,6 +14,8 @@
         android:textColor="@color/black"
         android:gravity="start"
         android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textSize="18sp" />
 
     <ImageView

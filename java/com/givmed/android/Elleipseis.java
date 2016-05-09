@@ -136,7 +136,7 @@ public class Elleipseis extends HelperActivity
         //registerForContextMenu(getListView());
         list.setAdapter(mAdapter);
 
-        if (isOnline())
+        if (isOnline(getApplicationContext()))
             new HttpGetTask().execute();
         else {
             int count = db.getAllNeeds(mAdapter, "pharName");

@@ -166,6 +166,11 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
+            android:name="com.givmed.android.DisplayMed"
+            android:label="display_med"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
             android:name="com.givmed.android.Inputter"
             android:label="inputter"
             android:theme="@style/AppTheme.NoActionBar" >

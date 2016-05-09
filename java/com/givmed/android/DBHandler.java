@@ -9,7 +9,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
+import org.json.JSONObject;
 
 
 public class DBHandler extends SQLiteOpenHelper {
@@ -353,25 +354,58 @@ public class DBHandler extends SQLiteOpenHelper {
         return med;
     }
 
-    // Getting all Meds and adding them to the adapter and also
-    // adding the prices and returning the summary
+    // get single med barcode from name
+    public String getMedBarcodeByName(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String barcode = null;
+
+        Cursor cursor = db.query(TABLE_MEDS, new String[]{KEY_BARCODE}, KEY_HALF_NAME + "=?",
+                new String[]{name}, null, null, null, null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            barcode = cursor.getString(0);
+            cursor.close();
+        }
+        db.close();
+
+        return barcode;
+    }
+
+    // Getting all Meds and adding them to the adapter
     public void getAllMedsToAdapter(String name, MedicineAdapter medAdapter) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_MEDS + " WHERE " + KEY_HALF_NAME + " == '" + name + "'";
+        String selectQuery = "SELECT " + KEY_BARCODE + " FROM " + TABLE_MEDS + " WHERE " + KEY_HALF_NAME + " == '" + name + "'";
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
-                //Medicine med = new Medicine(cursor);
-                //medAdapter.add(med);
+                medAdapter.add(cursor.getString(0));
             } while (cursor.moveToNext());
             cursor.close();
         }
         db.close();
     }
 
-    public void printAllMeds() {
+	// Getting all Unknown Meds and adding them to the adapter
+    public void getUnknownMedsToAdapter(BlueRedAdapter brAdapter) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String selectQuery = "SELECT " + KEY_BARCODE + "," + KEY_HALF_NAME + " FROM " + TABLE_MEDS
+                + " WHERE " + KEY_STATUS + " == 'U' OR " + KEY_STATUS + " == 'SU' ";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                brAdapter.add(new BlueRedItem(cursor.getString(0), cursor.getString(1), R.drawable.ic_tick_in_circle_gray));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+    }
+
+	public void printAllMeds() {
         SQLiteDatabase db = this.getWritableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_MEDS;

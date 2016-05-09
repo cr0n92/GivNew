@@ -1,5 +1,6 @@
 package com.givmed.android;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +36,7 @@ import java.lang.reflect.Field;
 public class HelperActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
-    public String server = "http://52.29.235.81:81";
+    public static String server = "http://52.29.235.81:81";
 
     public int myMenu;
 
@@ -181,9 +183,9 @@ public class HelperActivity extends AppCompatActivity
     //Allh enallaktikh:InetAddress.getByName(host).isReachable(timeOut)->den douleuei panta kala
     //Isws timeout sto http connection
     //http://stackoverflow.com/questions/1443166/android-how-to-check-if-the-server-is-available
-    public boolean isOnline() {
+    public static boolean isOnline(Context context) {
         ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
 
@@ -210,7 +212,7 @@ public class HelperActivity extends AppCompatActivity
     }
 
     // Synarthsh pou pairnei mono thn prwth le3h enos string
-    public String firstWord(String name) {
+    public static String firstWord(String name) {
         String sclearName = null;
 
         if (name.contains(" "))
@@ -219,6 +221,17 @@ public class HelperActivity extends AppCompatActivity
             sclearName = name;
 
         return sclearName;
+    }
+
+    public static void showDialogBox(Context context, ProgressDialog dialog) {
+        dialog.setMessage(context.getString(R.string.loading_msg));
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    public static void httpErrorToast(Context context, int error) {
+        Toast.makeText(context, (error == 1) ? context.getString(R.string.no_internet) : "Server error", Toast.LENGTH_LONG).show();
     }
 
     public static String readStream(InputStream in) {

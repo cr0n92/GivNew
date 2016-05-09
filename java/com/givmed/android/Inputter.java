@@ -81,7 +81,7 @@ public class Inputter extends HelperActivity {
             }
             else {
 
-                if (isOnline()) {
+                if (isOnline(getApplicationContext())) {
                     dialog = new ProgressDialog(this);
                     dialog.setMessage(getString(R.string.loading_msg));
                     dialog.setCancelable(false);

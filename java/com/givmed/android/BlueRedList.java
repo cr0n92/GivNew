@@ -33,6 +33,8 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
         super.setMenu(R.menu.menu_main);
         super.helperOnCreate(R.layout.blue_red_list, R.string.two_buttons, true);
 
+        db = new DBHandler(getApplicationContext());
+
         firstMes = (TextView) findViewById(R.id.firstMes);
         mAdapter = new BlueRedAdapter(getApplicationContext());
         ListView list = (ListView) findViewById(R.id.list);
@@ -44,20 +46,8 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
             inRed = false;
             firstMes.setText(getString(R.string.br_first_msg_blue));
 
-            if (mAdapter.getCount() == 0) {
-//                mAdapter.add(new BlueRedItem("DEPON", R.drawable.ic_tick_in_circle_gray));
-//                mAdapter.add(new BlueRedItem("LEXOTANIL", R.drawable.ic_tick_in_circle_gray));
-//                mAdapter.add(new BlueRedItem("ULTRA", R.drawable.ic_tick_in_circle_gray));
-//                mAdapter.add(new BlueRedItem("MAKIS", R.drawable.ic_tick_in_circle_gray));
-//                mAdapter.add(new BlueRedItem("CECLOR", R.drawable.ic_tick_in_circle_gray));
-//                mAdapter.add(new BlueRedItem("DEPON", R.drawable.ic_tick_in_circle_gray));
-//                mAdapter.add(new BlueRedItem("ULTRA", R.drawable.ic_tick_in_circle_gray));
-//                mAdapter.add(new BlueRedItem("MEDROL", R.drawable.ic_tick_in_circle_gray));
-//                mAdapter.add(new BlueRedItem("DEPON", R.drawable.ic_tick_in_circle_gray));
-//                mAdapter.add(new BlueRedItem("CECLOR", R.drawable.ic_tick_in_circle_gray));
-//                mAdapter.add(new BlueRedItem("ULTRA", R.drawable.ic_tick_in_circle_gray));
-//                mAdapter.add(new BlueRedItem("MAKIS", R.drawable.ic_tick_in_circle_gray));
-            }
+            mAdapter.clear();
+            db.getUnknownMedsToAdapter(mAdapter);
         }
         else {
             inRed = savedInstanceState.getBoolean("inRed");

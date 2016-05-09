@@ -8,8 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.givmed.android.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +60,7 @@ public class DonationAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) { //called after setAdapter,notifyDataSetChanged
-        final Medicine med = (Medicine) getItem(position);
+        final Donation don = (Donation) getItem(position);
 
         // from donation.xml
         LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(mContext).inflate(
@@ -74,13 +72,13 @@ public class DonationAdapter extends BaseAdapter {
         // in the layout file
 
         final TextView titleView = (TextView) itemLayout.findViewById(R.id.medView);
-        titleView.setText(med.getName());
+        titleView.setText(don.getName());
 
         final TextView quantity = (TextView) itemLayout.findViewById(R.id.pharView);
-        quantity.setText(med.getPrice());
+        quantity.setText(don.getRegion());
 
         final TextView dateView = (TextView) itemLayout.findViewById(R.id.dateView);
-        dateView.setText(med.getDate());
+        dateView.setText(don.getDate());
 
         // Return the View you just created
         return itemLayout;

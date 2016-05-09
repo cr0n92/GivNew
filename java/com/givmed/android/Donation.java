@@ -4,18 +4,18 @@ public class Donation {
     public static final String ITEM_SEP = System.getProperty("line.separator");
 
     public final static String NAME = "name";
-    public final static String COUNT = "count";
+    public final static String REGION = "region";
     public final static String DATE = "date";
 
     private String mName = new String();
-    private String mCount = new String();
+    private String mRegion = new String();
     private String mDate = new String();
 
     Donation() { }
 
-    Donation(String name, String count, String date) {
+    Donation(String name, String region, String date) {
         this.mName = name;
-        this.mCount = count;
+        this.mRegion = region;
         this.mDate = date;
     }
 
@@ -33,8 +33,8 @@ public class Donation {
         mDate = date;
     }
 
-    public void setCount(String count) {
-        mCount = count;
+    public void setRegion(String region) {
+        mRegion = region;
     }
 
     //getters
@@ -44,8 +44,8 @@ public class Donation {
         return mDate;
     }
 
-    public String getCount() {
-        return mCount;
+    public String getRegion() {
+        return mRegion;
     }
 
     // Take a set of String data values and
@@ -57,6 +57,6 @@ public class Donation {
 //    }
 
     public String toString() {
-        return mName + ITEM_SEP + mCount + ITEM_SEP + mDate;
+        return mName + ITEM_SEP + mRegion + ITEM_SEP + mDate;
     }
 }

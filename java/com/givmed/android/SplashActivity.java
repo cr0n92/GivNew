@@ -11,6 +11,8 @@ import java.util.Calendar;
  */
 public class SplashActivity extends AppCompatActivity {
     private DBHandler db;
+    public static DonationAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,8 +22,11 @@ public class SplashActivity extends AppCompatActivity {
 //        Log.e("Month",""+calendar.get(Calendar.MONTH));
 //        Log.e("Day of Year",""+calendar.get(Calendar.DAY_OF_YEAR));
 
-        db = new DBHandler(getApplicationContext());
-        db.printAllMeds();
+
+//        db = new DBHandler(getApplicationContext());
+//        db.printAllMeds();
+
+
 
 
         startService(new Intent(this, AlarmService.class));

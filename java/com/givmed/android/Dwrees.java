@@ -1,16 +1,15 @@
 package com.givmed.android;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.givmed.android.R;
-
 public class Dwrees extends HelperActivity {
     private final String TAG = "Dwrees";
-    public static NeedAdapter mAdapter;
+    public static DonationAdapter mAdapter;
     private static TextView msgView;
     private static Button progButton, doneButton;
     DBHandler db;
@@ -47,11 +46,16 @@ public class Dwrees extends HelperActivity {
             }
         });
 
-        mAdapter = new NeedAdapter(getApplicationContext());
+        Donation don = new Donation("Depon","Ellhniko","2015-03-02");
+
+        mAdapter = new DonationAdapter(getApplicationContext());
+        mAdapter.add(don);
+
         ListView list = (ListView) findViewById(R.id.list);
         list.setFooterDividersEnabled(true);
         //registerForContextMenu(getListView());
         list.setAdapter(mAdapter);
+        Log.e("Dwrees","Mama sou");
 
         db = new DBHandler(getApplicationContext());
 

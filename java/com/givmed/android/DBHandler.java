@@ -464,6 +464,9 @@ public class DBHandler extends SQLiteOpenHelper {
         return cnt;
     }
 
+    /*---------------- donations functions ----------------------------*/
+
+
     /*---------------- done donations functions ----------------------------*/
     // Adding new done donation
     public void addDoneDonation(String price, String name, String pharName, String date) {

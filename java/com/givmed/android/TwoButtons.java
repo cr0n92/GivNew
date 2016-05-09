@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.givmed.android.R;
-
 public class TwoButtons extends HelperActivity
 {
 
@@ -44,6 +42,14 @@ public class TwoButtons extends HelperActivity
                 startActivity(myIntent);
             }
         });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+        GivmedApplication.getInstance().trackScreenView("TwoButtons");
+
 
     }
 

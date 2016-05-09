@@ -9,7 +9,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -288,6 +287,17 @@ public class DBHandler extends SQLiteOpenHelper {
                 new String[]{med.getBarcode()});
     }
 
+    public void updateMedStatus(String three_months_later) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_STATUS, "B");
+
+        db.update(TABLE_MEDS, values, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?",new String[]{"A",three_months_later});
+        db.close();
+
+    }
+
     // Deleting single med
     public void deleteMed(Medicine med, String halfName) {
         MedName name = this.getMedName(halfName);
@@ -378,7 +388,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    // Getting all Unknown Meds and adding them to the adapter
+	// Getting all Unknown Meds and adding them to the adapter
     public void getUnknownMedsToAdapter(BlueRedAdapter brAdapter) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -389,6 +399,23 @@ public class DBHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 brAdapter.add(new BlueRedItem(cursor.getString(0), cursor.getString(1), R.drawable.ic_tick_in_circle_gray));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+    }
+
+	public void printAllMeds() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_MEDS;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Log.e("Statys",""+cursor.getString(5)+"Exp.Date"+cursor.getString(2));
+
+                //medAdapter.add(med);
             } while (cursor.moveToNext());
             cursor.close();
         }

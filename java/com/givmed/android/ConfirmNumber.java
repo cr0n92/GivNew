@@ -281,7 +281,8 @@ public class ConfirmNumber extends AppCompatActivity {
 
             try {
                 url = new URL(request);
-                String urlParameters = "userPhone="   + phone ;
+                String urlParameters = "userPhone="   + phone +
+                                        "&os=A";
 
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));

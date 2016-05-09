@@ -16,8 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -43,7 +41,6 @@ public class Elleipseis extends HelperActivity
     DBHandler db;
 
 
-    private Tracker mTracker;
 
     //!!!!!!!!!!!PUSH!!!!!!!!!!
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -131,18 +128,7 @@ public class Elleipseis extends HelperActivity
             }
         });
 
-        // Obtain the shared Tracker instance.
-        AnalyticsApplication application = (AnalyticsApplication) getApplication();
-        mTracker = application.getDefaultTracker();
 
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("Share")
-                .build());
-
-        Log.i(TAG, "Setting screen name: Elleipseis");
-        mTracker.setScreenName("Image~");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
 
         mAdapter = new NeedAdapter(getApplicationContext());
         ListView list = (ListView)findViewById(R.id.list);

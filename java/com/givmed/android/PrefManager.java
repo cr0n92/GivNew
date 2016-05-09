@@ -107,6 +107,15 @@ public class PrefManager {
         return pref.getInt(KEY_OLD_MONTH, -1);
     }
 
+    public void setUsername(String username) {
+        editor.putString(KEY_NAME, username);
+        editor.commit();
+    }
+
+    public String getUsername() {
+        return pref.getString(KEY_NAME, "");
+    }
+
     public void setOldMonth(int month) {
         editor.putInt(KEY_OLD_MONTH, month);
         editor.commit();

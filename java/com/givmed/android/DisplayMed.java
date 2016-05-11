@@ -56,13 +56,13 @@ public class DisplayMed extends AppCompatActivity {
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.farmako);
         mToolBar.setNavigationIcon(R.drawable.ic_arrows);
+        setSupportActionBar(mToolBar);
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        setSupportActionBar(mToolBar);
 
         db = new DBHandler(getApplicationContext());
         dialog = new ProgressDialog(this);

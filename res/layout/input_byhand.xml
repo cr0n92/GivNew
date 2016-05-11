@@ -54,7 +54,7 @@
                     android:layout_below="@id/firstMes"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@drawable/grafo"
+                    android:src="@drawable/svg_grafo"
                     android:layout_centerHorizontal="true"/>
 
                 <EditText

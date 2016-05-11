@@ -34,10 +34,11 @@ import java.net.URL;
 public class Elleipseis extends HelperActivity
 {
     private final String TAG = "Ellepseis";
-    private String right_plu, right_sin, left_sin;
+    private String right_plu, right_sin, left_sin, needs, pharms;
     public static NeedAdapter mAdapter;
     private static TextView msgView;
     private static Button nameButton, regionButton;
+    JSONObject obj = null;
     DBHandler db;
 
 
@@ -105,6 +106,12 @@ public class Elleipseis extends HelperActivity
         regionButton = (Button) findViewById(R.id.regionButton);
         msgView.setText(left_sin + " (0) " + right_plu);
 
+        mAdapter = new NeedAdapter(getApplicationContext());
+        ListView list = (ListView)findViewById(R.id.list);
+        list.setFooterDividersEnabled(true);
+        //registerForContextMenu(getListView());
+        list.setAdapter(mAdapter);
+
         nameButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -127,14 +134,6 @@ public class Elleipseis extends HelperActivity
 
             }
         });
-
-
-
-        mAdapter = new NeedAdapter(getApplicationContext());
-        ListView list = (ListView)findViewById(R.id.list);
-        list.setFooterDividersEnabled(true);
-        //registerForContextMenu(getListView());
-        list.setAdapter(mAdapter);
 
         if (isOnline(getApplicationContext()))
             new HttpGetTask().execute();
@@ -194,39 +193,30 @@ public class Elleipseis extends HelperActivity
     }
     //!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!
 
-    private class HttpGetTask extends AsyncTask<Void, Void, JSONArray> {
+    private class HttpGetTask extends AsyncTask<Void, Void, Integer> {
 
         private static final String TAG = "HttpGetTask";
         private int error = -1;
 
         @Override
-        protected JSONArray doInBackground(Void... arg0) {
-
-            String URL = server + "/needs/";
-
-            String data = "";
-            JSONArray out = null;
-
-            String request = URL;
+        protected Integer doInBackground(Void... arg0) {
+            String URL = server + "/needs_date/2011-5-3/";
+            Integer out = 0;
             java.net.URL url = null;
             HttpURLConnection conn = null;
 
             try {
-                url = new URL(request);
+                url = new URL(URL);
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
 
                 //conn.setConnectTimeout(10* 1000);          // 10 s.
                 //conn.connect();
 
                 conn.setDoInput(true);
-
                 InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
-                data = HelperActivity.readStream(in);
+                needs = HelperActivity.readStream(in);
+                out = conn.getResponseCode();
 
-                out = new JSONArray(data);
-
-            } catch (JSONException e) {
-                Log.e(TAG, "JsonException");
             } catch (ProtocolException e) {
                 error = 1;
                 Log.e(TAG, "ProtocolException");
@@ -246,65 +236,63 @@ public class Elleipseis extends HelperActivity
         }
 
         @Override
-        protected void onPostExecute(JSONArray result) {
+        protected void onPostExecute(Integer result) {
             if (error > 0) {
                 Toast.makeText(getApplicationContext(), (error == 1)? "No internet connection" : "Nothing to show",
                         Toast.LENGTH_LONG).show();
             } else {
-                db.deleteNeeds();
-                try {
-                    for(int i=0; i<result.length(); i++) {
-                        JSONObject json = result.getJSONObject(i);
-                        Log.i("etsi pou les", "" + json);
-                        Need needo = new Need();
-                        needo.setNeedName(json.getString("needMedName"));
-                        needo.setPhone(json.getString("needPhone"));
+                if (result == 200) {
+                    try {
+                        JSONObject obj = new JSONObject(needs);
+                        String newDate = obj.getString("newDate");
+                        JSONArray objs = new JSONArray(obj.getString("data"));
+                        db.deleteNeeds();
 
-                        db.addNeed(needo);
+                        Log.i("etsi pou les", "" + newDate + "" + objs);
+
+                        for (int i = 0; i < objs.length(); i++) {
+                            JSONObject json = objs.getJSONObject(i);
+                            Need needo = new Need();
+                            needo.setNeedName(json.getString("needMedName"));
+                            needo.setPhone(json.getString("needPhone"));
+                            db.addNeed(needo);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+                    int count = db.getAllNeeds(mAdapter, "needName");
+                    String right_msg = (count == 1) ? right_sin : right_plu;
+                    msgView.setText(left_sin + " " + count + " " + right_msg);
                 }
-                int count = db.getAllNeeds(mAdapter, "needName");
-                String right_msg = (count == 1) ? right_sin: right_plu;
-                msgView.setText(left_sin + " " + count + " " + right_msg);
             }
         }
     }
 
-    private class HttpGetTaskPharmacies extends AsyncTask<Void, Void, JSONArray> {
+    private class HttpGetTaskPharmacies extends AsyncTask<Void, Void, Integer> {
 
         private static final String TAG = "HttpGetTask";
         private int error = -1;
 
         @Override
-        protected JSONArray doInBackground(Void... arg0) {
-
-            String URL = server + "/pharmacies/";
-
-            String data = "";
-            JSONArray out = null;
-
-            String request = URL;
+        protected Integer doInBackground(Void... arg0) {
+            String URL = server + "/pharmacies_date/2011-9-10";
+            Integer out = 0;
             java.net.URL url = null;
             HttpURLConnection conn = null;
 
             try {
-                url = new URL(request);
+                url = new URL(URL);
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
 
                 //conn.setConnectTimeout(10* 1000);          // 10 s.
                 //conn.connect();
 
                 conn.setDoInput(true);
-
                 InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
-                data = HelperActivity.readStream(in);
+                pharms = HelperActivity.readStream(in);
+                out = conn.getResponseCode();
 
-                out = new JSONArray(data);
-
-            } catch (JSONException e) {
-                Log.e(TAG, "JsonException");
             } catch (ProtocolException e) {
                 error = 1;
                 Log.e(TAG, "ProtocolException");
@@ -324,22 +312,28 @@ public class Elleipseis extends HelperActivity
         }
 
         @Override
-        protected void onPostExecute(JSONArray result) {
-            if (error > 0) {
-                Toast.makeText(getApplicationContext(), (error == 1)? "No internet connection" : "Nothing to show",
-                        Toast.LENGTH_LONG).show();
-            } else {
-                try {
-                    db.deletePharmacies();
-                    for(int i=0; i<result.length(); i++) {
-                        JSONObject json = result.getJSONObject(i);
-                        Log.i("etsi pou les", "" + json);
+        protected void onPostExecute(Integer result) {
+            if (error > 0)
+                httpErrorToast(getApplicationContext(), error);
+            else {
+                if (result == 200) {
+                    try {
+                        JSONObject obj = new JSONObject(pharms);
+                        String newDate = obj.getString("newDate");
+                        JSONArray objs = new JSONArray(obj.getString("data"));
+                        db.deletePharmacies();
 
-                        db.addPharmacy(json.getString("pharmacyPhone"), json.getString("pharmacyAddress"),
-                                json.getString("openTime"), json.getString("pharmacyName"), json.getString("pharmacyNameGen"));
+                        Log.i("etsi pou les", "" + newDate + "" + objs);
+
+                        for (int i = 0; i < objs.length(); i++) {
+                            JSONObject json = objs.getJSONObject(i);
+
+                            db.addPharmacy(json.getString("pharmacyPhone"), json.getString("pharmacyAddress"),
+                                    json.getString("openTime"), json.getString("pharmacyName"), json.getString("pharmacyNameGen"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
         }

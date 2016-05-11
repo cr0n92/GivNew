@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -413,7 +414,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Log.e("Statys",""+cursor.getString(5)+"Exp.Date"+cursor.getString(2));
+                Log.e("Statys", "" + cursor.getString(5) + "Exp.Date" + cursor.getString(2));
 
                 //medAdapter.add(med);
             } while (cursor.moveToNext());

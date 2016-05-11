@@ -106,6 +106,7 @@
                 android:layout_below="@id/downLine"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:dividerHeight="1dp"
+                android:divider="@android:color/white"
                 android:drawSelectorOnTop="true"
                 android:footerDividersEnabled="false"
                 android:padding="5dp"

@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.givmed.android.R;
@@ -29,6 +30,7 @@ import java.net.URL;
 public class AfterFarmakeio extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     public static MedicineAdapter mAdapter;
+    public static TextView msgView;
     public static String name = "";
     DBHandler db;
 
@@ -41,16 +43,19 @@ public class AfterFarmakeio extends AppCompatActivity implements AdapterView.OnI
         if (intent != null && intent.hasExtra("name"))
             name = intent.getStringExtra("name");
 
+        msgView = (TextView) findViewById(R.id.secondMes);
+        msgView.setText(name);
+
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
-        mToolBar.setTitle(name);
+        mToolBar.setTitle(R.string.farmako);
         mToolBar.setNavigationIcon(R.drawable.ic_arrows);
+        setSupportActionBar(mToolBar);
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        setSupportActionBar(mToolBar);
 
         db = new DBHandler(getApplicationContext());
 

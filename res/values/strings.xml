@@ -10,6 +10,9 @@
     <string name="two_buttons">Επιλογή</string>
     <string name="farmako">Φάρμακο</string>
     <string name="elleipseis">Ελλείψεις</string>
+    <string name="tropos_paradoshs">Τρόπος Παράδοσης</string>
+    <string name="user">Μόνος Μου</string>
+    <string name="volunteer">Εθελοντής</string>
     <string name="dwrees">Δωρεές</string>
     <string name="farmakeio">Φαρμακείο</string>
     <string name="register">Eγγραφή</string>
@@ -61,6 +64,31 @@
     <string name="farmako_caps">ΦΑΡΜΑΚΟ</string>
     <string name="perioxh_caps">ΠΕΡΙΟΧΗ</string>
     <string name="date_caps">ΗΜ/ΝΙΑ</string>
+
+    <!-- Τρόπος Παράδοσης -->
+    <string name="choo_left_first_msg">Κάποιος συνάνθρωπός σου</string>
+    <string name="choo_right_first_msg">έχει ανάγκη τη δωρεά σου!</string>
+    <string name="choo_mid_first_msg">στο κοινωνικό φαρμακείο του</string>
+    <string name="choo_second_msg">Πώς θέλεις να φθάσουν τα φάρμακά σου σε αυτόν;</string>
+    <string name="choo_pharm_msg">Διάλεξε το κοινωνικό φαρμακείο που θέλεις να δωρίσεις το φαρμακό σου:</string>
+    <string name="user_btn">Θα το παω εγω!</string>
+    <string name="volu_btn">Θελω να σταλει με εθελοντη</string>
+    <string name="choo_cng_msg">Μπορείς να αλλάξεις τον τρόπο μεταφοράς ανα πάσα στιγμή από το menu Προγραμματισμένες Δωρεές</string>
+
+    <!-- Μόνος Μου & Εθελοντής -->
+    <string name="choo_foreas">Φορέας</string>
+    <string name="choo_phone">Τηλέφωνο</string>
+    <string name="choo_pick_date">Ημ. Παράδοσης</string>
+    <string name="choo_delivered">Το παρέδωσα!</string>
+    <string name="choo_want_volu">Θελω να σταλει με εθελοντη</string>
+    <string name="choo_volu_msg">Δεν μπορείς τελικά; Ζήτα κάποιον από το δίκτυό μας να σε βοηθήσει!</string>
+    <string name="choo_user_first">Ευκαιρία να γνωρίσεις και τους εθελοντές του κοινωνικού φαρμακείου!</string>
+    <string name="choo_user_second">Μέχρι πότε θα μπορούσες να το πας μέσα στις επόμενες 20 μέρες;</string>
+
+    <string name="choo_volu_first">Δεν χρειάζεται να κάνεις τίποτα άλλο!</string>
+    <string name="choo_volu_second">Επίλεξε τις ημέρες που μπορεί να το παραλάβει κάποιος εθελοντής.</string>
+    <string name="choo_add_dates"><u>Πρόσθεσε ημερομηνίες</u></string>
+    <string name="choo_addr">Διέυθυνση (Οδός, Περιοχή, Τ.Κ.)</string>
 
     <!-- Δυο κουμπιά -->
     <string name="two_btn_first_msg">Καταχώρησε τα φαρμακά σου!</string>

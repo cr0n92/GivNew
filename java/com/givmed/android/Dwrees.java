@@ -1,7 +1,9 @@
 package com.givmed.android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -10,8 +12,9 @@ import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
 
-public class Dwrees extends HelperActivity {
+public class Dwrees extends HelperActivity implements AdapterView.OnItemClickListener {
     private final String TAG = "Dwrees";
+    private static boolean inDone = false;
     public static DonationAdapter mAdapter;
     private static TextView msgView;
     private static Button progButton, doneButton;
@@ -50,14 +53,11 @@ public class Dwrees extends HelperActivity {
             }
         });
 
-//        Donation don = new Donation("Depon","Ellhniko","2015-03-02");
-//
-         mAdapter = new DonationAdapter(getApplicationContext());
-//        mAdapter.add(don);
+        mAdapter = new DonationAdapter(getApplicationContext());
 
         ListView list = (ListView) findViewById(R.id.list);
         list.setFooterDividersEnabled(true);
-        //registerForContextMenu(getListView());
+        registerForContextMenu(list);
         list.setAdapter(mAdapter);
 
         db = new DBHandler(getApplicationContext());
@@ -66,5 +66,23 @@ public class Dwrees extends HelperActivity {
         double price = 0.0;
         String mid_msg = (count == 1) ? mid_sin : mid_plu;
         msgView.setText(left + " " + count + " " + mid_msg + " " + price + " " + right);
+    }
+
+    public void onItemClick(AdapterView<?> l, View v, int position, long id) {
+        Donation progDonation = (Donation) mAdapter.getItem(position);
+
+        if (progDonation.getVolunteer().equals("V")) {
+            Intent intent = new Intent(getApplicationContext(), DwreaVolunteer.class);
+            startActivity(intent);
+        }
+        else if (progDonation.getVolunteer().equals("U")) {
+            Intent intent = new Intent(getApplicationContext(), DwreaUser.class);
+            startActivity(intent);
+        }
+        else {
+            Intent intent = new Intent(getApplicationContext(), AfterDwrees.class);
+            intent.putExtra("pharmName", progDonation.getPharNameGen());
+            startActivity(intent);
+        }
     }
 }

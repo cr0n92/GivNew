@@ -61,6 +61,8 @@
             <Button
                 android:id="@+id/nameButton"
                 android:text="@string/naming_caps"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:layout_weight="1"
@@ -73,6 +75,8 @@
             <Button
                 android:id="@+id/regionButton"
                 android:text="@string/perioxh_caps"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_weight="1"

@@ -3,6 +3,7 @@ package com.givmed.android;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +24,15 @@ public class DwreaUser extends AppCompatActivity {
     private static EditText dateChoose;
     public static String serverDate;
     public ProgressDialog dialog;
+    public Donation donation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dwrea_user);
+
+        Intent intent = getIntent();
+        if (intent != null)
 
         dialog = new ProgressDialog(this);
 
@@ -61,8 +66,8 @@ public class DwreaUser extends AppCompatActivity {
         EditText mForeas = (EditText) findViewById(R.id.foreas);
         EditText mPhone = (EditText) findViewById(R.id.phone);
 
-        //mName.setText(name);
-        //mExp.setText(date);
+        //mName.setText(donation.getName());
+        //mForeas.setText(donation.getRegion()); // + wres leitourgias kai pws pame ekei
         //mPhone.setText(phone);
 
         mName.setKeyListener(null);

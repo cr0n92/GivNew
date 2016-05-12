@@ -61,6 +61,8 @@
             <Button
                 android:id="@+id/progButton"
                 android:text="@string/scheduled"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:layout_weight="1"
@@ -73,6 +75,8 @@
             <Button
                 android:id="@+id/doneButton"
                 android:text="@string/done"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_weight="1"

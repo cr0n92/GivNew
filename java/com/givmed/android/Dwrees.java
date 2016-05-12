@@ -73,12 +73,10 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
 
         if (progDonation.getVolunteer().equals("V")) {
             Intent intent = new Intent(getApplicationContext(), DwreaVolunteer.class);
-            packageIntent(intent, progDonation);
             startActivity(intent);
         }
         else if (progDonation.getVolunteer().equals("U")) {
             Intent intent = new Intent(getApplicationContext(), DwreaUser.class);
-            packageIntent(intent, progDonation);
             startActivity(intent);
         }
         else {

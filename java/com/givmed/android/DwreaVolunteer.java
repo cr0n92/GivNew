@@ -38,7 +38,6 @@ public class DwreaVolunteer extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null)
-            donation = new Donation(intent);
 
         dialog = new ProgressDialog(this);
 

@@ -4,58 +4,83 @@ public class Donation {
     public static final String ITEM_SEP = System.getProperty("line.separator");
 
     public final static String NAME = "name";
-    public final static String REGION = "region";
-    public final static String DATE = "date";
+    public final static String BARCODE = "barcode";
+    public final static String PHARNAME = "pharmName";
+    public final static String PHARNAMEGEN = "pharmNameGen";
+
+    public final static String DATE1 = "date1";
+    public final static String DATE2 = "date2";
+    public final static String DATE3 = "date3";
+    public final static String VOLUNTEER = "volunteer";
+
+
 
     private String mName ;
-    private String mRegion ;
-    private String mDate ;
+    private String mBarcode ;
+
+    private String mpharmName ;
+
+    private String mpharmNameGen ;
 
 
-    Donation(String name, String region, String date) {
+    private String mDate1 ;
+    private String mDate2 ;
+    private String mDate3 ;
+    private String mVolunteer ;
+
+
+
+    Donation(String name, String date1,String date2,String date3,String volunteer,String barcode,String pharmName,String pharmNameGen) {
         this.mName = name;
-        this.mRegion = region;
-        this.mDate = date;
-    }
+        this.mBarcode = barcode;
 
-    // Create a new Donation from data packaged in an Intent
-//    Donation(Intent intent) {
-//        mName = intent.getStringExtra(MedName.NAME);
-//        mCount = intent.getStringExtra(MedName.COUNT);
-//        mDate = intent.getStringExtra(MedName.DATE);
-//    }
+        this.mpharmName = pharmName;
+
+        this.mpharmNameGen = pharmNameGen;
+
+        this.mDate1 = date1;
+        this.mDate1 = date2;
+
+        this.mDate1 = date3;
+
+        this.mVolunteer = volunteer;
+
+    }
 
     //setters
     public void setName(String name) { mName = name; }
 
     public void setDate(String date) {
-        mDate = date;
+        mDate1 = date;
     }
 
-    public void setRegion(String region) {
-        mRegion = region;
-    }
+
 
     //getters
     public String getName() { return mName; }
 
-    public String getDate() {
-        return mDate;
+    public String getBarcode() { return mBarcode; }
+
+    public String getPharName() { return mpharmName; }
+
+    public String getPharNameGen() { return mpharmNameGen; }
+
+    public String getDate1() {
+        return mDate1;
+    }
+    public String getDate2() {
+        return mDate2;
     }
 
-    public String getRegion() {
-        return mRegion;
+    public String getDate3() {
+        return mDate3;
     }
 
-    // Take a set of String data values and
-    // package them for transport in an Intent
-//    public static void packageIntent(Intent intent, String name, String count, String date) {
-//        intent.putExtra(Medicine.NAME, name);
-//        intent.putExtra(Medicine.PRICE, count);
-//        intent.putExtra(Medicine.DATE, date);
-//    }
-
-    public String toString() {
-        return mName + ITEM_SEP + mRegion + ITEM_SEP + mDate;
+    public String getVolunteer() {
+        return mVolunteer;
     }
+
+
+
+
 }

@@ -200,6 +200,7 @@ public class Elleipseis extends HelperActivity
 private class HttpGetTask extends AsyncTask<Void, Void, Integer> {
 
         private static final String TAG = "HttpGetTask";
+        String needs;
         private int error = -1;
 
         @Override
@@ -277,6 +278,7 @@ private class HttpGetTask extends AsyncTask<Void, Void, Integer> {
 
         private static final String TAG = "HttpGetTask";
         private int error = -1;
+        String pharms;
 
         @Override
         protected Integer doInBackground(Void... arg0) {

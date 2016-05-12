@@ -63,6 +63,8 @@ public class PrefManager {
         editor.commit();
     }
 
+    //TODO pickupaddress
+    //TODO pharm date,need date
     public boolean isWaitingForSms() {
         return pref.getBoolean(KEY_IS_WAITING_FOR_SMS, false);
     }

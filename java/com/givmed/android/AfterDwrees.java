@@ -1,27 +1,17 @@
 package com.givmed.android;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +22,8 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
     public static String mid_msg = " ";
     public static String selectedPharm = " ";
     public static TextView msgView;
+    DBHandler db;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +35,7 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
         // se ka8e periptwsh kai an yparxei se perisottera tote deixnoume to spinner wste na
         // epile3ei o xrhsths to farmakeio pou 8elei epishs ena mhnyma panw apo to spinner.
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("pharName"))
+        if (intent != null && intent.hasExtra("pharName") && !(intent.getStringExtra("pharName").equals(";")))
             mid_msg = " " + getString(R.string.choo_mid_first_msg) + " " + intent.getStringExtra("pharName") + " ";
 
         msgView = (TextView) findViewById(R.id.firstMes);
@@ -53,15 +45,20 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
         TextView chooseMsg = (TextView) findViewById(R.id.chooseMsg);
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
-        if (mid_msg.equals(" ")) {
+        if (mid_msg.equals(";")) {
             chooseMsg.setText(getString(R.string.choo_pharm_msg));
 
             // TODO: pairnoume apo thn vash kai ta gyrname se ena list me strings
 
             List<String> list = new ArrayList<String>();
-            list.add("ellhniko");
-            list.add("alvaniko");
-            list.add("scanouri");
+//            list.add("ellhniko");
+//            list.add("alvaniko");
+//            list.add("scanouri");
+            db = new DBHandler(getApplicationContext());
+
+            if (intent != null) {
+                list=db.getPharmaciesForNeed(intent.getStringExtra("needName"));
+            }
 
             spinner.setOnItemSelectedListener(this);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);

@@ -3,20 +3,16 @@ package com.givmed.android;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RadioGroup;
-
 
 import java.util.Calendar;
 import java.util.Date;
@@ -84,6 +80,7 @@ public class DwreaUser extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO: vazoume to farmako stis oloklhrwmenes, to leme ston server kai diagrafoume to famrmako topika
+
 //                Intent intent = new Intent(getApplicationContext(), BarcodeScanner.class);
 //                startActivity(intent);
 //                finish();

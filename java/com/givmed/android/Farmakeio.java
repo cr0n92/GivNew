@@ -2,11 +2,14 @@ package com.givmed.android;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 
 public class Farmakeio extends HelperActivity implements AdapterView.OnItemClickListener {
 
@@ -19,6 +22,7 @@ public class Farmakeio extends HelperActivity implements AdapterView.OnItemClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
         super.helperOnCreate(R.layout.pharmacy_names, R.string.farmakeio, true);
 

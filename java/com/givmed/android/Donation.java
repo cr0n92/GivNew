@@ -7,11 +7,10 @@ public class Donation {
     public final static String REGION = "region";
     public final static String DATE = "date";
 
-    private String mName = new String();
-    private String mRegion = new String();
-    private String mDate = new String();
+    private String mName ;
+    private String mRegion ;
+    private String mDate ;
 
-    Donation() { }
 
     Donation(String name, String region, String date) {
         this.mName = name;

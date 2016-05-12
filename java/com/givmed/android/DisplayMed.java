@@ -6,36 +6,27 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
-import com.givmed.android.R;
+import com.crashlytics.android.Crashlytics;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
+
+import io.fabric.sdk.android.Fabric;
 
 public class DisplayMed extends AppCompatActivity {
     private EditText mName, mExp, mBarcode, mNotes, mCategory;
@@ -51,6 +42,7 @@ public class DisplayMed extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.display_med);
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
@@ -250,13 +242,16 @@ public class DisplayMed extends AppCompatActivity {
                 Log.e(TAG, "Received HTTP response: " + result);
 
             } catch (ProtocolException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "ProtocolException");
                 e.printStackTrace();
-            } catch (MalformedURLException exception) {
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "MalformedURLException");
-            } catch (IOException exception) {
+            } catch (IOException e) {
+                Crashlytics.logException(e);
                 error = 2;
                 Log.e(TAG, "IOException");
             } finally {
@@ -319,17 +314,20 @@ public class DisplayMed extends AppCompatActivity {
                 Log.e(TAG, "Received HTTP response: " + result);
 
             } catch (ProtocolException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "ProtocolException");
                 e.printStackTrace();
-            } catch (MalformedURLException exception) {
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "MalformedURLException");
-                exception.printStackTrace();
-            } catch (IOException exception) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                Crashlytics.logException(e);
                 error = 2;
                 Log.e(TAG, "IOException");
-                exception.printStackTrace();
+                e.printStackTrace();
             } finally {
                 if (null != conn)
                     conn.disconnect();

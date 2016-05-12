@@ -9,13 +9,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.givmed.android.R;
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 
 public class Communication extends HelperActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
         super.helperOnCreate(R.layout.communication, R.string.communication, true);
 

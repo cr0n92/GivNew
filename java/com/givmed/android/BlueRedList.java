@@ -3,21 +3,17 @@ package com.givmed.android;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.givmed.android.R;
+import java.util.ArrayList;
 
 public class BlueRedList extends HelperActivity implements AdapterView.OnItemClickListener {
     private final String TAG = "BlueRedList";
@@ -107,6 +103,22 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
     }
 
     public void matching() {
+        int ret;
+
+        //Kanoume subscribe sta topics gia kathe onoma farmakou sthn mple lista
+        //Kanoume subscribe mono gia ayta pou den exoune ginei match
+        ArrayList<String> topics = new ArrayList<String>();
+//        for (BlueRedItem item : mAdapter.mItems) {
+//            if (item.getStatus()==BlueRedItem.blue)
+//                topics.add(item.getName());
+//        }
+        Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
+        serviceIntent.putExtra("subscribe", true);
+
+
+
+
+
         int matchedMeds = 0;
 
         dialog = new ProgressDialog(this);
@@ -116,8 +128,18 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
         dialog.show();
 
         for (BlueRedItem item : mAdapter.mItems) {
-            //matchedMeds += db.updateMedAndMatch();
+            Log.e("Med name",item.getName());
+            ret = db.updateMedAndMatch(item);
+            if (ret == -1)
+                topics.add(item.getName());
+            else if (ret == 1)
+                matchedMeds++;
+
         }
+        serviceIntent.putStringArrayListExtra("topic", topics);
+        startService(serviceIntent);
+
+
 
         dialog.dismiss();
         dialog = null;

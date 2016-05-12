@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +33,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
+
+import io.fabric.sdk.android.Fabric;
 
 public class ConfirmNumber extends AppCompatActivity {
     private String phone;
@@ -122,6 +126,7 @@ public class ConfirmNumber extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.confirm_number);
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
@@ -304,14 +309,17 @@ public class ConfirmNumber extends AppCompatActivity {
 
 
             } catch (ProtocolException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "ProtocolException");
-            } catch (MalformedURLException exception) {
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "MalformedURLException");
-            } catch (IOException exception) {
+            } catch (IOException e) {
+                Crashlytics.logException(e);
                 error = 1;
-                Log.e(TAG, "IOException"+exception);
+                Log.e(TAG, "IOException"+e);
             } finally {
                 if (null != conn)
                     conn.disconnect();
@@ -320,6 +328,7 @@ public class ConfirmNumber extends AppCompatActivity {
                 Log.e(TAG, "phone"+phone);
                 out.put("phone",phone);
             } catch (JSONException e) {
+                Crashlytics.logException(e);
                 e.printStackTrace();
             }
             return out;
@@ -335,6 +344,7 @@ public class ConfirmNumber extends AppCompatActivity {
                 try {
                     pref.setMobileNumber(result.get("phone").toString());
                 } catch (JSONException e) {
+                    Crashlytics.logException(e);
                     e.printStackTrace();
                 }
                 //kanoume update thn vash tou kinitou me tis plhrofories

@@ -12,6 +12,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
+
 public class Number extends AppCompatActivity {
     EditText mPhoneView;
     String phone;
@@ -22,6 +26,7 @@ public class Number extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.number);
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);

@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,6 +27,8 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.fabric.sdk.android.Fabric;
+
 public class Inputter extends HelperActivity {
     private EditText mEditText;
     private String date, eof, name, code;
@@ -35,6 +39,7 @@ public class Inputter extends HelperActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main);
         super.helperOnCreate(R.layout.input_byhand, R.string.inputter, true);
 
@@ -192,15 +197,19 @@ public class Inputter extends HelperActivity {
                 results[2] = eof.group(1);
 
             } catch (ProtocolException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "ProtocolException");
-            } catch (MalformedURLException exception) {
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "MalformedURLException");
-            } catch (IOException exception) {
+            } catch (IOException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "IOException");
-            } catch (Exception exp) {
+            } catch (Exception e) {
+                Crashlytics.logException(e);
                 error = 2;
                 Log.e(TAG, "Wrong barcode");
             } finally {

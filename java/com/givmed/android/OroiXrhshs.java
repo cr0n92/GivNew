@@ -7,13 +7,16 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.givmed.android.R;
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 
 public class OroiXrhshs extends HelperActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
         super.helperOnCreate(R.layout.faq, R.string.oroi_xrhshs, true);
 

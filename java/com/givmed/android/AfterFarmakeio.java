@@ -1,30 +1,17 @@
 package com.givmed.android;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.givmed.android.R;
+import com.crashlytics.android.Crashlytics;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import io.fabric.sdk.android.Fabric;
 
 public class AfterFarmakeio extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -35,6 +22,7 @@ public class AfterFarmakeio extends AppCompatActivity implements AdapterView.OnI
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.pharmacy);
 
         Intent intent = getIntent();

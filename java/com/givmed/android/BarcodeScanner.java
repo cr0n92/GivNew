@@ -1,6 +1,5 @@
 package com.givmed.android;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
@@ -20,8 +19,9 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.crashlytics.android.Crashlytics;
 
 import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;
@@ -29,8 +29,9 @@ import net.sourceforge.zbar.ImageScanner;
 import net.sourceforge.zbar.Symbol;
 import net.sourceforge.zbar.SymbolSet;
 
-import com.givmed.android.R;
 import java.util.List;
+
+import io.fabric.sdk.android.Fabric;
 
 public class BarcodeScanner extends AppCompatActivity {
 
@@ -53,6 +54,7 @@ public class BarcodeScanner extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState)
     {
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.barcode_scanner);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -120,6 +122,7 @@ public class BarcodeScanner extends AppCompatActivity {
                 try {
                     camera = Camera.open(i);
                 } catch (Exception e) {
+                    Crashlytics.logException(e);
                     e.printStackTrace();
                     //  throws runtime exception :"Failed to connect to camera service"
                 }

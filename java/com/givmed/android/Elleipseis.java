@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -30,6 +31,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+
+import io.fabric.sdk.android.Fabric;
 
 public class Elleipseis extends HelperActivity
 {
@@ -56,6 +59,7 @@ public class Elleipseis extends HelperActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
         super.helperOnCreate(R.layout.eleipseis, R.string.elleipseis, false);
 
@@ -226,16 +230,20 @@ public class Elleipseis extends HelperActivity
                 out = new JSONArray(data);
 
             } catch (JSONException e) {
+                Crashlytics.logException(e);
                 Log.e(TAG, "JsonException");
             } catch (ProtocolException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "ProtocolException");
-            } catch (MalformedURLException exception) {
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "MalformedURLException");
-            } catch (IOException exception) {
+            } catch (IOException e) {
+                Crashlytics.logException(e);
                 error = 1;
-                exception.printStackTrace();
+                e.printStackTrace();
                 Log.e(TAG, "IOException");
             } finally {
                 if (null != conn)
@@ -263,6 +271,7 @@ public class Elleipseis extends HelperActivity
                         db.addNeed(needo);
                     }
                 } catch (JSONException e) {
+                    Crashlytics.logException(e);
                     e.printStackTrace();
                 }
                 int count = db.getAllNeeds(mAdapter, "needName");
@@ -304,16 +313,20 @@ public class Elleipseis extends HelperActivity
                 out = new JSONArray(data);
 
             } catch (JSONException e) {
+                Crashlytics.logException(e);
                 Log.e(TAG, "JsonException");
             } catch (ProtocolException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "ProtocolException");
-            } catch (MalformedURLException exception) {
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "MalformedURLException");
-            } catch (IOException exception) {
+            } catch (IOException e) {
+                Crashlytics.logException(e);
                 error = 1;
-                exception.printStackTrace();
+                e.printStackTrace();
                 Log.e(TAG, "IOException");
             } finally {
                 if (null != conn)
@@ -339,6 +352,7 @@ public class Elleipseis extends HelperActivity
                                 json.getString("openTime"), json.getString("pharmacyName"), json.getString("pharmacyNameGen"));
                     }
                 } catch (JSONException e) {
+                    Crashlytics.logException(e);
                     e.printStackTrace();
                 }
             }

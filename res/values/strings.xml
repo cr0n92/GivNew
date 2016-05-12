@@ -39,7 +39,7 @@
     <string name="out_now">ΑΜΕΣΑ</string>
     <string name="out_before">ΠΡΙΝ ΛΗΞΕΙ</string>
     <string name="out_category">Kατηγορία</string>
-    <string name="out_is_sirup">Δυστηχώς τα κοινωνικά φαρμακεία δεν δέχονται φάρμακα που χρειάζονται ψυγείο ή ανοιχτά σιρόπια.</string>
+    <string name="out_is_sirup">Δυστυχώς τα κοινωνικά φαρμακεία δεν δέχονται φάρμακα που χρειάζονται ψυγείο ή ανοιχτά σιρόπια.</string>
 
     <!-- Προσωπικό Φαρμακείο -->
     <string name="home_message">Δες πόσα φάρμακα έχεις στο σπίτι σου, παρακάτω!</string>
@@ -49,7 +49,7 @@
     <string name="naming_caps">ΟΝΟΜΑΣΙΑ</string>
     <string name="expire_caps">ΗΜ. ΛΗΞΗΣ</string>
     <string name="delete_med">Διαγραφή φαρμάκου</string>
-    <string name="delete_sure">Είστε σίγουρος οτι θέλετε να το διαγράψεται;</string>
+    <string name="delete_sure">Είστε σίγουρος οτι θέλετε να το διαγράψετε;</string>
 
     <!-- Δωρεές -->
     <string name="donation_med">φάρμακα αξίας</string>
@@ -84,7 +84,7 @@
     <!-- Ελείψεις -->
     <string name="region">Περιοχή</string>
     <string name="need_your_help">Η βοήθειά σου είναι πολύ σημαντική!</string>
-    <string name="need_left_half_msg">Αυτή τη στιγμή υπάρχουν ελείψεις σε</string>
+    <string name="need_left_half_msg">Αυτή τη στιγμή υπάρχουν ελλείψεις σε</string>
     <string name="need_right_half_msg_plural">φάρμακα! Έχεις κάποιο από αυτά; Δωρισέ το!</string>
     <string name="need_right_half_msg_single">φάρμακo! Άν το έχεις, δωρισέ το.</string>
 
@@ -163,12 +163,12 @@
         <item name="hdr1">Τι είναι το GIVMED;</item>
         <item name="hdr2">Ποιοί είναι οι στόχοι του GIVMED;</item>
         <item name="hdr3">Πως ακριβώς δουλεύει;</item>
-        <item name="hdr4">Ποιός μπορεί να δωρίσει φάρμακα;</item>
-        <item name="hdr5">Ποιός μπορεί να επωφεληθεί από τα φάρμακα;</item>
+        <item name="hdr4">Ποιος μπορεί να δωρίσει φάρμακα;</item>
+        <item name="hdr5">Ποιος μπορεί να επωφεληθεί από τα φάρμακα;</item>
         <item name="hdr6">Γιατί δεν μπορεί να επωφεληθεί κατευθείαν κάποιος άστεγος ή πρόσφυγας;</item>
         <item name="hdr7">Υπάρχει κάποιο κόστος για τη χρήση της εφαρμογής;</item>
         <item name="hdr8">Τι φάρμακα μπορώ να δωρίσω;</item>
-        <item name="hdr9">Ποιός ελέγχει τα φάρμακα;</item>
+        <item name="hdr9">Ποιος ελέγχει τα φάρμακα;</item>
         <item name="hdr10">Πως μπορώ να δωρίσω τα φάρμακά μου;</item>
         <item name="hdr11">Πως φθάνουν οι δωρεές σους επωφελούμενους φορείς;</item>
         <item name="hdr12">Τι είναι το προσωπικό φαρμακείο;</item>

@@ -1,11 +1,14 @@
 package com.givmed.android;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 
 public class Dwrees extends HelperActivity {
     private final String TAG = "Dwrees";
@@ -17,6 +20,7 @@ public class Dwrees extends HelperActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
         super.helperOnCreate(R.layout.dwrees, R.string.dwrees, true);
 
@@ -46,21 +50,19 @@ public class Dwrees extends HelperActivity {
             }
         });
 
-        Donation don = new Donation("Depon","Ellhniko","2015-03-02");
-
-        mAdapter = new DonationAdapter(getApplicationContext());
-        mAdapter.add(don);
+//        Donation don = new Donation("Depon","Ellhniko","2015-03-02");
+//
+         mAdapter = new DonationAdapter(getApplicationContext());
+//        mAdapter.add(don);
 
         ListView list = (ListView) findViewById(R.id.list);
         list.setFooterDividersEnabled(true);
         //registerForContextMenu(getListView());
         list.setAdapter(mAdapter);
-        Log.e("Dwrees","Mama sou");
 
         db = new DBHandler(getApplicationContext());
 
-        //int count = db.getAllNeeds(mAdapter, "region");
-        int count = 0;
+        int count = db.getAllDonations(mAdapter);
         double price = 0.0;
         String mid_msg = (count == 1) ? mid_sin : mid_plu;
         msgView.setText(left + " " + count + " " + mid_msg + " " + price + " " + right);

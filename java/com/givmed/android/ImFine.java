@@ -1,13 +1,13 @@
 package com.givmed.android;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.givmed.android.R;
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
 
 public class ImFine extends HelperActivity
 {
@@ -15,6 +15,7 @@ public class ImFine extends HelperActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
         super.helperOnCreate(R.layout.oxi_eimai_entaxei, R.string.outputer, true);
 

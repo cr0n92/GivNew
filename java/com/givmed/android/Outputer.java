@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,6 +27,8 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
+import io.fabric.sdk.android.Fabric;
+
 public class Outputer extends HelperActivity {
     private EditText mName, mExp, mBarcode, mNotes;
     private RadioGroup mConditionGroup;
@@ -37,6 +41,7 @@ public class Outputer extends HelperActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main);
         super.helperOnCreate(R.layout.outputs, R.string.outputer, true);
 
@@ -162,18 +167,22 @@ public class Outputer extends HelperActivity {
                 Log.e(TAG, "Received HTTP response: " + result);
 
             } catch (ProtocolException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "ProtocolException");
                 e.printStackTrace();
-            } catch (MalformedURLException exception) {
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "MalformedURLException");
-                exception.printStackTrace();
-            } catch (IOException exception) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                Crashlytics.logException(e);
                 error = 2;
                 Log.e(TAG, "IOException");
-                exception.printStackTrace();
+                e.printStackTrace();
             } catch (JSONException e) {
+                Crashlytics.logException(e);
                 error = 2;
                 e.printStackTrace();
             } finally {
@@ -209,6 +218,7 @@ public class Outputer extends HelperActivity {
                             obj.getString("medSubstance"), obj.getString("medCategory"), status), firstWord(name));
 
                     } catch (JSONException e) {
+                        Crashlytics.logException(e);
                         e.printStackTrace();
                         dialog.dismiss();
                         httpErrorToast(getApplicationContext(), 2);

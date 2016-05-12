@@ -7,12 +7,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
+
+import io.fabric.sdk.android.Fabric;
+
 public class TwoButtons extends HelperActivity
 {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
         super.helperOnCreate(R.layout.mainee, R.string.two_buttons, true);
 
@@ -21,6 +26,7 @@ public class TwoButtons extends HelperActivity
 
             @Override
             public void onClick(View v) {
+                GivmedApplication.getInstance().trackEvent("TwoButtons", "Push", "Scan");
                 PackageManager pm = getApplicationContext().getPackageManager();
 
                 // koitame an to kinito exei kamera kai an den exei deixnoume toast
@@ -38,6 +44,8 @@ public class TwoButtons extends HelperActivity
 
             @Override
             public void onClick(View v) {
+                GivmedApplication.getInstance().trackEvent("TwoButtons", "Push", "Hand");
+
                 Intent myIntent = new Intent(getApplicationContext(), Inputter.class);
                 startActivity(myIntent);
             }

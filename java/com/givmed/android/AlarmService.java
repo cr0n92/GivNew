@@ -51,7 +51,6 @@ public class AlarmService extends Service {
 
 
 
-        //me ton tropo parakatw an o xrhsths kleinei to kinhto tou kathe 23 wres kai 59 lepta thn gamhsame
         Toast.makeText(getApplicationContext(), "Alarm turned on!",
                 Toast.LENGTH_LONG).show();
         Log.e("Date", "" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR));

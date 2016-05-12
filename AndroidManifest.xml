@@ -93,6 +93,10 @@
             android:name="com.givmed.android.VerifyService"
             android:exported="false" />
 
+        <service
+            android:name="com.givmed.android.SubscribeService"
+            android:exported="false" />
+
 
         <receiver android:name="com.givmed.android.NotificationPublisher" />
 
@@ -110,10 +114,7 @@
             android:name="com.givmed.android.BlueRedList"
             android:label="blue_red_list"
             android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity
             android:name="com.givmed.android.Settings"
@@ -134,10 +135,7 @@
             android:name="com.givmed.android.Number"
             android:label="number"
             android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity
             android:name="com.givmed.android.ConfirmNumber"
@@ -191,10 +189,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity
             android:name="com.givmed.android.Register"
@@ -202,10 +197,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <receiver android:name="com.givmed.android.SMSReceiver">
             <intent-filter android:priority="99999">

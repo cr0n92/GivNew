@@ -9,8 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import org.json.JSONObject;
+import android.util.Log;
 
 
 public class DBHandler extends SQLiteOpenHelper {
@@ -186,6 +185,13 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void existsNeed(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+
+        db.close();
+    }
+
     // vazoume oles tis ellepseis ston adapter ta3hnomhmena eite ws pros to onoma/ousia h ws pros thn perioxh
     // epishs gyrizoume to plh8os twn elleipsewn
     public int getAllNeeds(NeedAdapter needAdapter, String orderingColumn) {
@@ -293,7 +299,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_STATUS, "B");
 
-        db.update(TABLE_MEDS, values, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?",new String[]{"A",three_months_later});
+        db.update(TABLE_MEDS, values, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?", new String[]{"A", three_months_later});
         db.close();
 
     }
@@ -408,12 +414,13 @@ public class DBHandler extends SQLiteOpenHelper {
 	public void printAllMeds() {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_MEDS;
+        String selectQuery = "SELECT  * FROM " + TABLE_DONATIONS;
         Cursor cursor = db.rawQuery(selectQuery, null);
+        Log.e("Makhs","Kaniouras");
 
         if (cursor.moveToFirst()) {
             do {
-                Log.e("Statys",""+cursor.getString(5)+"Exp.Date"+cursor.getString(2));
+                Log.e("Barcode", "" + cursor.getString(0) + "Phar Phone" + cursor.getString(1));
 
                 //medAdapter.add(med);
             } while (cursor.moveToNext());
@@ -422,27 +429,96 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    // Updating and matching
-//    public int updateMedAndMatch(BlueRedItem med) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        ContentValues values = new ContentValues();
-//        switch (med.getStatus()) {
-//            case BlueRedItem.gray:
-//                values.put(KEY_STATUS, "N");
-//                break;
-//            case BlueRedItem.blue:
-//                values.put(KEY_STATUS, "Y");
-//                break;
-//            case BlueRedItem.red:
-//                values.put(KEY_STATUS, "B");
-//                break;
-//            default:
-//                values.put(KEY_STATUS, "U");
-//        }
-//
-//        db.update(TABLE_MEDS, values, KEY_BARCODE + " = ?", new String[]{med.getBarcode()});
-//    }
+//     Updating and matching
+    public int updateMedAndMatch(BlueRedItem med) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int ret = 0;
+
+        ContentValues values = new ContentValues();
+        switch (med.getStatus()) {
+            case BlueRedItem.gray:
+                values.put(KEY_STATUS, "N");
+                break;
+            case BlueRedItem.blue:
+                String name = med.getName();
+                //query : select * from Needs where need_name=name gia na paroume ola ta farmakeia pou exoun elleipsh
+                //an gurisei keno prepei na kanoume subscribe sto antistoixo topic(enallaktika koitame an uparxei idio onoma
+                //sto Meds->Half_Name kai an oxi tote kanoume subscribe)
+
+                String selectQuery = "SELECT "+KEY_PHAR_PHONE+" FROM " + TABLE_NEEDS + " WHERE " + KEY_NEED_NAME + " = '" + name + "'";
+                Cursor cursor = db.rawQuery(selectQuery, null);
+
+
+
+                if (cursor.getCount() > 0) {
+                    ret = 1;
+                    if (cursor.getCount() == 1) {
+                        cursor.moveToFirst();
+//                        String selectQuery1 = "SELECT " + KEY_PHAR_NAME + " FROM " + TABLE_PHARMACIES + " WHERE " + KEY_PHAR_PHONE + " = " + cursor.getString(0);
+//                        Cursor cursor1 = db.rawQuery(selectQuery1, null);
+                        ContentValues values1 = new ContentValues();
+                        values1.put(KEY_BARCODE, med.getBarcode());
+                        values1.put(KEY_PHAR_PHONE, cursor.getString(0));
+                        values1.put(KEY_DATE1, ";");
+                        values1.put(KEY_DATE2, ";");
+                        values1.put(KEY_DATE3, ";");
+                        values1.put(KEY_VOLUNTEER, ";");
+                        values1.put(KEY_PICK_ADDR, ";");
+
+
+
+
+
+                        db.insert(TABLE_DONATIONS, null, values1);
+                    } else {
+                        ContentValues values1 = new ContentValues();
+                        values1.put(KEY_BARCODE, med.getBarcode());
+                        values1.put(KEY_PHAR_PHONE, ";");
+                        values1.put(KEY_DATE1, ";");
+                        values1.put(KEY_DATE2, ";");
+                        values1.put(KEY_DATE3, ";");
+                        values1.put(KEY_VOLUNTEER, ";");
+                        values1.put(KEY_PICK_ADDR, ";");
+
+
+                        db.insert(TABLE_DONATIONS, null, values1);
+                    }
+                }
+                else
+                    ret = -1;
+
+                cursor.close();
+//                if (cursor.moveToFirst()) {
+//                        do {
+//                            medAdapter.add(cursor.getString(0));
+//                        } while (cursor.moveToNext());
+//                        cursor.close();
+//                    }
+
+                //an to ret einai 0 tote adiaforo.an einai 1 tote egine ena mats,an einai -1 tote dn vrhkame elleipsh
+                //kai prepei na kanoume subscribe
+
+                //an kaname match ftiaxnoume to antistoixo row sto Table Donations sumplhrwnontas barcode kai isws phar_phone
+                //(monadiko farmakeio)
+
+                //stis programmatismenes theloume mia sunarthsh pou na dinei ta aparaithta stoixeia apo ton pinaka donations
+
+
+                values.put(KEY_STATUS, "Y");
+                break;
+            case BlueRedItem.red:
+                values.put(KEY_STATUS, "B");
+                break;
+            default:
+                values.put(KEY_STATUS, "U");
+        }
+
+        db.update(TABLE_MEDS, values, KEY_BARCODE + " = ?", new String[]{med.getBarcode()});
+
+
+        db.close();
+        return ret;
+    }
 
     /*---------------- eofcodes functions ----------------------------*/
     // Adding new eofcode
@@ -499,6 +575,52 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /*---------------- donations functions ----------------------------*/
+    public void addDonation(String barcode, String phar_phone, String date1, String date2,String date3,String volunteer,String pick_addr) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_BARCODE, barcode);
+        values.put(KEY_PHAR_PHONE, phar_phone);
+        values.put(KEY_DATE1, date1);
+        values.put(KEY_DATE2, date2);
+        values.put(KEY_DATE3, date3);
+        values.put(KEY_VOLUNTEER, volunteer);
+        values.put(KEY_PICK_ADDR, pick_addr);
+
+
+
+        db.insert(TABLE_DONATIONS, null, values);
+        db.close();
+    }
+
+    public int getAllDonations(DonationAdapter donationAdapter) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int cnt = 0;
+
+        String selectQuery = "SELECT " + KEY_HALF_NAME + "," + KEY_PHAR_NAME + "," + KEY_DATE1
+                + " FROM " + TABLE_DONATIONS + " LEFT OUTER JOIN " + TABLE_PHARMACIES + " ON donations.pharPhone = pharmacies.pharPhone NATURAL JOIN " +TABLE_MEDS;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+
+        if (cursor.moveToFirst()) {
+            do {
+                String second;
+                if (cursor.getString(1)==null)
+                    second = ";";
+                else
+                    second = cursor.getString(1);
+                Donation don = new Donation(cursor.getString(0),second,cursor.getString(2));
+                donationAdapter.add(don);
+                cnt++;
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+
+        return cnt;
+    }
+
 
 
     /*---------------- done donations functions ----------------------------*/

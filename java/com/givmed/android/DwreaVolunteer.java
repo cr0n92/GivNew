@@ -29,11 +29,16 @@ public class DwreaVolunteer extends AppCompatActivity {
     public static String serverDate;
     private static int datesCnt = 1;
     public ProgressDialog dialog;
+    public Donation donation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dwrea_volunteer);
+
+        Intent intent = getIntent();
+        if (intent != null)
+            donation = new Donation(intent);
 
         dialog = new ProgressDialog(this);
 

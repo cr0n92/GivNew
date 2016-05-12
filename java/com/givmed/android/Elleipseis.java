@@ -37,7 +37,7 @@ import io.fabric.sdk.android.Fabric;
 public class Elleipseis extends HelperActivity
 {
     private final String TAG = "Ellepseis";
-    private String right_plu, right_sin, left_sin;
+    private String right_plu, right_sin, left_sin, needs, pharms;
     public static NeedAdapter mAdapter;
     private static TextView msgView;
     private static Button nameButton, regionButton;

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    tools:context="com.givmed.android.Outputer">
+
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tool_bar"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/firstMes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding"
+                android:gravity="center_vertical|center_horizontal"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:text="@string/choo_user_first"
+                android:layout_centerHorizontal="true">
+            </TextView>
+
+            <TextView
+                android:id="@+id/secondMes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding"
+                android:layout_below="@id/firstMes"
+                android:gravity="center_vertical|center_horizontal"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:text="@string/choo_user_second"
+                android:layout_centerHorizontal="true" >
+            </TextView>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/nameLayout"
+                android:layout_below="@id/secondMes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:theme="@style/MyEditTextTheme">
+
+                <EditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/farmako"
+                    android:textSize="24sp"
+                    android:drawableStart="@drawable/ic_med_name"
+                    android:drawableLeft="@drawable/ic_med_name"
+                    android:theme="@style/MyEditTextTheme">
+                </EditText>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/foreasLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nameLayout"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:theme="@style/MyEditTextTheme">
+
+                <EditText
+                    android:id="@+id/foreas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/choo_foreas"
+                    android:textSize="24sp"
+                    android:drawableStart="@drawable/ic_foreas"
+                    android:drawableLeft="@drawable/ic_foreas"
+                    android:theme="@style/MyEditTextTheme">
+                </EditText>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/phoneLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/foreasLayout"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:theme="@style/MyEditTextTheme">
+
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/choo_phone"
+                    android:textSize="24sp"
+                    android:drawableStart="@drawable/ic_phone"
+                    android:drawableLeft="@drawable/ic_phone"
+                    android:theme="@style/MyEditTextTheme">
+                </EditText>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/dateMsg"
+                android:layout_below="@id/phoneLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/choo_pick_date"
+                android:textSize="24sp"
+                android:drawableStart="@drawable/ic_calendar"
+                android:drawableLeft="@drawable/ic_calendar"
+                android:layout_centerHorizontal="true"
+                android:theme="@style/MyEditTextTheme">
+            </TextView>
+
+            <EditText
+                android:id="@+id/edit1"
+                android:layout_below="@id/dateMsg"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_width="180dp"
+                android:layout_height="60dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:textSize="20sp"
+                android:focusable="false"
+                android:singleLine="true"
+                android:background="@drawable/button_simple_border"
+                android:layout_centerHorizontal="true" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/choo_delivered"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/edit1"
+                android:layout_alignLeft="@+id/button2"
+                android:layout_alignStart="@+id/button2"
+                android:layout_alignRight="@+id/button2"
+                android:layout_alignEnd="@+id/button2"
+                android:background="@drawable/button_simple">
+            </Button>
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="@string/choo_want_volu"
+                android:textAllCaps="false"
+                android:layout_below="@id/button1"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_simple">
+            </Button>
+
+            <TextView
+                android:id="@+id/voluMsg"
+                android:layout_below="@id/button2"
+                android:layout_alignLeft="@+id/button2"
+                android:layout_alignStart="@+id/button2"
+                android:layout_alignRight="@+id/button2"
+                android:layout_alignEnd="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/choo_volu_msg"
+                android:textSize="16sp"
+                android:theme="@style/MyEditTextTheme">
+            </TextView>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

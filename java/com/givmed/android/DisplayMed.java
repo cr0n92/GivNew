@@ -34,7 +34,7 @@ public class DisplayMed extends AppCompatActivity {
     private RadioButton mBefore, mNow, mNo, mOpen, mClose;
     private String phone, notes, state, forDonation;
     private static Medicine med;
-    AlertDialog alert;
+    AlertDialog sirupAlert, deleteAlert;
     ProgressDialog dialog;
     DBHandler db;
     private PrefManager pref;
@@ -48,13 +48,13 @@ public class DisplayMed extends AppCompatActivity {
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.farmako);
         mToolBar.setNavigationIcon(R.drawable.ic_arrows);
+        setSupportActionBar(mToolBar);
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-        setSupportActionBar(mToolBar);
 
         db = new DBHandler(getApplicationContext());
         dialog = new ProgressDialog(this);
@@ -75,7 +75,26 @@ public class DisplayMed extends AppCompatActivity {
 
                     }
                 });
-        alert = builder.create();
+        sirupAlert = builder.create();
+
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder2.setMessage(getString(R.string.delete_sure))
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog2, int id) {
+                        if (HelperActivity.isOnline(getApplicationContext())) {
+                            HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                            new HttpDeleteMedTask().execute(med.getBarcode());
+                        } else
+                            HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+        deleteAlert = builder.create();
 
         mName = (EditText) findViewById(R.id.name);
         mExp = (EditText) findViewById(R.id.expiration);
@@ -94,8 +113,6 @@ public class DisplayMed extends AppCompatActivity {
         mExp.setKeyListener(null);
         mBarcode.setKeyListener(null);
         mCategory.setKeyListener(null);
-
-        Log.e("kokoku", med.getStatus());
 
         setConditionRadioGroup();
         setDonationRadioGroup();
@@ -185,11 +202,7 @@ public class DisplayMed extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_delete) {
-            if (HelperActivity.isOnline(getApplicationContext())) {
-                HelperActivity.showDialogBox(getApplicationContext(), dialog);
-                new HttpDeleteMedTask().execute(med.getBarcode());
-            } else
-                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+            deleteAlert.show();
         }
         else if (id == R.id.action_tick) {
             if (HelperActivity.isOnline(getApplicationContext())) {
@@ -205,7 +218,7 @@ public class DisplayMed extends AppCompatActivity {
                     if (med.getStatus().charAt(0) == 'S') {
                         if ((forDonation.equals("Y") || forDonation.equals("B")) && isOpen()) {
                             dialog.dismiss();
-                            alert.show();
+                            sirupAlert.show();
                             return true;
                         }
                         forDonation = "S" + forDonation;
@@ -268,6 +281,7 @@ public class DisplayMed extends AppCompatActivity {
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
                 if (result == 200 || result == 204) {
+                    // TODO: diagrafoume kai apo programmatismenes an yparxei
                     db.deleteMed(med, HelperActivity.firstWord(med.getName()));
 
                     Intent afterdel = new Intent(getApplicationContext(), Farmakeio.class);

@@ -9,7 +9,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
+import org.json.JSONObject;
 
 
 public class DBHandler extends SQLiteOpenHelper {
@@ -185,13 +186,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void existsNeed(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-
-        db.close();
-    }
-
     // vazoume oles tis ellepseis ston adapter ta3hnomhmena eite ws pros to onoma/ousia h ws pros thn perioxh
     // epishs gyrizoume to plh8os twn elleipsewn
     public int getAllNeeds(NeedAdapter needAdapter, String orderingColumn) {
@@ -299,7 +293,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_STATUS, "B");
 
-        db.update(TABLE_MEDS, values, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?", new String[]{"A", three_months_later});
+        db.update(TABLE_MEDS, values, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?",new String[]{"A",three_months_later});
         db.close();
 
     }
@@ -414,13 +408,12 @@ public class DBHandler extends SQLiteOpenHelper {
 	public void printAllMeds() {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_DONATIONS;
+        String selectQuery = "SELECT  * FROM " + TABLE_MEDS;
         Cursor cursor = db.rawQuery(selectQuery, null);
-        Log.e("Makhs","Kaniouras");
 
         if (cursor.moveToFirst()) {
             do {
-                Log.e("Barcode", "" + cursor.getString(0) + "Phar Phone" + cursor.getString(1));
+                Log.e("Statys",""+cursor.getString(5)+"Exp.Date"+cursor.getString(2));
 
                 //medAdapter.add(med);
             } while (cursor.moveToNext());

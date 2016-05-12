@@ -48,6 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding"
+                    android:layout_marginBottom="30dp"
                     android:layout_below="@id/firstMes"
                     android:gravity="center_vertical|center_horizontal"
                     android:textColor="@color/black"

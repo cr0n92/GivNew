@@ -605,7 +605,8 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         int cnt = 0;
 
-        String selectQuery = "SELECT " + KEY_HALF_NAME + "," + KEY_PHAR_NAME + "," + KEY_DATE1 +"," + KEY_DATE2 + "," + KEY_DATE3 + "," + KEY_VOLUNTEER
+        String selectQuery = "SELECT " + KEY_HALF_NAME + "," + KEY_DATE1 +"," + KEY_DATE2 + ","
+                + KEY_DATE3 + "," + KEY_VOLUNTEER + "," + KEY_BARCODE + "," + KEY_PHAR_NAME + "," + KEY_PHAR_NAME_GEN
                 + " FROM " + TABLE_DONATIONS + " LEFT OUTER JOIN " + TABLE_PHARMACIES + " ON donations.pharPhone = pharmacies.pharPhone NATURAL JOIN " +TABLE_MEDS;
 
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -613,12 +614,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                String second;
-                if (cursor.getString(1)==null)
-                    second = ";";
+                String sixth;
+                if (cursor.getString(6)==null)
+                    sixth = ";";
                 else
-                    second = cursor.getString(1);
-                Donation don = new Donation(cursor.getString(0),second,cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5));
+                    sixth = cursor.getString(1);
+
+                    Donation don = new Donation(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),sixth,cursor.getString(7));
                 donationAdapter.add(don);
                 cnt++;
             } while (cursor.moveToNext());
@@ -638,7 +640,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_PRICE, price);
-        values.put(KEY_NAME, name);
         values.put(KEY_NAME, name);
         values.put(KEY_PHAR_NAME, pharName);
         values.put(KEY_DATE, date);

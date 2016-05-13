@@ -173,8 +173,7 @@ public class DwreaUser extends AppCompatActivity {
             if (HelperActivity.isOnline(getApplicationContext())) {
                 HelperActivity.showDialogBox(getApplicationContext(), dialog);
                 if (!(dateChoose.getText().toString().trim().isEmpty())) {
-                    //morfopoihsh gia date1
-
+                    date1 = transformDate(dateChoose.getText().toString());
                 }
 
 
@@ -223,6 +222,11 @@ public class DwreaUser extends AppCompatActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             setDateString(year, monthOfYear, dayOfMonth);
         }
+    }
+
+    public String transformDate(String date) {
+        String[] splitted = date.split("/");
+        return "20" + splitted[2] + "-" + splitted[1] + "-" + splitted[0];
     }
 
 

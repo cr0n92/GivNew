@@ -660,15 +660,18 @@ public class DBHandler extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void updateProgDonation(String barcode,String date1,String date2,String date3,String pick_addr) {
+    public void updateProgDonation(String barcode,String pharPhone,String date1,String date2,String date3,String volunteer,String pick_addr) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_BARCODE, barcode);
+        values.put(KEY_PHAR_PHONE, pharPhone);
         values.put(KEY_DATE1, date1);
         values.put(KEY_DATE2, date2);
         values.put(KEY_DATE3, date3);
+        values.put(KEY_VOLUNTEER, volunteer);
         values.put(KEY_PICK_ADDR, pick_addr);
+
 
 
 

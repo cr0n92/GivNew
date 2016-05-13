@@ -1,6 +1,7 @@
 package com.givmed.android;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -100,6 +101,8 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
                 //edw einai eite to onoma farmakeiou sthn genikh an eixame ena farmakeio eite to onoma tou farmakeiou
                 // kanonika an to epileksame apo thn lista
                 intent.putExtra("pharmName", selectedPharm);
+                Cursor pharCursor  = db.getPharmacy(selectedPharm);
+                db.updateProgDonation(barcode,pharCursor.getString(0),";",";",";","U",";");
                 startActivity(intent);
             }
         });
@@ -111,6 +114,13 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), DwreaVolunteer.class);
                 intent.putExtra("barcode", barcode);
+                intent.putExtra("medName", medname);
+
+                //edw einai eite to onoma farmakeiou sthn genikh an eixame ena farmakeio eite to onoma tou farmakeiou
+                // kanonika an to epileksame apo thn lista
+                intent.putExtra("pharmName", selectedPharm);
+                Cursor pharCursor  = db.getPharmacy(selectedPharm);
+                db.updateProgDonation(barcode, pharCursor.getString(0), ";", ";", ";", "V", ";");
                 startActivity(intent);
             }
         });

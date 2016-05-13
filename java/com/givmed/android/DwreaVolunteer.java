@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -46,9 +47,10 @@ public class DwreaVolunteer extends AppCompatActivity {
 
     private static EditText dateChoose1, dateChoose2, dateChoose3, dateChoosed, mAddress;
     public static String medName =  "", barcode = "", pharPhone = "", pharName = "", address = "";
-    private static String sdate1 = "", sdate2 = "", sdate3 = "";
-    private static String[] info;
+    private static String sdate1 = "", sdate2 = "", sdate3 = "", todayDate;
+    private static String date1 = "", date2 = "", date3 = "";
     private static int datesCnt = 1;
+    private Cursor cursor, pharCursor;
     public ProgressDialog dialog;
     public AlertDialog alert;
     public PrefManager pref;
@@ -70,8 +72,14 @@ public class DwreaVolunteer extends AppCompatActivity {
         pref = new PrefManager(this);
         db = new DBHandler(getApplicationContext());
 
-        info = new String[4];
-        //cursor = db.getDonation();
+        pharCursor = db.getPharmacy(pharName);
+        pharPhone = pharCursor.getString(0);
+
+        cursor = db.getDonation(barcode);
+        date1 = cursor.getString(2);
+        date2 = cursor.getString(3);
+        date3 = cursor.getString(4);
+        address = cursor.getString(6);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.choo_volu_call))
@@ -148,6 +156,21 @@ public class DwreaVolunteer extends AppCompatActivity {
             }
         });
 
+        if (!date1.equals(";"))
+            dateChoose1.setText(date1);
+
+        if (!date2.equals(";")) {
+            dateChoose2.setVisibility(View.VISIBLE);
+            dateChoose2.setText(date2);
+            datesCnt++;
+        }
+
+        if (!date3.equals(";")) {
+            dateChoose3.setVisibility(View.VISIBLE);
+            dateChoose3.setText(date3);
+            datesCnt++;
+        }
+
         EditText mName = (EditText) findViewById(R.id.name);
         EditText mForeas = (EditText) findViewById(R.id.foreas);
         mAddress = (EditText) findViewById(R.id.address);
@@ -155,7 +178,6 @@ public class DwreaVolunteer extends AppCompatActivity {
         mName.setText(medName);
         mForeas.setText(pharName);
 
-        //address =
         if (address.equals(";"))
             address = pref.getAddress();
         mAddress.setText(address);
@@ -169,7 +191,10 @@ public class DwreaVolunteer extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (HelperActivity.isOnline(getApplicationContext())) {
-
+                    Date date1 = new Date();
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date1);
+                    todayDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
                 }
                 else
                     HelperActivity.httpErrorToast(getApplicationContext(), 1);
@@ -191,13 +216,22 @@ public class DwreaVolunteer extends AppCompatActivity {
             if (HelperActivity.isOnline(getApplicationContext())) {
                 HelperActivity.showDialogBox(getApplicationContext(), dialog);
 
-                sdate1 = dateChoose1.getText().toString().trim();
-                sdate2 = dateChoose2.getText().toString().trim();
-                sdate3 = dateChoose3.getText().toString().trim();
+                date1 = dateChoose1.getText().toString().trim();
+                date2 = dateChoose2.getText().toString().trim();
+                date3 = dateChoose3.getText().toString().trim();
+
+                if (date1.isEmpty() && date2.isEmpty() && date3.isEmpty())
+                    return super.onOptionsItemSelected(item);
+
+                sdate1 = transformDate(date1);
+                sdate2 = transformDate(date2);
+                sdate3 = transformDate(date3);
 
                 address = mAddress.getText().toString().trim();
-                if (address.isEmpty())
-                pref.setAddress(address);
+                if (!address.isEmpty())
+                    pref.setAddress(address);
+                else
+                    return super.onOptionsItemSelected(item);
 
                 new HttpVolunteer().execute();
             } else
@@ -249,8 +283,85 @@ public class DwreaVolunteer extends AppCompatActivity {
     }
 
     public String transformDate(String date) {
+        if (date.isEmpty())
+            return ";";
+
         String[] splitted = date.split("/");
         return "20" + splitted[2] + "-" + splitted[1] + "-" + splitted[0];
+    }
+
+    private class HttpDone extends AsyncTask<Void, Void, Integer> {
+
+        private static final String TAG = "HttpGetTask";
+        private int error = -1;
+        private int result;
+
+
+        @Override
+        protected Integer doInBackground(Void... arg0) {
+            String data = "";
+
+            String URL = HelperActivity.server + "add_done_donation/" + barcode + "/";
+            Integer out = 0;
+            java.net.URL url = null;
+            HttpURLConnection conn = null;
+            pref = new PrefManager(getApplicationContext());
+
+            try {
+                url = new URL(URL);
+                String urlParameters = "doneUser="+ pref.getMobileNumber() +
+                        "&doneDeliveryType=V" +
+                        "&doneDate=" + todayDate +
+                        "&donePharPhone=" + pharPhone;
+
+                byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setDoOutput(true);
+                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+                wr.write(postData);
+                InputStream in = new BufferedInputStream(conn.getInputStream());
+                data = HelperActivity.readStream(in);
+                Log.e(TAG, "Komple? " + data);
+
+
+            } catch (ProtocolException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "ProtocolException");
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "MalformedURLException");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Crashlytics.logException(e);
+                error = 2;
+                Log.e(TAG, "IOException");
+                e.printStackTrace();
+            } finally {
+                if (null != conn)
+                    conn.disconnect();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (error > 0)
+                HelperActivity.httpErrorToast(getApplicationContext(), error);
+            else {
+                if (result == 201) {
+                    db.progToDoneDonation(barcode, pharName, todayDate, medName);
+                    dialog.dismiss();
+                    alert.show();
+                    return;
+                } else
+                    HelperActivity.httpErrorToast(getApplicationContext(), 1);
+            }
+            dialog.dismiss();
+        }
     }
 
     private class HttpVolunteer extends AsyncTask<Object, Void, Integer> {
@@ -274,13 +385,13 @@ public class DwreaVolunteer extends AppCompatActivity {
                         "&donationAddress=" + address +
                         "&donationType=V";
 
-                if (!sdate1.isEmpty())
+                if (!sdate1.equals(";"))
                     urlParameters += "&donationDate1=" + transformDate(sdate1);
 
-                if (!sdate2.isEmpty())
+                if (!sdate2.equals(";"))
                     urlParameters += "&donationDate2=" + transformDate(sdate2);
 
-                if (!sdate3.isEmpty())
+                if (!sdate3.equals(";"))
                     urlParameters += "&donationDate3=" + transformDate(sdate3);
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
@@ -327,7 +438,7 @@ public class DwreaVolunteer extends AppCompatActivity {
             else {
                 if (result == 201) {
                     pref.setAddress(address);
-                    // TODO update database
+                    db.updateProgDonation(barcode, pharPhone, sdate1, sdate2, sdate3, "V", address);
                     dialog.dismiss();
                     alert.show();
                     return;

@@ -229,7 +229,6 @@ public class DwreaUser extends AppCompatActivity {
     private class HttpDone extends AsyncTask<Void, Void, Integer> {
 
         private static final String TAG = "HttpGetTask";
-        String needs;
         private int error = -1;
         private int result;
 
@@ -297,7 +296,7 @@ public class DwreaUser extends AppCompatActivity {
                     alert.show();
                     return;
                 } else
-                    HelperActivity.httpErrorToast(getApplicationContext(), 2);
+                    HelperActivity.httpErrorToast(getApplicationContext(), 1);
             }
             dialog.dismiss();
         }

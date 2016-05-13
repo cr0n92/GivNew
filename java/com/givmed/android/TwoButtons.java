@@ -19,7 +19,7 @@ public class TwoButtons extends HelperActivity
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
-        super.helperOnCreate(R.layout.mainee, R.string.two_buttons, true);
+        super.helperOnCreate(R.layout.mainee, R.string.register_med, false);
 
         final Button scanButton = (Button) findViewById(R.id.button1);
         scanButton.setOnClickListener(new View.OnClickListener() {
@@ -57,8 +57,6 @@ public class TwoButtons extends HelperActivity
     public void onResume() {
         super.onResume();  // Always call the superclass method first
         GivmedApplication.getInstance().trackScreenView("TwoButtons");
-
-
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -68,7 +66,7 @@ public class TwoButtons extends HelperActivity
             String barcode = intent.getStringExtra("BARCODE");
 
             if (barcode.equals("NULL"))
-                Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT).show();
+                ;//Toast.makeText(getApplicationContext(), "No scan data received!", Toast.LENGTH_SHORT).show();
             else {
                 Intent showItemIntent = new Intent(getApplicationContext(), Inputter.class);
                 showItemIntent.putExtra("barcode", barcode);

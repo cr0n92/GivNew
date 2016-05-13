@@ -16,7 +16,7 @@ public class Settings extends HelperActivity
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
-        super.helperOnCreate(R.layout.settings, R.string.settings, true);
+        super.helperOnCreate(R.layout.settings, R.string.settings, false);
 
         final Button yesButton1 = (Button) findViewById(R.id.yesButton1);
         final Button noButton1 = (Button) findViewById(R.id.noButton1);

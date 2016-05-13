@@ -24,7 +24,7 @@ public class Farmakeio extends HelperActivity implements AdapterView.OnItemClick
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
-        super.helperOnCreate(R.layout.pharmacy_names, R.string.farmakeio, true);
+        super.helperOnCreate(R.layout.pharmacy_names, R.string.personal_pharmacy, false);
 
         db = new DBHandler(getApplicationContext());
 

@@ -18,7 +18,7 @@ public class Share extends HelperActivity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
-        super.helperOnCreate(R.layout.share, R.string.share, true);
+        super.helperOnCreate(R.layout.share, R.string.share, false);
 
         msgButton = (Button) findViewById(R.id.msgButton);
 

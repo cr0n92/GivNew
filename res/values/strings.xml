@@ -16,7 +16,7 @@
     <string name="dwrees">Δωρεές</string>
     <string name="farmakeio">Φαρμακείο</string>
     <string name="register">Eγγραφή</string>
-    <string name="profile">Προφίλ</string>
+    <string name="profile">Profile</string>
     <string name="settings">Ρυθμίσεις</string>
     <string name="share">Κοινοποίηση</string>
     <string name="communication">Επικοινωνία</string>
@@ -89,6 +89,7 @@
     <string name="choo_volu_second">Επίλεξε τις ημέρες που μπορεί να το παραλάβει κάποιος εθελοντής.</string>
     <string name="choo_add_dates"><u>Πρόσθεσε ημερομηνίες</u></string>
     <string name="choo_addr">Διέυθυνση (Οδός, Περιοχή, Τ.Κ.)</string>
+    <string name="choo_volu_call">Μπράβο σου!\nΜέσα στις επόμενες ώρες θα σε ενημερώσουμε για την ακριβή μέρα καί ώρα που θα έρθουμε για την παραλαβή!</string>
 
     <!-- Δυο κουμπιά -->
     <string name="two_btn_first_msg">Καταχώρησε τα φαρμακά σου!</string>
@@ -118,9 +119,12 @@
 
     <!-- Προφίλ -->
     <string name="prof_name">Όνομα</string>
+    <string name="prof_name_warning">Λάθος όνομα</string>
+    <string name="prof_name_exists">Το όνομα υπάρχει ήδη!</string>
     <string name="prof_sex">Φύλο</string>
     <string name="prof_birth_date">Έτος Γέννησης</string>
     <string name="prof_email">Email</string>
+    <string name="prof_email_warning">Λάθος email</string>
     <string name="prof_age_warning">Λόγω των όρων χρήσης μας, μόνο άτομα άνω των 18 μπορούν να χρησιμοποιήσουν το GIVMED!</string>
 
     <!-- Εγγραφή -->

@@ -9,12 +9,6 @@ import android.content.SharedPreferences.Editor;
 
 import java.util.HashMap;
 
-/**
- * Created by Ravi on 08/07/15.
- */
-
-
-
 //SharedPreference: Store private primitive data in key-value pairs. (To store small entries/data)
 //Internal Storage: Store private data on the device memory. (To store large datasets)
 
@@ -40,7 +34,10 @@ public class PrefManager {
     private static final String KEY_IS_LOGGED_IN = "isLoggedIn";
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
+    private static final String KEY_SEX = "sex";
+    private static final String KEY_BIRTH = "birth";
     private static final String KEY_MOBILE = "mobile";
+    private static final String KEY_ADDRESS = "address";
     private static final String KEY_TOKEN = "token";
     private static final String KEY_NOTIFICATION_PERMIT = "notification_permit";
     private static final String KEY_COUNTDOWN = "countdown";
@@ -118,12 +115,46 @@ public class PrefManager {
         return pref.getString(KEY_NAME, "");
     }
 
+    public void setEmail(String email) {
+        editor.putString(KEY_EMAIL, email);
+        editor.commit();
+    }
+
+    public String getEmail() {
+        return pref.getString(KEY_EMAIL, "");
+    }
+
+    public void setSex(String sex) {
+        editor.putString(KEY_SEX, sex);
+        editor.commit();
+    }
+
+    public String getSex() {
+        return pref.getString(KEY_SEX, "F");
+    }
+
+    public void setBirthDate(String birthDate) {
+        editor.putString(KEY_BIRTH, birthDate);
+        editor.commit();
+    }
+
+    public String getBirthDate() {
+        return pref.getString(KEY_BIRTH, "");
+    }
+
+    public void setAddress(String address) {
+        editor.putString(KEY_ADDRESS, address);
+        editor.commit();
+    }
+
+    public String getAddress() {
+        return pref.getString(KEY_ADDRESS, "");
+    }
+
     public void setOldMonth(int month) {
         editor.putInt(KEY_OLD_MONTH, month);
         editor.commit();
     }
-
-
 
     public void createLogin() {
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
@@ -145,13 +176,5 @@ public class PrefManager {
     public void clearSession() {
         editor.clear();
         editor.commit();
-    }
-
-    public HashMap<String, String> getUserDetails() {
-        HashMap<String, String> profile = new HashMap<>();
-        profile.put("name", pref.getString(KEY_NAME, null));
-        profile.put("email", pref.getString(KEY_EMAIL, null));
-        profile.put("mobile", pref.getString(KEY_MOBILE, null));
-        return profile;
     }
 }

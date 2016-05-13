@@ -20,7 +20,7 @@ public class Communication extends HelperActivity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
-        super.helperOnCreate(R.layout.communication, R.string.communication, true);
+        super.helperOnCreate(R.layout.communication, R.string.communication, false);
 
         TextView mailView = (TextView) findViewById(R.id.mailView);
         mailView.setOnClickListener(new View.OnClickListener() {

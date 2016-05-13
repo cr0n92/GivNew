@@ -1,7 +1,10 @@
 package com.givmed.android;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -12,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -33,36 +38,42 @@ import java.util.Calendar;
 import io.fabric.sdk.android.Fabric;
 
 public class Register extends HelperActivity {
-    private EditText mDate, mEmail, mUsername, mSex, male, female;
-    private TextInputLayout nameLayout, emailLayout, dateLayout;
-    private TextInputLayout femaleLayout, maleLayout;
+    private EditText mDate, mEmail, mUsername;
+    private ImageView male, female;
+    private TextInputLayout nameLayout, emailLayout;
     private PrefManager pref;
     ProgressDialog dialog;
-
-    String username = "", email = "", date = "", sex = "", phone = "",mDate1="";
-    int code;
-
+    AlertDialog alert;
+    String username = "", email = "", date = "", sex = "", phone = "", mDate1="";
     Boolean is_male = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main);
-        super.helperOnCreate(R.layout.register, R.string.register, false);
+        super.helperOnCreate(R.layout.register, R.string.profile, false);
+
+        dialog = new ProgressDialog(this);
+        pref = new PrefManager(this);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.prof_age_warning))
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+        alert = builder.create();
 
         mUsername = (EditText) findViewById(R.id.username_text);
         mEmail = (EditText) findViewById(R.id.email_text);
         mDate = (EditText) findViewById(R.id.birth_text);
 
-        mSex = (EditText) findViewById(R.id.sex_text);
-        female = (EditText) findViewById(R.id.femaleButton);
-        male = (EditText) findViewById(R.id.maleButton);
-
-        // me auth thn synarthsh den kalleite to plhktrologio otan pataei panw sto edit text
-        mSex.setKeyListener(null);
-        female.setKeyListener(null);
-        male.setKeyListener(null);
+        female = (ImageView) findViewById(R.id.femaleButton);
+        male = (ImageView) findViewById(R.id.maleButton);
 
         // prepei sto editText na valoume android:focusable="false" giati alliws den douleuei
         // me to prwto click alla me to deutero kai einai ligo asxhmo (coockings)
@@ -71,8 +82,8 @@ public class Register extends HelperActivity {
             @Override
             public void onClick(View v) {
                 is_male = false;
-                female.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_female_pressed, 0, 0, 0);
-                male.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_male, 0, 0, 0);
+                female.setImageResource(R.drawable.ic_female_pressed);
+                male.setImageResource(R.drawable.ic_male);
             }
         });
 
@@ -81,28 +92,39 @@ public class Register extends HelperActivity {
             @Override
             public void onClick(View v) {
                 is_male = true;
-                male.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_male_pressed, 0, 0, 0);
-                female.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_female, 0, 0, 0);
+                male.setImageResource(R.drawable.ic_male_pressed);
+                female.setImageResource(R.drawable.ic_female);
             }
         });
 
+        phone = pref.getMobileNumber();
+        username = pref.getUsername();
+        email = pref.getEmail();
+        date = pref.getBirthDate();
+        sex = pref.getSex();
+
+        if (!(username.isEmpty() || username.equals(phone))) mUsername.setText(username);
+
+        if (!date.isEmpty()) mDate.setText(date);
+
+        if (!email.isEmpty()) mEmail.setText(email);
+
+        if (sex.equals("M")) {
+            is_male = true;
+            male.setImageResource(R.drawable.ic_male_pressed);
+            female.setImageResource(R.drawable.ic_female);
+        }
+        else {
+            is_male = false;
+            female.setImageResource(R.drawable.ic_female_pressed);
+            male.setImageResource(R.drawable.ic_male);
+        }
+
         nameLayout = (TextInputLayout) findViewById(R.id.username);
         emailLayout = (TextInputLayout) findViewById(R.id.email);
-        dateLayout = (TextInputLayout) findViewById(R.id.birth);
 
         mEmail.addTextChangedListener(new MyTextWatcher(mEmail));
         mUsername.addTextChangedListener(new MyTextWatcher(mUsername));
-
-
-        pref = new PrefManager(this);
-        Log.e("USERNAME",pref.getUsername());
-
-
-        phone=pref.getMobileNumber();
-
-
-
-
     }
 
     @Override
@@ -111,70 +133,67 @@ public class Register extends HelperActivity {
 
         if (id == R.id.action_tick) {
                 if (submitForm()) {
-                    username = mUsername.getText().toString();
-                    email = mEmail.getText().toString();
-                    sex = (is_male) ? "M" : "F";
-                    mDate1 = mDate.getText().toString().trim();
-                    int year = Calendar.getInstance().get(Calendar.YEAR);
+                    if (isOnline(getApplicationContext())) {
+                        showDialogBox(getApplicationContext(), dialog);
 
-                    if (!(mDate1.equals(""))) {
-                        if (year - Integer.parseInt(mDate1) < 18) {
-                            Toast.makeText(getApplicationContext(), getString(R.string.prof_age_warning),
-                                    Toast.LENGTH_LONG).show();
-                            return super.onOptionsItemSelected(item);
+                        username = mUsername.getText().toString();
+                        email = mEmail.getText().toString();
+                        sex = (is_male) ? "M" : "F";
+                        mDate1 = mDate.getText().toString().trim();
+                        int year = Calendar.getInstance().get(Calendar.YEAR);
 
+                        if (!(mDate1.equals(""))) {
+                            if (year - Integer.parseInt(mDate1) < 18) {
+                                dialog.dismiss();
+                                alert.show();
+                                return super.onOptionsItemSelected(item);
+                            }
+
+                            date = mDate.getText().toString().trim() + "-1-1";
                         }
-                        date = mDate.getText().toString().trim() + "-1-1";
+                        if (username.equals(""))
+                            username = phone;
+
+                        new HttpGetTask().execute();
                     }
-                    if (username.equals(""))
-                        username = phone;
-
-                    dialog = new ProgressDialog(this);
-                    dialog.setMessage(getString(R.string.loading_msg));
-                    dialog.show();
-                    new HttpGetTask().execute();
+                    else
+                        httpErrorToast(getApplicationContext(), 1);
                 }
-
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private class HttpGetTask extends AsyncTask<Void, Void, JSONObject> {
+    private class HttpGetTask extends AsyncTask<Void, Void, Integer> {
 
         private static final String TAG = "HttpGetTask";
         private int error = -1;
 
         @Override
-        protected JSONObject doInBackground(Void... arg0) {
+        protected Integer doInBackground(Void... arg0) {
             String URL = server + "/profile/";
             String data = "";
-            JSONObject out = new JSONObject();
-
-            String request = URL;
+            Integer out = 0;
             java.net.URL url = null;
             HttpURLConnection conn = null;
 
             try {
-                url = new URL(request);
+                url = new URL(URL);
                 String urlParameters =
-                        //"username="     + username +
-                        "userPhone="+phone +
-                        //"&userEmail="   + email +
-                        //"&birthDate="   + date +
-                        "&sex="         + sex;
-                if (!(username == null || username.trim().equals(""))){
-                    urlParameters+="&username="+username;
-                }
-                if (!(email == null || email.trim().equals(""))){
-                    urlParameters+="&email="+email;
-                }
-                if (!(date == null || date.trim().equals(""))){
-                    urlParameters+="&date="+date;
-                }
+                        "userPhone=" + phone +
+                        "&sex=" + sex;
+
+                if (!(username == null || username.trim().equals("")))
+                    urlParameters += "&username=" + username;
+
+                if (!(email == null || email.trim().equals("")))
+                    urlParameters += "&email=" + email;
+
+                if (!(date == null || date.trim().equals("")))
+                    urlParameters += "&birthDate=" + date;
+
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 int postDataLength = postData.length;
-
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setDoOutput(true);
                 conn.setRequestMethod("PUT");
@@ -184,14 +203,8 @@ public class Register extends HelperActivity {
                 DataOutputStream wr = new DataOutputStream(conn.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
                 wr.write(postData);
                 InputStream in = new BufferedInputStream(conn.getInputStream());
-                data = HelperActivity.readStream(in);
-                code = conn.getResponseCode();
-
-                Log.e("data", data);
-
-                //JSONObject obj = new JSONObject(data);
-                //Log.e("thlefwno", obj.getString("userPhone"));
-
+                data = readStream(in);
+                out = conn.getResponseCode();
 
             } catch (ProtocolException e) {
                 error = 1;
@@ -209,45 +222,32 @@ public class Register extends HelperActivity {
                 if (null != conn)
                     conn.disconnect();
             }
-            try {
-                Log.e(TAG, "phone"+phone);
-                out.put("code",code);
-            } catch (JSONException e) {
-                Crashlytics.logException(e);
-                e.printStackTrace();
-            }
+
             return out;
         }
 
         @Override
-        protected void onPostExecute(JSONObject result) {
-            if (error > 0) {
-                Toast.makeText(getApplicationContext(), (error == 1) ? "skata" : "Nothing to show",
-                        Toast.LENGTH_LONG).show();
-            }
+        protected void onPostExecute(Integer result) {
+            if (error > 0)
+                httpErrorToast(getApplicationContext(), error);
             else {
-                try {
-                    if(result.getInt("code")==202) {
-                        nameLayout.setError("To username uparxei hdh");
-                        requestFocus(mUsername);
-                    }
-                    else {
-                        Intent intent = new Intent(Register.this, Elleipseis.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }
-                } catch (JSONException e) {
-                    Crashlytics.logException(e);
-                    e.printStackTrace();
+                if (result == 202) {
+                    nameLayout.setError(getString(R.string.prof_name_exists));
+                    requestFocus(mUsername);
                 }
+                else {
+                    pref.setUsername(username);
+                    pref.setBirthDate(date);
+                    pref.setSex(sex);
+                    pref.setEmail(email);
 
-
-
-
+                    Intent intent = new Intent(getApplicationContext(), TwoButtons.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
             }
-
             dialog.dismiss();
-            dialog = null;
         }
     }
 
@@ -263,13 +263,11 @@ public class Register extends HelperActivity {
 
     private boolean validateName() {
         if (mUsername.getText().toString().trim().isEmpty()) {
-            nameLayout.setError("Λάθος Όνομα");
+            nameLayout.setError(getString(R.string.prof_name_warning));
             requestFocus(mUsername);
             return false;
         } else {
             nameLayout.setError(null);
-
-            //nameLayout.setErrorEnabled(false);
         }
 
         return true;
@@ -279,12 +277,11 @@ public class Register extends HelperActivity {
         String email = mEmail.getText().toString().trim();
 
         if (!isValidEmail(email)) {
-            emailLayout.setError("Λάθος email");
+            emailLayout.setError(getString(R.string.prof_email_warning));
             requestFocus(mEmail);
             return false;
         } else {
             emailLayout.setError(null);
-            //emailLayout.setErrorEnabled(false);
         }
 
         return true;

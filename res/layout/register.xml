@@ -102,72 +102,31 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp" >
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/sex"
-                        android:layout_width="150dp"
+                    <TextView
+                        android:id="@+id/sex_text"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:theme="@style/MyEditTextTheme">
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textSize="24sp"
+                        android:drawableStart="@drawable/ic_sex"
+                        android:drawableLeft="@drawable/ic_sex"
+                        android:theme="@style/MyEditTextTheme"/>
 
-                        <EditText
-                            android:id="@+id/sex_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/prof_sex"
-                            android:inputType="number"
-                            android:maxLength="4"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textSize="24sp"
-                            android:drawableStart="@drawable/ic_sex"
-                            android:drawableLeft="@drawable/ic_sex"
-                            android:theme="@style/MyEditTextTheme"/>
-
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/sex2"
+                    <ImageView
+                        android:id="@+id/femaleButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_female_pressed" />
 
-                        <EditText
-                            android:id="@+id/femaleButton"
-                            android:inputType="none"
-                            android:focusable="false"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLength="0"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textSize="24sp"
-                            android:drawableStart="@drawable/ic_female_pressed"
-                            android:drawableLeft="@drawable/ic_female_pressed"
-                            android:theme="@style/MyEditTextTheme" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/sex3"
+                    <ImageView
+                        android:id="@+id/maleButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" >
-
-                        <EditText
-                            android:id="@+id/maleButton"
-                            android:inputType="none"
-                            android:focusable="false"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLength="0"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textSize="24sp"
-                            android:drawableStart="@drawable/ic_male"
-                            android:drawableLeft="@drawable/ic_male"
-                            android:theme="@style/MyEditTextTheme" />
-
-                    </android.support.design.widget.TextInputLayout>
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_male" />
                 </LinearLayout>
 
                 <android.support.design.widget.TextInputLayout

@@ -432,7 +432,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Log.e("Statys",""+cursor.getString(5)+"Exp.Date"+cursor.getString(2));
+                //Log.e("Statys",""+cursor.getString(5)+"Exp.Date"+cursor.getString(2));
 
                 //medAdapter.add(med);
             } while (cursor.moveToNext());
@@ -617,8 +617,8 @@ public class DBHandler extends SQLiteOpenHelper {
                     second = ";";
                 else
                     second = cursor.getString(1);
-                Donation don = new Donation(cursor.getString(0),second,cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5));
-                donationAdapter.add(don);
+                //Donation don = new Donation(cursor.getString(0),second,cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5));
+                //donationAdapter.add(don);
                 cnt++;
             } while (cursor.moveToNext());
             cursor.close();

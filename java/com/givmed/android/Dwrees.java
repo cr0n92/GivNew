@@ -25,7 +25,7 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main_simple);
-        super.helperOnCreate(R.layout.dwrees, R.string.dwrees, true);
+        super.helperOnCreate(R.layout.dwrees, R.string.dwrees, false);
 
         String left = getResources().getString(R.string.pharm_left_half_msg);
         String right = getResources().getString(R.string.donation_euros);
@@ -77,6 +77,10 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         }
         else if (progDonation.getVolunteer().equals("U")) {
             Intent intent = new Intent(getApplicationContext(), DwreaUser.class);
+            intent.putExtra("pharPhone", "12345");
+            intent.putExtra("pharName", progDonation.getPharName());
+            intent.putExtra("medName", progDonation.getName());
+            intent.putExtra("barcode", progDonation.getBarcode());
             startActivity(intent);
         }
         else {

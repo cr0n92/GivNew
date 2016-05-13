@@ -22,9 +22,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-/**
- * Created by Ravi on 04/04/15.
- */
 public class VerifyService extends IntentService {
 
     private static String TAG = VerifyService.class.getSimpleName();
@@ -40,8 +37,7 @@ public class VerifyService extends IntentService {
             String otp = intent.getStringExtra("otp");
             String old_user = intent.getStringExtra("oldUser");
 
-
-            verifyOtp(otp,old_user);
+            verifyOtp(otp, old_user);
         }
     }
 
@@ -52,58 +48,51 @@ public class VerifyService extends IntentService {
      */
     private void verifyOtp(final String otp,final String oldUser) {
 
-        String URL = "http://givmed.com:81/verify/";
+        String URL = HelperActivity.server + "/verify/";
         String data = "";
         int code;
-
-        String request = URL;
         java.net.URL url ;
         HttpURLConnection conn = null;
         pref = new PrefManager(this);
 
         try {
-            url = new URL(request);
-            String urlParameters = "otp="+ otp +
-                                   "&phone=" + pref.getMobileNumber() +
-                                    "&oldUser=" + oldUser;
+            url = new URL(URL);
+            String urlParameters =
+                    "otp="+ otp +
+                    "&phone=" + pref.getMobileNumber() +
+                    "&oldUser=" + oldUser;
 
             byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
-
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoOutput(true);
-
             DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
             wr.write(postData);
             InputStream in = new BufferedInputStream(conn.getInputStream());
             data = HelperActivity.readStream(in);
             code = conn.getResponseCode();
 
-            if (code==202 || code==201) {
+            if (code == 202 || code == 201) {
                 PrefManager pref = new PrefManager(getApplicationContext());
                 pref.createLogin();
                 Intent TokenIntent = new Intent("token");
-                TokenIntent.putExtra("token",otp);
-                if (code==201) {
+                TokenIntent.putExtra("token", otp);
+
+                if (code == 201) {
                     JSONObject obj = new JSONObject(data);
                     pref.setUsername(obj.getString("username"));
-                    //TokenIntent.putExtra("username",obj.getString("username"));
-
-
+                    pref.setBirthDate(obj.getString("birthDate"));
+                    pref.setSex(obj.getString("sex"));
+                    pref.setEmail(obj.getString("email"));
                 }
 
-
                 LocalBroadcastManager.getInstance(this).sendBroadcast(TokenIntent);
-
             }
-
-            else{
+            else {
                 //deikse ston xrhsth oti ta mageirepsame kai dn vghke
                 //ara prepei na to valei monos tou
             }
 
-
             Log.e("django response", ""+code);
-
 
         } catch (ProtocolException e) {
             Log.e(TAG, "ProtocolException");
@@ -111,7 +100,6 @@ public class VerifyService extends IntentService {
             Log.e(TAG, "MalformedURLException");
         } catch (IOException exception) {
             Log.e(TAG, "IOException");
-
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {
@@ -119,8 +107,4 @@ public class VerifyService extends IntentService {
                 conn.disconnect();
         }
     }
-
-
-
-
 }

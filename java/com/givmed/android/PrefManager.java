@@ -9,10 +9,6 @@ import android.content.SharedPreferences.Editor;
 
 import java.util.HashMap;
 
-/**
- * Created by Ravi on 08/07/15.
- */
-
 
 
 //SharedPreference: Store private primitive data in key-value pairs. (To store small entries/data)
@@ -63,7 +59,6 @@ public class PrefManager {
         editor.commit();
     }
 
-    //TODO pickupaddress
     //TODO pharm date,need date
     public boolean isWaitingForSms() {
         return pref.getBoolean(KEY_IS_WAITING_FOR_SMS, false);

@@ -89,6 +89,8 @@
     <string name="choo_volu_second">Επίλεξε τις ημέρες που μπορεί να το παραλάβει κάποιος εθελοντής.</string>
     <string name="choo_add_dates"><u>Πρόσθεσε ημερομηνίες</u></string>
     <string name="choo_addr">Διέυθυνση (Οδός, Περιοχή, Τ.Κ.)</string>
+    <string name="choo_monos_eyxaristoume"><b>Σε ευχαριστούμε!</b>\nΤο φάρμακό σου βρίσκεται σχεδόν στον προορισμό του.</string>
+
 
     <!-- Δυο κουμπιά -->
     <string name="two_btn_first_msg">Καταχώρησε τα φαρμακά σου!</string>

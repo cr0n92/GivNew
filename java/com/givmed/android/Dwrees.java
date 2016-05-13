@@ -57,7 +57,7 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
 
         ListView list = (ListView) findViewById(R.id.list);
         list.setFooterDividersEnabled(true);
-        registerForContextMenu(list);
+        list.setOnItemClickListener(this);
         list.setAdapter(mAdapter);
 
         db = new DBHandler(getApplicationContext());
@@ -77,11 +77,16 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         }
         else if (progDonation.getVolunteer().equals("U")) {
             Intent intent = new Intent(getApplicationContext(), DwreaUser.class);
+            intent.putExtra("pharmName", progDonation.getPharNameGen());
+            intent.putExtra("barcode", progDonation.getBarcode());
+            intent.putExtra("medName", progDonation.getName());
             startActivity(intent);
         }
         else {
             Intent intent = new Intent(getApplicationContext(), AfterDwrees.class);
             intent.putExtra("pharmName", progDonation.getPharNameGen());
+            intent.putExtra("barcode", progDonation.getBarcode());
+            intent.putExtra("medName", progDonation.getName());
             startActivity(intent);
         }
     }

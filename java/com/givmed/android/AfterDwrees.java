@@ -19,11 +19,12 @@ import java.util.List;
 
 public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    public static String mid_msg = " ";
-    public static String selectedPharm = " ";
-    public static TextView msgView;
+    private static String mid_msg = " ";
+    private static String selectedPharm = " ",barcode="",medname="";
+    private static TextView msgView;
     DBHandler db;
 
+    //TODO ama o xrhsths epileksei farmakeio kai pathsei koumpi dn exoume ti ginetai??
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,14 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
         // se ka8e periptwsh kai an yparxei se perisottera tote deixnoume to spinner wste na
         // epile3ei o xrhsths to farmakeio pou 8elei epishs ena mhnyma panw apo to spinner.
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("pharName") && !(intent.getStringExtra("pharName").equals(";")))
+        barcode = intent.getStringExtra("barcode");
+        medname = intent.getStringExtra("medName");
+
+        if (intent != null && intent.hasExtra("pharName") && !(intent.getStringExtra("pharName").equals(";"))) {
             mid_msg = " " + getString(R.string.choo_mid_first_msg) + " " + intent.getStringExtra("pharName") + " ";
+            //to selectedpharm tha exei to pharNameGen = pharName
+            selectedPharm = intent.getStringExtra("pharName");
+        }
 
         msgView = (TextView) findViewById(R.id.firstMes);
         String msg = getString(R.string.choo_left_first_msg) + mid_msg + getString(R.string.choo_right_first_msg);
@@ -87,7 +94,12 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), DwreaUser.class);
-                intent.putExtra("selected", selectedPharm);
+                intent.putExtra("barcode", barcode);
+                intent.putExtra("medName", medname);
+
+                //edw einai eite to onoma farmakeiou sthn genikh an eixame ena farmakeio eite to onoma tou farmakeiou
+                // kanonika an to epileksame apo thn lista
+                intent.putExtra("pharmName", selectedPharm);
                 startActivity(intent);
             }
         });
@@ -98,7 +110,7 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), DwreaVolunteer.class);
-                intent.putExtra("selected", selectedPharm);
+                intent.putExtra("barcode", barcode);
                 startActivity(intent);
             }
         });

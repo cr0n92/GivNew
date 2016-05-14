@@ -174,12 +174,6 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_NEEDS_TABLE);
     }
 
-    public void deleteDonations() {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DONATIONS);
-        db.execSQL(CREATE_DONATIONS_TABLE);
-    }
 
     /*---------------- needs functions ----------------------------*/
     // Adding new need
@@ -462,7 +456,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-               Log.e("Statys", " " + cursor.getString(0) + " " + cursor.getString(1));
+                Log.e("Barcode", "" + cursor.getString(0) + "PharPhone" + cursor.getString(1)+ "Date1" + cursor.getString(2));
 
                 //medAdapter.add(med);
             } while (cursor.moveToNext());
@@ -632,6 +626,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 + KEY_PHAR_NAME + "," + KEY_PHAR_NAME_GEN + " FROM " + TABLE_DONATIONS
                 + " LEFT OUTER JOIN " + TABLE_PHARMACIES + " ON donations.pharPhone = pharmacies.pharPhone NATURAL JOIN "
                 + TABLE_MEDS;
+
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {

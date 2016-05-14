@@ -129,8 +129,7 @@
         <activity
             android:name="com.givmed.android.Number"
             android:label="number"
-            android:theme="@style/AppTheme.NoActionBar" >
-
+            android:theme="@style/AppTheme.NoActionBar" >            
         </activity>
         <activity
             android:name="com.givmed.android.ConfirmNumber"

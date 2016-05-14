@@ -16,6 +16,7 @@ import io.fabric.sdk.android.Fabric;
 public class SplashActivity extends AppCompatActivity {
     private DBHandler db;
     public static DonationAdapter mAdapter;
+    PrefManager pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,8 @@ public class SplashActivity extends AppCompatActivity {
 //        Log.e("Month",""+calendar.get(Calendar.MONTH));
 //        Log.e("Day of Year",""+calendar.get(Calendar.DAY_OF_YEAR));
 
-
+        pref = new PrefManager(this);
+        pref.setMobileNumber("12345");
         db = new DBHandler(getApplicationContext());
         db.printAllMeds();
 

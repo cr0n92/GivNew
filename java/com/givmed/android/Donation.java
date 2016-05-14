@@ -39,9 +39,9 @@ public class Donation {
         this.mpharmNameGen = pharmNameGen;
 
         this.mDate1 = date1;
-        this.mDate1 = date2;
+        this.mDate2 = date2;
 
-        this.mDate1 = date3;
+        this.mDate3 = date3;
 
         this.mVolunteer = volunteer;
 

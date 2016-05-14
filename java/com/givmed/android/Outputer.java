@@ -36,6 +36,7 @@ public class Outputer extends HelperActivity {
     private String server_date = "", name = "", date = "", barcode = "", eofcode = "", state = "", price = "", notes = "";
     ProgressDialog dialog;
     AlertDialog alert;
+    PrefManager pref;
     DBHandler db;
 
     @Override
@@ -46,6 +47,7 @@ public class Outputer extends HelperActivity {
         super.helperOnCreate(R.layout.outputs, R.string.outputer, true);
 
         db = new DBHandler(getApplicationContext());
+        pref = new PrefManager(this);
         dialog = new ProgressDialog(this);
 
         Intent intent = getIntent();
@@ -120,7 +122,7 @@ public class Outputer extends HelperActivity {
                 notes = mNotes.getText().toString().trim();
                 new HttpOutputer().execute();
             } else
-                Toast.makeText(getApplicationContext(), getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+                HelperActivity.httpErrorToast(getApplicationContext(), 1);
         }
 
         return super.onOptionsItemSelected(item);
@@ -131,12 +133,13 @@ public class Outputer extends HelperActivity {
         private static final String TAG = "HttpGetTask_Outputer";
         private int error = -1;
         private int result ;
+
         @Override
         protected Integer doInBackground(Object... input) {
             String data = "";
             java.net.URL url = null;
             HttpURLConnection conn2 = null;
-            String URL = server + "/med_check/12345/";
+            String URL = server + "/med_check/" + pref.getMobileNumber() + "/";
 
             try {
                 url = new URL(URL);

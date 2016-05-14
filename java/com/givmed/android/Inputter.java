@@ -33,7 +33,7 @@ public class Inputter extends HelperActivity {
     private EditText mEditText;
     private String date, eof, name, code;
     ProgressDialog dialog;
-    AlertDialog alert;
+    AlertDialog wrongBarcodeAlert, elhkseAlert;
 
 
     @Override
@@ -43,21 +43,28 @@ public class Inputter extends HelperActivity {
         super.setMenu(R.menu.menu_main);
         super.helperOnCreate(R.layout.input_byhand, R.string.inputter, true);
 
+        dialog = new ProgressDialog(this);
         mEditText = (EditText) findViewById(R.id.edit1);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.inp_expired_msg))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent TedxIntent = new Intent(getApplicationContext(), Farmakeio.class);
-                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        startActivity(TedxIntent);
+                    public void onClick(DialogInterface dialog2, int id) {
 
                     }
                 });
-        alert = builder.create();
+        elhkseAlert = builder.create();
+
+        //AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.inp_error_msg))
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog2, int id) {
+
+                    }
+                });
+        wrongBarcodeAlert = builder.create();
 
         Intent intent = getIntent();
         if (intent.hasExtra("barcode")) {
@@ -81,21 +88,15 @@ public class Inputter extends HelperActivity {
         if (id == R.id.action_tick) {
             code = mEditText.getText().toString().trim();
 
-            if (code.length() != 12) {
-                Toast.makeText(getApplicationContext(), getString(R.string.inp_error_msg), Toast.LENGTH_LONG).show();
-            }
+            if (code.length() != 12)
+                wrongBarcodeAlert.show();
             else {
-
                 if (isOnline(getApplicationContext())) {
-                    dialog = new ProgressDialog(this);
-                    dialog.setMessage(getString(R.string.loading_msg));
-                    dialog.setCancelable(false);
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
+                    showDialogBox(getApplicationContext(), dialog);
 
                     new HttpGetTask().execute(code);
                 } else
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+                    httpErrorToast(getApplicationContext(), 1);
             }
         }
 
@@ -226,8 +227,12 @@ public class Inputter extends HelperActivity {
         @Override
         protected void onPostExecute(String[] result) {
             if (error > 0) {
-                Toast.makeText(getApplicationContext(), (error == 1)? "No internet connection" : "Wrong barcode number",
-                        Toast.LENGTH_LONG).show();
+                if (error == 1)
+                    httpErrorToast(getApplicationContext(), 1);
+                else {
+                    dialog.dismiss();
+                    wrongBarcodeAlert.show();
+                }
             }
             else {
                 date = result[0];
@@ -249,8 +254,7 @@ public class Inputter extends HelperActivity {
 
                 if (year2 * 12 + month2 < year * 12 + month) {
                     dialog.dismiss();
-                    dialog = null;
-                    alert.show();
+                    elhkseAlert.show();
                     return;
                 }
 
@@ -264,7 +268,6 @@ public class Inputter extends HelperActivity {
             }
 
             dialog.dismiss();
-            dialog = null;
         }
     }
 }

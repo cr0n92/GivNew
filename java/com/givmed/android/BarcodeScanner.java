@@ -59,7 +59,8 @@ public class BarcodeScanner extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
-        mToolBar.setTitle(R.string.scan);
+        mToolBar.setTitle(R.string.scan_barcodes);
+        mToolBar.setTitleTextColor(0xFFFFFFFF);
         mToolBar.setNavigationIcon(R.drawable.ic_arrows);
         setSupportActionBar(mToolBar);
 

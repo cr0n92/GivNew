@@ -6,6 +6,7 @@
     <string name="confirm">Επιβεβαίωση</string>
     <string name="inputter">Εισαγωγή</string>
     <string name="scan">Σάρωση</string>
+    <string name="scan_barcodes">Σάρωση Barcodes</string>
     <string name="outputer">Καταχώρηση</string>
     <string name="two_buttons">Επιλογή</string>
     <string name="farmako">Φάρμακο</string>
@@ -55,10 +56,15 @@
     <string name="delete_sure">Είστε σίγουρος οτι θέλετε να το διαγράψετε;</string>
 
     <!-- Δωρεές -->
-    <string name="donation_med">φάρμακα αξίας</string>
-    <string name="donation_meds">φάρμακο αξίας</string>
+    <string name="donation_med_left">Μπράβο! Μέχρι τώρα έχεις κάνει</string>
+    <string name="donation_values">δωρεές αξίας</string>
+    <string name="donation_value">δωρεά αξίας</string>
     <string name="donation_euros">ευρώ!</string>
+    <string name="donation_done_left">Έχεις</string>
+    <string name="donation_done_rights">φάρμακα προς άμεση δωρεά!</string>
+    <string name="donation_done_right">φάρμακο προς άμεση δωρεά!</string>
     <string name="donation_choose_msg">Επίλεξε ποιό θέλεις να δωρίσεις πρώτο από την παρακάτω λίστα.</string>
+
     <string name="scheduled">Προγραμματισμενες</string>
     <string name="done">Ολοκληρωμενες</string>
     <string name="farmako_caps">ΦΑΡΜΑΚΟ</string>
@@ -68,7 +74,7 @@
     <!-- Τρόπος Παράδοσης -->
     <string name="choo_left_first_msg">Κάποιος συνάνθρωπός σου</string>
     <string name="choo_right_first_msg">έχει ανάγκη τη δωρεά σου!</string>
-    <string name="choo_mid_first_msg">στο κοινωνικό φαρμακείο του</string>
+    <string name="choo_mid_first_msg">στο κοινωνικό φαρμακείο</string>
     <string name="choo_second_msg">Πώς θέλεις να φθάσουν τα φάρμακά σου σε αυτόν;</string>
     <string name="choo_pharm_msg">Διάλεξε το κοινωνικό φαρμακείο που θέλεις να δωρίσεις το φαρμακό σου:</string>
     <string name="user_btn">Θα το παω εγω!</string>
@@ -173,7 +179,7 @@
 
     <!-- Eισαγωγή barcode -->
     <string name="inp_type_msg">Πληκτρολόγησε τον κωδικό που βρίσκεται πάνω στο κουτι.</string>
-    <string name="inp_error_msg">Το μήκος του barcode δεν είναι έγκυρο!</string>
+    <string name="inp_error_msg">Μήπως έγραψες κάτι λάθος; Αν όχι επικοινώνησε μαζί μας!</string>
     <string name="inp_expired_msg">Το φάρμακο έχει λήξει!</string>
 
     <!-- Κάμερα -->

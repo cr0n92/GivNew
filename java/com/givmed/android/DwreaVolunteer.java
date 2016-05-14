@@ -50,7 +50,7 @@ public class DwreaVolunteer extends AppCompatActivity {
     private static String sdate1 = "", sdate2 = "", sdate3 = "", todayDate;
     private static String date1 = "", date2 = "", date3 = "";
     private static int datesCnt = 1;
-    private Cursor cursor, pharCursor;
+    private String[] pharInfo, donationInfo;
     public ProgressDialog dialog;
     public AlertDialog alert;
     public PrefManager pref;
@@ -72,14 +72,16 @@ public class DwreaVolunteer extends AppCompatActivity {
         pref = new PrefManager(this);
         db = new DBHandler(getApplicationContext());
 
-        pharCursor = db.getPharmacy(pharName);
-        pharPhone = pharCursor.getString(0);
+        pharInfo = new String[5];
+        db.getPharmacy(pharName, pharInfo);
+        pharPhone = pharInfo[0];
 
-        cursor = db.getDonation(barcode);
-        date1 = cursor.getString(2);
-        date2 = cursor.getString(3);
-        date3 = cursor.getString(4);
-        address = cursor.getString(6);
+        donationInfo = new String[7];
+        db.getProgDonation(barcode, donationInfo);
+        date1 = donationInfo[2];
+        date2 = donationInfo[3];
+        date3 = donationInfo[4];
+        address = donationInfo[6];
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.choo_volu_call))
@@ -195,6 +197,8 @@ public class DwreaVolunteer extends AppCompatActivity {
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(date1);
                     todayDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
+
+                    new HttpDone().execute();
                 }
                 else
                     HelperActivity.httpErrorToast(getApplicationContext(), 1);

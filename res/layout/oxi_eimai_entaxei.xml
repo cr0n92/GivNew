@@ -56,6 +56,16 @@
                     android:layout_centerHorizontal="true">
                 </TextView>
 
+                <ImageView
+                    android:id="@+id/proswpaki"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_below="@id/secondMes"
+                    android:layout_width="252dp"
+                    android:layout_height="225dp"
+                    android:src="@drawable/svg_prosopaki"/>
+
                 <Button
                     android:id="@+id/button1"
                     android:layout_width="wrap_content"
@@ -65,7 +75,7 @@
                     android:textSize="20sp"
                     android:textColor="@color/white"
                     android:layout_marginBottom="10dp"
-                    android:layout_below="@id/secondMes"
+                    android:layout_below="@id/proswpaki"
                     android:layout_alignLeft="@+id/button2"
                     android:layout_alignStart="@+id/button2"
                     android:layout_alignRight="@+id/button2"

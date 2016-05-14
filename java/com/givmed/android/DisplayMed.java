@@ -77,8 +77,8 @@ public class DisplayMed extends AppCompatActivity {
                 });
         sirupAlert = builder.create();
 
-        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
-        builder2.setMessage(getString(R.string.delete_sure))
+        //AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.delete_sure))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog2, int id) {
@@ -90,7 +90,7 @@ public class DisplayMed extends AppCompatActivity {
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                    public void onClick(DialogInterface dialog2, int id) {
 
                     }
                 });
@@ -203,6 +203,7 @@ public class DisplayMed extends AppCompatActivity {
 
         if (id == R.id.action_delete) {
             deleteAlert.show();
+            return true;
         }
         else if (id == R.id.action_tick) {
             if (HelperActivity.isOnline(getApplicationContext())) {
@@ -306,7 +307,7 @@ public class DisplayMed extends AppCompatActivity {
         protected Integer doInBackground(Object... input) {
             java.net.URL url = null;
             HttpURLConnection conn = null;
-            String URL = HelperActivity.server + "/med_check/" + "12345/";
+            String URL = HelperActivity.server + "/med_check/" + phone + "/";
 
             try {
                 url = new URL(URL);
@@ -362,7 +363,13 @@ public class DisplayMed extends AppCompatActivity {
 
                     db.updateMed(med);
 
+                    Intent afterdel = new Intent(getApplicationContext(), Farmakeio.class);
+                    afterdel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    afterdel.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(afterdel);
+                    finish();
                     //TODO: an kanei to med pros dwrea na kanoume match
+
                 }
                 else
                     HelperActivity.httpErrorToast(getApplicationContext(), 2);

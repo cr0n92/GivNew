@@ -38,24 +38,22 @@ import java.util.Date;
 
 public class DwreaUser extends AppCompatActivity {
 
-    private static String selectedPharm = " ",barcode="",medname="",pharmname="",todayDate="";
-
+    private static String barcode="",medname="",pharmname="",todayDate="",  date1 = "";;
     private static EditText dateChoose;
-    AlertDialog alert;
     public static String serverDate;
     public ProgressDialog dialog;
-    String date1="";
-    Cursor pharCursor,progDonCursor;
+    AlertDialog alert;
+    private String[] pharInfo, donationInfo;
     DBHandler db;
     private PrefManager pref;
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dwrea_user);
+
         db = new DBHandler(getApplicationContext());
+        dialog = new ProgressDialog(this);
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -64,9 +62,12 @@ public class DwreaUser extends AppCompatActivity {
             medname = intent.getStringExtra("medName");
 
         }
-        progDonCursor = db.getProgDonation(barcode);
 
-        dialog = new ProgressDialog(this);
+        donationInfo = new String[7];
+        db.getProgDonation(barcode, donationInfo);
+
+        pharInfo = new String[5];
+        db.getPharmacy(pharmname, pharInfo);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.choo_monos_eyxaristoume))
@@ -82,8 +83,6 @@ public class DwreaUser extends AppCompatActivity {
                 });
         alert = builder.create();
 
-
-
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.user);
         mToolBar.setNavigationIcon(R.drawable.ic_arrows);
@@ -96,15 +95,14 @@ public class DwreaUser extends AppCompatActivity {
         });
         dateChoose = (EditText) findViewById(R.id.edit1);
 
-        if (progDonCursor.getString(2).equals(";")) {
-
+        if (donationInfo[2].equals(";")) {
             Date date1 = new Date();
             Calendar cal = Calendar.getInstance();
             cal.setTime(date1);
             setDateString(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
         }
         else {
-            dateChoose.setText(progDonCursor.getString(2));
+            dateChoose.setText(donationInfo[2]);
         }
 
         dateChoose.setOnClickListener(new View.OnClickListener() {
@@ -120,10 +118,9 @@ public class DwreaUser extends AppCompatActivity {
         EditText mForeas = (EditText) findViewById(R.id.foreas);
         EditText mPhone = (EditText) findViewById(R.id.phone);
 
-        pharCursor = db.getPharmacy(pharmname);
         mName.setText(medname);
-        mForeas.setText(pharmname+","+pharCursor.getString(1)+","+pharCursor.getString(2)); // + wres leitourgias kai pws pame ekei
-        mPhone.setText( pharCursor.getString(0));
+        mForeas.setText(pharmname + "," + pharInfo[1] + "," + pharInfo[2]); // + wres leitourgias kai pws pame ekei
+        mPhone.setText(pharInfo[0]);
 
         mName.setKeyListener(null);
         mForeas.setKeyListener(null);
@@ -134,11 +131,19 @@ public class DwreaUser extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Date date1 = new Date();
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(date1);
-                todayDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
-                new HttpDone().execute();
+                if (HelperActivity.isOnline(getApplicationContext())) {
+                    HelperActivity.showDialogBox(getApplicationContext(), dialog);
+
+                    Date date1 = new Date();
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(date1);
+                    todayDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
+
+                    new HttpDone().execute();
+                }
+                else
+                    HelperActivity.httpErrorToast(getApplicationContext(), 1);
+
                 // TODO: vazoume to farmako stis oloklhrwmenes, to leme ston server kai diagrafoume to famrmako topika
 //                Intent intent = new Intent(getApplicationContext(), BarcodeScanner.class);
 //                startActivity(intent);
@@ -172,17 +177,15 @@ public class DwreaUser extends AppCompatActivity {
 
             if (HelperActivity.isOnline(getApplicationContext())) {
                 HelperActivity.showDialogBox(getApplicationContext(), dialog);
+
                 if (!(dateChoose.getText().toString().trim().isEmpty())) {
                     date1 = transformDate(dateChoose.getText().toString());
                 }
 
-
-
                 new HttpUser().execute();
             } else
-                Toast.makeText(getApplicationContext(), getString(R.string.no_internet), Toast.LENGTH_LONG).show();
+                HelperActivity.httpErrorToast(getApplicationContext(), 1);
         }
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -249,10 +252,11 @@ public class DwreaUser extends AppCompatActivity {
 
             try {
                 url = new URL(URL);
-                String urlParameters = "doneUser="+ pref.getMobileNumber() +
+                String urlParameters =
+                        "doneUser="+ pref.getMobileNumber() +
                         "&doneDeliveryType=U" +
                         "&doneDate=" + todayDate +
-                        "&donePharPhone=" + pharCursor.getString(0);
+                        "&donePharPhone=" + pharInfo[0];
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
 
@@ -324,9 +328,9 @@ public class DwreaUser extends AppCompatActivity {
                 url = new URL(URL);
                 String urlParameters =
                         "donationBarcode=" + barcode +
-                                "&donatedPhone=" + pharCursor.getString(0) +
-                                 "&deliveryDate1=" + date1 +
-                                "&donationType=U";
+                        "&donatedPhone=" + pharInfo[0] +
+                        "&deliveryDate1=" + date1 +
+                        "&donationType=U";
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
@@ -371,7 +375,7 @@ public class DwreaUser extends AppCompatActivity {
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
                 if (result == 201) {
-                    db.updateProgDonation(barcode,date1,";",";",";");
+                    db.updateProgDonation(barcode, pharInfo[0], date1, ";", ";", "U", ";");
                     dialog.dismiss();
                     alert.show();
                     return;

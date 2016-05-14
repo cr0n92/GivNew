@@ -227,14 +227,23 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     //vazoume pharmName h pharmNameGen kai gurnaei ola ta stoixeia tou farmakeiou
-    public Cursor getPharmacy(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        String selectQuery = "SELECT * FROM " + TABLE_PHARMACIES + " WHERE " + KEY_PHAR_NAME+ " = '" + name + "'" + " OR " + KEY_PHAR_NAME_GEN + " = '" + name + "'";
+    public void getPharmacy(String name, String[] arr) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_PHARMACIES + " WHERE " + KEY_PHAR_NAME_GEN + " = '" + name + "' OR "
+                + KEY_PHAR_NAME + " = '" + name + "'";
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            arr[0] = cursor.getString(0);
+            arr[1] = cursor.getString(1);
+            arr[2] = cursor.getString(2);
+            arr[3] = cursor.getString(3);
+            arr[4] = cursor.getString(4);
+            cursor.close();
+        }
         db.close();
-        return cursor;
     }
 
     //get all pharmacies that have a specific need
@@ -348,6 +357,8 @@ public class DBHandler extends SQLiteOpenHelper {
             this.updateEofcode(med.getEofcode(), eofcodes - 1);
         }
 
+        this.deleteProgDonation(med.getBarcode());
+
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.delete(TABLE_MEDS, KEY_BARCODE + " = ?", new String[]{med.getBarcode()});
@@ -453,7 +464,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-//     Updating and matching
+    // Updating and matching
     public int updateMedAndMatch(BlueRedItem med) {
         SQLiteDatabase db = this.getWritableDatabase();
         int ret = 0;
@@ -469,10 +480,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 //an gurisei keno prepei na kanoume subscribe sto antistoixo topic(enallaktika koitame an uparxei idio onoma
                 //sto Meds->Half_Name kai an oxi tote kanoume subscribe)
 
-                String selectQuery = "SELECT "+KEY_PHAR_PHONE+" FROM " + TABLE_NEEDS + " WHERE " + KEY_NEED_NAME + " = '" + name + "'";
+                String selectQuery = "SELECT " + KEY_PHAR_PHONE + " FROM " + TABLE_NEEDS
+                        + " WHERE " + KEY_NEED_NAME + " = '" + name + "'";
                 Cursor cursor = db.rawQuery(selectQuery, null);
-
-
 
                 if (cursor.getCount() > 0) {
                     ret = 1;
@@ -489,10 +499,6 @@ public class DBHandler extends SQLiteOpenHelper {
                         values1.put(KEY_VOLUNTEER, "A");
                         values1.put(KEY_PICK_ADDR, ";");
 
-
-
-
-
                         db.insert(TABLE_DONATIONS, null, values1);
                     } else {
                         ContentValues values1 = new ContentValues();
@@ -503,7 +509,6 @@ public class DBHandler extends SQLiteOpenHelper {
                         values1.put(KEY_DATE3, ";");
                         values1.put(KEY_VOLUNTEER, "Α");
                         values1.put(KEY_PICK_ADDR, ";");
-
 
                         db.insert(TABLE_DONATIONS, null, values1);
                     }
@@ -594,7 +599,8 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     /*---------------- donations functions ----------------------------*/
-    public void addDonation(String barcode, String phar_phone, String date1, String date2,String date3,String volunteer,String pick_addr) {
+    public void addDonation(String barcode, String phar_phone, String date1, String date2,
+                            String date3, String volunteer,String pick_addr) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -606,8 +612,6 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(KEY_VOLUNTEER, volunteer);
         values.put(KEY_PICK_ADDR, pick_addr);
 
-
-
         db.insert(TABLE_DONATIONS, null, values);
         db.close();
     }
@@ -617,21 +621,23 @@ public class DBHandler extends SQLiteOpenHelper {
         int cnt = 0;
 
         String selectQuery = "SELECT " + KEY_HALF_NAME + "," + KEY_DATE1 +"," + KEY_DATE2 + ","
-                + KEY_DATE3 + "," + KEY_VOLUNTEER + "," + TABLE_MEDS+"."+KEY_BARCODE + "," + KEY_PHAR_NAME + "," + KEY_PHAR_NAME_GEN
-                + " FROM " + TABLE_DONATIONS + " LEFT OUTER JOIN " + TABLE_PHARMACIES + " ON donations.pharPhone = pharmacies.pharPhone NATURAL JOIN " +TABLE_MEDS;
+                + KEY_DATE3 + "," + KEY_VOLUNTEER + "," + TABLE_MEDS+"."+KEY_BARCODE + ","
+                + KEY_PHAR_NAME + "," + KEY_PHAR_NAME_GEN + " FROM " + TABLE_DONATIONS
+                + " LEFT OUTER JOIN " + TABLE_PHARMACIES + " ON donations.pharPhone = pharmacies.pharPhone NATURAL JOIN "
+                + TABLE_MEDS;
 
         Cursor cursor = db.rawQuery(selectQuery, null);
-
 
         if (cursor.moveToFirst()) {
             do {
                 String sixth;
-                if (cursor.getString(6)==null)
+                if (cursor.getString(6) == null)
                     sixth = ";";
                 else
                     sixth = cursor.getString(6);
 
-                    Donation don = new Donation(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getString(5),sixth,cursor.getString(7));
+                Donation don = new Donation(cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                        cursor.getString(3), cursor.getString(4), cursor.getString(5), sixth, cursor.getString(7));
                 donationAdapter.add(don);
                 cnt++;
             } while (cursor.moveToNext());
@@ -642,7 +648,7 @@ public class DBHandler extends SQLiteOpenHelper {
         return cnt;
     }
 
-    // Deleting single med
+    // Deleting single programmed donation
     public void deleteProgDonation(String barcode) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -650,17 +656,31 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Cursor getProgDonation(String barcode) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    // Getting a programmed donation
+    public void getProgDonation(String barcode, String[] arr) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + TABLE_DONATIONS + " WHERE " + KEY_BARCODE + " == '" + barcode + "'";
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = db.query(TABLE_DONATIONS, new String[]{KEY_BARCODE, KEY_PHAR_PHONE, KEY_DATE1,
+                KEY_DATE2, KEY_DATE3, KEY_VOLUNTEER, KEY_PICK_ADDR}, KEY_BARCODE + "=?",
+                new String[]{barcode}, null, null, null, null);
 
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            arr[0] = cursor.getString(0);
+            arr[1] = cursor.getString(1);
+            arr[2] = cursor.getString(2);
+            arr[3] = cursor.getString(3);
+            arr[4] = cursor.getString(4);
+            arr[5] = cursor.getString(5);
+            arr[6] = cursor.getString(6);
+            cursor.close();
+        }
         db.close();
-        return cursor;
     }
 
-    public void updateProgDonation(String barcode,String pharPhone,String date1,String date2,String date3,String volunteer,String pick_addr) {
+    // Updating a programmed donation
+    public void updateProgDonation(String barcode, String pharPhone, String date1, String date2,
+                                   String date3, String volunteer, String pick_addr) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -672,13 +692,8 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(KEY_VOLUNTEER, volunteer);
         values.put(KEY_PICK_ADDR, pick_addr);
 
-
-
-
-        db.insert(TABLE_DONATIONS, null, values);
+        db.update(TABLE_DONATIONS, values, KEY_BARCODE + " = ?", new String[]{barcode});
         db.close();
-
-
     }
 
 
@@ -700,9 +715,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     //diagrafei prog dwrea ,th vazei stis oloklhrwmenes kai diagrafei to farmako
     public void progToDoneDonation(String barcode, String pharName, String date , String halfName) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
         Medicine med = getMed(barcode);
+        SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_PRICE, med.getPrice());
@@ -712,6 +726,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         db.insert(TABLE_DONE_DONATIONS, null, values);
         db.close();
+
         deleteMed(med, halfName);
         deleteProgDonation(barcode);
     }

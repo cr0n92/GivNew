@@ -170,6 +170,7 @@ public class DwreaVolunteer extends AppCompatActivity {
         if (!date3.equals(";")) {
             dateChoose3.setVisibility(View.VISIBLE);
             dateChoose3.setText(date3);
+            addDate.setVisibility(View.GONE);
             datesCnt++;
         }
 
@@ -305,7 +306,7 @@ public class DwreaVolunteer extends AppCompatActivity {
         protected Integer doInBackground(Void... arg0) {
             String data = "";
 
-            String URL = HelperActivity.server + "add_done_donation/" + barcode + "/";
+            String URL = HelperActivity.server + "/add_done_donation/" + barcode + "/";
             Integer out = 0;
             java.net.URL url = null;
             HttpURLConnection conn = null;

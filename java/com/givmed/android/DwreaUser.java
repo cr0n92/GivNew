@@ -56,7 +56,7 @@ public class DwreaUser extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             barcode = intent.getStringExtra("barcode");
-            pharmname = intent.getStringExtra("pharmName");
+            pharmname = intent.getStringExtra("pharName");
             medname = intent.getStringExtra("medName");
 
         }
@@ -117,7 +117,8 @@ public class DwreaUser extends AppCompatActivity {
         EditText mPhone = (EditText) findViewById(R.id.phone);
 
         mName.setText(medname);
-        mForeas.setText(pharmname + "," + pharInfo[1] + "," + pharInfo[2]); // + wres leitourgias kai pws pame ekei
+        String foreas = pharmname + "," + pharInfo[1] + "," + pharInfo[2];
+        mForeas.setText(foreas); // + wres leitourgias kai pws pame ekei
         mPhone.setText(pharInfo[0]);
 
         mName.setKeyListener(null);
@@ -237,12 +238,11 @@ public class DwreaUser extends AppCompatActivity {
         private int error = -1;
         private int result;
 
-
         @Override
         protected Integer doInBackground(Void... arg0) {
             String data = "";
 
-            String URL = HelperActivity.server + "add_done_donation/" + barcode + "/";
+            String URL = HelperActivity.server + "/add_done_donation/" + barcode + "/";
             Integer out = 0;
             java.net.URL url = null;
             HttpURLConnection conn = null;

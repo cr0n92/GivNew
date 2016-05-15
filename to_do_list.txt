@@ -2,7 +2,6 @@ GIVMED TO DO LIST:
 ------------------
 
 -o	 SMS verification
--a   othones gia eggrafh,login
 -a	 Ta strings sta agglika
 
 -o	 Queries kai urls gia ola(pou xreiazetai ON_CASCADE?)
@@ -22,10 +21,10 @@ Argotera alla oxi polu argotera:
 -	 Anagnwrish pshfiwn kai times
 
 
-SXOLH TO DO LIST:
------------------
-
-- Parallhla 3	8/1
-- Kryptografia 	8/1
-- Sxedio
-
+Alex:
+-----
+-   Na kanoume match opote kanei ena farmako pros dwrea sthn DisplayMed
+-   Na fernoume ta dedomena tou an eixe hdh profile
+-   Na ftia3oume tis ierarxies twn activities
+-   Na kanoume sync ta dedomena an exei 2 syskeues?? (mallon den prolavainoume twra)
+-   Otan pataei apostolh 3ana na stelnoume pali mhnyma

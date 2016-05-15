@@ -143,11 +143,11 @@ public class HelperActivity extends AppCompatActivity
             started = true;
         } else if (id == R.id.nav_register_med && !class_name.equals("TwoButtons")) {
             startActivity(new Intent(getApplicationContext(), TwoButtons.class));
-            started = true;
         } else if (id == R.id.nav_needs && !class_name.equals("Elleipseis")) {
             startActivity(new Intent(getApplicationContext(), Elleipseis.class));
+            started = true;
         } else if (id == R.id.nav_donations && !class_name.equals("Dwrees")) {
-            startActivity(new Intent(getApplicationContext(), Dwrees.class));
+            startActivity(new Intent(getApplicationContext(), BlueRedList.class));
             started = true;
         } else if (id == R.id.nav_profile && !class_name.equals("Register")) {
             startActivity(new Intent(getApplicationContext(), Register.class));
@@ -172,7 +172,7 @@ public class HelperActivity extends AppCompatActivity
             started = true;
         }
 
-        if (started && !class_name.equals("Elleipseis"))
+        if (started && !class_name.equals("TwoButtons"))
             finish();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

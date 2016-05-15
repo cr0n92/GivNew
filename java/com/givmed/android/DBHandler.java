@@ -432,20 +432,24 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 	// Getting all Unknown Meds and adding them to the adapter
-    public void getUnknownMedsToAdapter(BlueRedAdapter brAdapter) {
+    public boolean getUnknownMedsToAdapter(BlueRedAdapter brAdapter) {
+        boolean hasUnknown = false;
         SQLiteDatabase db = this.getWritableDatabase();
 
         String selectQuery = "SELECT " + KEY_BARCODE + "," + KEY_HALF_NAME + " FROM " + TABLE_MEDS
                 + " WHERE " + KEY_STATUS + " == 'U' OR " + KEY_STATUS + " == 'SU' ";
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        if (cursor.moveToFirst()) {
+        if (cursor.moveToFirst() && cursor.getCount() > 0) {
+            hasUnknown = true;
             do {
                 brAdapter.add(new BlueRedItem(cursor.getString(0), cursor.getString(1), R.drawable.ic_tick_in_circle_gray));
             } while (cursor.moveToNext());
             cursor.close();
         }
         db.close();
+
+        return hasUnknown;
     }
 
 	public void printAllMeds() {
@@ -456,7 +460,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                Log.e("Barcode", "Name " + cursor.getString(0) + " Count " + cursor.getString(1)+ " Date " + cursor.getString(2));
+                Log.e("Barcode", "Name " + cursor.getString(0) + " Count " + cursor.getString(1) + " Date " + cursor.getString(2));
 
                 //medAdapter.add(med);
             } while (cursor.moveToNext());
@@ -722,6 +726,29 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
 
         this.deleteMed(med, halfName);
+    }
+
+    public int[] getAllDoneDonations(DonationAdapter donationAdapter) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int[] info = new int[2];
+        info[0] = info[1] = 0;
+
+        String selectQuery = "SELECT * FROM " + TABLE_DONE_DONATIONS;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Donation don = new Donation(cursor.getString(2), cursor.getString(4), "", "", cursor.getString(3), "");
+                donationAdapter.add(don);
+
+                info[0]++;
+                info[1] += (int) Math.round(Double.parseDouble(cursor.getString(1)));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+
+        return info;
     }
 
     /*---------------- names functions ----------------------------*/

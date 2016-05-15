@@ -94,9 +94,14 @@
     <string name="choo_volu_first">Δεν χρειάζεται να κάνεις τίποτα άλλο!</string>
     <string name="choo_volu_second">Επίλεξε τις ημέρες που μπορεί να το παραλάβει κάποιος εθελοντής.</string>
     <string name="choo_add_dates"><u>Πρόσθεσε ημερομηνίες</u></string>
+    <string name="choo_picked_up">Παραλήφθηκε!</string>
     <string name="choo_addr">Διέυθυνση (Οδός, Περιοχή, Τ.Κ.)</string>
     <string name="choo_monos_eyxaristoume"><b>Σε ευχαριστούμε!</b>\nΤο φάρμακό σου βρίσκεται σχεδόν στον προορισμό του.</string>
     <string name="choo_volu_call">Μπράβο σου!\nΜέσα στις επόμενες ώρες θα σε ενημερώσουμε για την ακριβή μέρα καί ώρα που θα έρθουμε για την παραλαβή!</string>
+
+    <string name="choo_date">Επέλεξε ημερομηνία!</string>
+    <string name="choo_one_date">Επέλεξε τουλάχιστον μία ημερομηνία!</string>
+    <string name="choo_empty_address">Συμπλήρωσε την διεύθυνση!</string>
 
     <!-- Δυο κουμπιά -->
     <string name="two_btn_first_msg">Καταχώρησε τα φαρμακά σου!</string>
@@ -116,6 +121,9 @@
     <string name="br_donation">ΔΩΡΕΑ:</string>
     <string name="br_now">ΑΜΕΣΗ</string>
     <string name="br_exp">ΠΡΙΝ ΛΗΞΟΥΝ</string>
+    <string name="matching">Γίνεται αντιστοίχηση των φαρμάκων σας με τις υπάρχουσες ελλείψεις...</string>
+    <string name="after_matching_left">Σε ευχαριστούμε!</string>
+    <string name="after_matching_right">από τα φάρμακα που καταχώρησες χρειάζονται κάπου! Κανόνισε πως θα φτάσουν στον προορισμό τους!</string>
     
     <!-- Ελείψεις -->
     <string name="region">Περιοχή</string>

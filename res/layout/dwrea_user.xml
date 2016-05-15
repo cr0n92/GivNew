@@ -165,7 +165,7 @@
 
             <Button
                 android:id="@+id/button1"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:text="@string/choo_delivered"
                 android:textAllCaps="false"
@@ -174,10 +174,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_below="@id/edit1"
-                android:layout_alignLeft="@+id/button2"
-                android:layout_alignStart="@+id/button2"
-                android:layout_alignRight="@+id/button2"
-                android:layout_alignEnd="@+id/button2"
+                android:layout_centerHorizontal="true"
                 android:background="@drawable/button_simple">
             </Button>
 
@@ -187,6 +184,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/choo_want_volu"
                 android:textAllCaps="false"
+                android:visibility="gone"
                 android:layout_below="@id/button1"
                 android:textSize="20sp"
                 android:textColor="@color/white"
@@ -202,18 +200,20 @@
                 android:layout_alignStart="@+id/button2"
                 android:layout_alignRight="@+id/button2"
                 android:layout_alignEnd="@+id/button2"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
+                android:padding="10dp"
                 android:layout_marginBottom="20dp"
                 android:text="@string/choo_volu_msg"
                 android:textSize="16sp"
                 android:theme="@style/MyEditTextTheme">
             </TextView>
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_below="@id/voluMsg" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

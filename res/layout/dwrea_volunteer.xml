@@ -74,6 +74,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/farmako"
                         android:maxLines="1"
+                        android:ellipsize="end"
                         android:textSize="24sp"
                         android:drawableStart="@drawable/ic_med_name"
                         android:drawableLeft="@drawable/ic_med_name"
@@ -95,6 +96,7 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/choo_foreas"
                         android:maxLines="1"
+                        android:ellipsize="end"
                         android:textSize="24sp"
                         android:drawableStart="@drawable/ic_foreas"
                         android:drawableLeft="@drawable/ic_foreas"
@@ -223,8 +225,9 @@
                 android:id="@+id/button1"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:text="@string/choo_delivered"
+                android:text="@string/choo_picked_up"
                 android:textAllCaps="false"
+                android:visibility="gone"
                 android:textSize="20sp"
                 android:textColor="@color/white"
                 android:layout_marginTop="10dp"
@@ -233,6 +236,11 @@
                 android:background="@drawable/button_simple"
                 android:layout_centerHorizontal="true">
             </Button>
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_below="@id/button1" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

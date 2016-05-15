@@ -1,6 +1,8 @@
 package com.givmed.android;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +23,7 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
     public static BlueRedAdapter mAdapter;
     public static boolean inRed = false;
     private static TextView firstMes;
+    AlertDialog matchAlert;
     DBHandler db;
 
     @Override
@@ -43,7 +46,12 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
             firstMes.setText(getString(R.string.br_first_msg_blue));
 
             mAdapter.clear();
-            db.getUnknownMedsToAdapter(mAdapter);
+            boolean hasUnknown = db.getUnknownMedsToAdapter(mAdapter);
+            if (!hasUnknown) {
+                Intent toDonations = new Intent(getApplicationContext(), Dwrees.class);
+                startActivity(toDonations);
+                finish();
+            }
         }
         else {
             inRed = savedInstanceState.getBoolean("inRed");
@@ -103,26 +111,17 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
     }
 
     public void matching() {
-        int ret;
+        int ret, matchedMeds = 0;
 
         //Kanoume subscribe sta topics gia kathe onoma farmakou sthn mple lista
         //Kanoume subscribe mono gia ayta pou den exoune ginei match
         ArrayList<String> topics = new ArrayList<String>();
-//        for (BlueRedItem item : mAdapter.mItems) {
-//            if (item.getStatus()==BlueRedItem.blue)
-//                topics.add(item.getName());
-//        }
+
         Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
         serviceIntent.putExtra("subscribe", true);
 
-
-
-
-
-        int matchedMeds = 0;
-
         dialog = new ProgressDialog(this);
-        dialog.setMessage(getString(R.string.loading_msg));
+        dialog.setMessage(getString(R.string.matching));
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
@@ -130,23 +129,36 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
         for (BlueRedItem item : mAdapter.mItems) {
             Log.e("Med name",item.getName());
             ret = db.updateMedAndMatch(item);
+
             if (ret == -1)
                 topics.add(item.getName());
             else if (ret == 1)
                 matchedMeds++;
-
         }
         serviceIntent.putStringArrayListExtra("topic", topics);
         startService(serviceIntent);
 
-
-
         dialog.dismiss();
         dialog = null;
 
-        Intent toDonations = new Intent(getApplicationContext(), Dwrees.class);
-        toDonations.putExtra("matchedMeds", matchedMeds);
-        startActivity(toDonations);
-        finish();
+        if (matchedMeds > 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(getString(R.string.after_matching_left) + " " + matchedMeds + " " + getString(R.string.after_matching_right))
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog2, int id) {
+                            Intent toDonations = new Intent(getApplicationContext(), Dwrees.class);
+                            startActivity(toDonations);
+                            finish();
+                        }
+                    });
+            matchAlert = builder.create();
+            matchAlert.show();
+        }
+        else {
+            Intent toFarmakeio = new Intent(getApplicationContext(), Farmakeio.class);
+            startActivity(toFarmakeio);
+            finish();
+        }
     }
 }

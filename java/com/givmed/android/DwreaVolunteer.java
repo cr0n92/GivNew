@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -42,7 +43,6 @@ public class DwreaVolunteer extends AppCompatActivity {
     private static String sdate1 = "", sdate2 = "", sdate3 = "", todayDate;
     private static String date1 = "", date2 = "", date3 = "";
     private static int datesCnt = 1;
-    private String[] pharInfo, donationInfo;
     public ProgressDialog dialog;
     public AlertDialog alert;
     public PrefManager pref;
@@ -53,22 +53,26 @@ public class DwreaVolunteer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dwrea_volunteer);
 
+        boolean showDoneButton = false;
         Intent intent = getIntent();
+
         if (intent != null) {
             pharName = intent.getStringExtra("pharName");
-            barcode =  intent.getStringExtra("barcode");
+            barcode = intent.getStringExtra("barcode");
             medName = intent.getStringExtra("medName");
+
+            if (intent.hasExtra("secondTime")) showDoneButton = true;
         }
 
         dialog = new ProgressDialog(this);
         pref = new PrefManager(this);
         db = new DBHandler(getApplicationContext());
 
-        pharInfo = new String[5];
+        String[] pharInfo = new String[5];
         db.getPharmacy(pharName, pharInfo);
         pharPhone = pharInfo[0];
 
-        donationInfo = new String[7];
+        String[] donationInfo = new String[7];
         db.getProgDonation(barcode, donationInfo);
         date1 = donationInfo[2];
         date2 = donationInfo[3];
@@ -181,22 +185,28 @@ public class DwreaVolunteer extends AppCompatActivity {
         mForeas.setKeyListener(null);
 
         final Button doneButton = (Button) findViewById(R.id.button1);
-        doneButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                if (HelperActivity.isOnline(getApplicationContext())) {
-                    Date date1 = new Date();
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(date1);
-                    todayDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
+        if (showDoneButton) {
+            doneButton.setVisibility(View.VISIBLE);
 
-                    new HttpDone().execute();
+            doneButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (HelperActivity.isOnline(getApplicationContext())) {
+                        HelperActivity.showDialogBox(getApplicationContext(), dialog);
+
+                        Date date1 = new Date();
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(date1);
+                        todayDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
+
+                        new HttpDone().execute();
+                    } else
+                        HelperActivity.httpErrorToast(getApplicationContext(), 1);
                 }
-                else
-                    HelperActivity.httpErrorToast(getApplicationContext(), 1);
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -219,6 +229,7 @@ public class DwreaVolunteer extends AppCompatActivity {
 
                 if (date1.isEmpty() && date2.isEmpty() && date3.isEmpty()) {
                     dialog.dismiss();
+                    Toast.makeText(getApplicationContext(), getString(R.string.choo_one_date), Toast.LENGTH_LONG).show();
                     return true;
                 }
 
@@ -229,6 +240,7 @@ public class DwreaVolunteer extends AppCompatActivity {
                 address = mAddress.getText().toString().trim();
                 if (address.isEmpty()) {
                     dialog.dismiss();
+                    Toast.makeText(getApplicationContext(), getString(R.string.choo_empty_address), Toast.LENGTH_LONG).show();
                     return true;
                 }
 
@@ -385,14 +397,14 @@ public class DwreaVolunteer extends AppCompatActivity {
                         "&donationAddress=" + address +
                         "&donationType=V";
 
-                if (!sdate1.equals(";"))
-                    urlParameters += "&donationDate1=" + sdate1;
+                if (!sdate1.equals(";")) urlParameters += "&donationDate1=" + sdate1;
+                else date1 = ";";
 
-                if (!sdate2.equals(";"))
-                    urlParameters += "&donationDate2=" + sdate2;
+                if (!sdate2.equals(";")) urlParameters += "&donationDate2=" + sdate2;
+                else date2 = ";";
 
-                if (!sdate3.equals(";"))
-                    urlParameters += "&donationDate3=" + sdate3;
+                if (!sdate3.equals(";")) urlParameters += "&donationDate3=" + sdate3;
+                else date3 = ";";
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
@@ -438,7 +450,7 @@ public class DwreaVolunteer extends AppCompatActivity {
             else {
                 if (result == 201) {
                     pref.setAddress(address);
-                    db.updateProgDonation(barcode, pharPhone, sdate1, sdate2, sdate3, "V", address);
+                    db.updateProgDonation(barcode, pharPhone, date1, date2, date3, "V", address);
                     dialog.dismiss();
                     alert.show();
                     return;

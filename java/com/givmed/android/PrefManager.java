@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import java.util.HashMap;
-
 
 
 //SharedPreference: Store private primitive data in key-value pairs. (To store small entries/data)
@@ -47,6 +45,10 @@ public class PrefManager {
     private static final String KEY_COUNTDOWN = "countdown";
     private static final String KEY_UPDATE_DONATIONS = "update_donations";
     private static final String KEY_OLD_MONTH = "old_month";
+    private static final String KEY_REG_COUNT = "reg_count";
+    private static final String KEY_OLD_USER = "old_user";
+
+
 
     public PrefManager(Context context) {
         this._context = context;
@@ -119,6 +121,24 @@ public class PrefManager {
 
     public String getEmail() {
         return pref.getString(KEY_EMAIL, "");
+    }
+
+    public void setRegCount(int count) {
+        editor.putInt(KEY_REG_COUNT, count);
+        editor.commit();
+    }
+
+    public boolean getOldUser() {
+        return pref.getBoolean(KEY_OLD_USER, false);
+    }
+
+    public void setOldUser(boolean flag) {
+        editor.putBoolean(KEY_OLD_USER, flag);
+        editor.commit();
+    }
+
+    public int getRegCount() {
+        return pref.getInt(KEY_REG_COUNT, 0);
     }
 
     public void setSex(String sex) {

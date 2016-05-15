@@ -40,7 +40,8 @@ import io.fabric.sdk.android.Fabric;
 public class ConfirmNumber extends AppCompatActivity {
     private String phone;
     private String token;
-    private int returnCode;
+    private int returnCode,regCount;
+    private boolean second = false;
     private EditText pin0, pin1, pin2, pin3;
     private TextView sendAgain;
     private PrefManager pref;
@@ -74,11 +75,13 @@ public class ConfirmNumber extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             if (pref.getCountdown().equals("second")) {
-
                                 pref.setCountdown("secondRunning");
                                 TimerIntent.putExtra("attempt", "second");
                                 startService(TimerIntent);
-                                sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~ Paint.UNDERLINE_TEXT_FLAG));
+                                sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+                                second  = true;
+                                HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                                new HttpGetTask().execute();
 
 
                             }
@@ -201,7 +204,10 @@ public class ConfirmNumber extends AppCompatActivity {
 
                         TimerIntent.putExtra("attempt", "second");
                         startService(TimerIntent);
-                        sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~ Paint.UNDERLINE_TEXT_FLAG));
+                        sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+                        second = true;
+                        HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                        new HttpGetTask().execute();
                         }
 
                 });
@@ -223,6 +229,9 @@ public class ConfirmNumber extends AppCompatActivity {
                         sendAgain.setText("Δεν έχεις δικάιωμα για άλλα μηνύματα");
                         sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
                         sendAgain.setOnClickListener(null);
+                        second  = true;
+                        HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                        new HttpGetTask().execute();
                     }
 
                 });
@@ -286,7 +295,7 @@ public class ConfirmNumber extends AppCompatActivity {
                 else {
                     Intent httpIntent = new Intent(getApplicationContext(), VerifyService.class);
                     httpIntent.putExtra("otp", p1+p2+p3+p4);
-                    if (returnCode==202)
+                    if (pref.getOldUser())
                         httpIntent.putExtra("oldUser", "yes");
                     else
                         httpIntent.putExtra("oldUser", "no");
@@ -334,6 +343,8 @@ public class ConfirmNumber extends AppCompatActivity {
                 InputStream in = new BufferedInputStream(conn.getInputStream());
                 data = HelperActivity.readStream(in);
                 returnCode = conn.getResponseCode();
+                if (!second && returnCode==202)
+                    pref.setOldUser(true);
                 Log.e("data", data);
 
                 //JSONObject obj = new JSONObject(data);
@@ -371,6 +382,8 @@ public class ConfirmNumber extends AppCompatActivity {
             if (error > 0)
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
+                regCount = pref.getRegCount() + 1;
+                pref.setRegCount(regCount);
                 try {
                     pref.setMobileNumber(result.get("phone").toString());
                 } catch (JSONException e) {

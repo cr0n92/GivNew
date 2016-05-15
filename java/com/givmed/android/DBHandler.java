@@ -451,12 +451,12 @@ public class DBHandler extends SQLiteOpenHelper {
 	public void printAllMeds() {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_DONATIONS;
+        String selectQuery = "SELECT  * FROM " + TABLE_NAMES;
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
-                Log.e("Barcode", "" + cursor.getString(0) + "PharPhone" + cursor.getString(1)+ "Date1" + cursor.getString(2));
+                Log.e("Barcode", "Name " + cursor.getString(0) + " Count " + cursor.getString(1)+ " Date " + cursor.getString(2));
 
                 //medAdapter.add(med);
             } while (cursor.moveToNext());

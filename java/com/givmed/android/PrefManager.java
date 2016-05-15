@@ -38,6 +38,8 @@ public class PrefManager {
     private static final String KEY_EMAIL = "email";
     private static final String KEY_SEX = "sex";
     private static final String KEY_BIRTH = "birth";
+    private static final String KEY_NEED_DATE = "needDate";
+    private static final String KEY_PHAR_DATE = "pharDate";
     private static final String KEY_MOBILE = "mobile";
     private static final String KEY_ADDRESS = "address";
     private static final String KEY_TOKEN = "token";
@@ -45,11 +47,6 @@ public class PrefManager {
     private static final String KEY_COUNTDOWN = "countdown";
     private static final String KEY_UPDATE_DONATIONS = "update_donations";
     private static final String KEY_OLD_MONTH = "old_month";
-
-
-
-
-
 
     public PrefManager(Context context) {
         this._context = context;
@@ -62,8 +59,6 @@ public class PrefManager {
         editor.commit();
     }
 
-
-    //TODO pharm date,need date
     public boolean isWaitingForSms() {
         return pref.getBoolean(KEY_IS_WAITING_FOR_SMS, false);
     }
@@ -133,6 +128,24 @@ public class PrefManager {
 
     public String getSex() {
         return pref.getString(KEY_SEX, "F");
+    }
+
+    public void setNeedDate(String date) {
+        editor.putString(KEY_NEED_DATE, date);
+        editor.commit();
+    }
+
+    public String getNeedDate() {
+        return pref.getString(KEY_NEED_DATE, "1992-08-07");
+    }
+
+    public void setPharDate(String date) {
+        editor.putString(KEY_PHAR_DATE, date);
+        editor.commit();
+    }
+
+    public String getPharDate() {
+        return pref.getString(KEY_PHAR_DATE, "1992-08-07");
     }
 
     public void setBirthDate(String birthDate) {

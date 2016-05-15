@@ -217,18 +217,20 @@ public class DwreaVolunteer extends AppCompatActivity {
                 date2 = dateChoose2.getText().toString().trim();
                 date3 = dateChoose3.getText().toString().trim();
 
-                if (date1.isEmpty() && date2.isEmpty() && date3.isEmpty())
-                    return super.onOptionsItemSelected(item);
+                if (date1.isEmpty() && date2.isEmpty() && date3.isEmpty()) {
+                    dialog.dismiss();
+                    return true;
+                }
 
                 sdate1 = transformDate(date1);
                 sdate2 = transformDate(date2);
                 sdate3 = transformDate(date3);
 
                 address = mAddress.getText().toString().trim();
-                if (!address.isEmpty())
-                    pref.setAddress(address);
-                else
-                    return super.onOptionsItemSelected(item);
+                if (address.isEmpty()) {
+                    dialog.dismiss();
+                    return true;
+                }
 
                 new HttpVolunteer().execute();
             } else
@@ -318,6 +320,7 @@ public class DwreaVolunteer extends AppCompatActivity {
                 wr.write(postData);
                 InputStream in = new BufferedInputStream(conn.getInputStream());
                 data = HelperActivity.readStream(in);
+                result = conn.getResponseCode();
                 Log.e(TAG, "Komple? " + data);
 
 
@@ -355,7 +358,7 @@ public class DwreaVolunteer extends AppCompatActivity {
                     alert.show();
                     return;
                 } else
-                    HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                    HelperActivity.httpErrorToast(getApplicationContext(), 2);
             }
             dialog.dismiss();
         }
@@ -383,13 +386,13 @@ public class DwreaVolunteer extends AppCompatActivity {
                         "&donationType=V";
 
                 if (!sdate1.equals(";"))
-                    urlParameters += "&donationDate1=" + transformDate(sdate1);
+                    urlParameters += "&donationDate1=" + sdate1;
 
                 if (!sdate2.equals(";"))
-                    urlParameters += "&donationDate2=" + transformDate(sdate2);
+                    urlParameters += "&donationDate2=" + sdate2;
 
                 if (!sdate3.equals(";"))
-                    urlParameters += "&donationDate3=" + transformDate(sdate3);
+                    urlParameters += "&donationDate3=" + sdate3;
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection

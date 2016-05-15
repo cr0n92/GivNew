@@ -142,11 +142,6 @@ public class DwreaUser extends AppCompatActivity {
                 }
                 else
                     HelperActivity.httpErrorToast(getApplicationContext(), 1);
-
-                // TODO: vazoume to farmako stis oloklhrwmenes, to leme ston server kai diagrafoume to famrmako topika
-//                Intent intent = new Intent(getApplicationContext(), BarcodeScanner.class);
-//                startActivity(intent);
-//                finish();
             }
         });
 
@@ -265,6 +260,7 @@ public class DwreaUser extends AppCompatActivity {
                 wr.write(postData);
                 InputStream in = new BufferedInputStream(conn.getInputStream());
                 data = HelperActivity.readStream(in);
+                result = conn.getResponseCode();
                 Log.e(TAG, "Komple? " + data);
 
 
@@ -302,7 +298,7 @@ public class DwreaUser extends AppCompatActivity {
                     alert.show();
                     return;
                 } else
-                    HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                    HelperActivity.httpErrorToast(getApplicationContext(), 2);
             }
             dialog.dismiss();
         }

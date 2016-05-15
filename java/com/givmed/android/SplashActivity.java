@@ -32,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
         db.printAllMeds();
 
         PrefManager pref = new PrefManager(this);
-        pref.setMobileNumber("6975766571");
+        pref.setMobileNumber("12345");
 
 
         startService(new Intent(this, AlarmService.class));

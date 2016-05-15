@@ -318,6 +318,7 @@ public class DwreaVolunteer extends AppCompatActivity {
                 wr.write(postData);
                 InputStream in = new BufferedInputStream(conn.getInputStream());
                 data = HelperActivity.readStream(in);
+                result = conn.getResponseCode();
                 Log.e(TAG, "Komple? " + data);
 
 
@@ -355,7 +356,7 @@ public class DwreaVolunteer extends AppCompatActivity {
                     alert.show();
                     return;
                 } else
-                    HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                    HelperActivity.httpErrorToast(getApplicationContext(), 2);
             }
             dialog.dismiss();
         }

@@ -284,7 +284,7 @@ private class HttpGetTask extends AsyncTask<Void, Void, Integer> {
 
         @Override
         protected Integer doInBackground(Void... arg0) {
-            String URL = server + "/pharmacies_date/2011-9-10";
+            String URL = server + "/pharmacies_date/2011-9-10/";
             Integer out = 0;
             java.net.URL url = null;
             HttpURLConnection conn = null;

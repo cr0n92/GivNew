@@ -1,8 +1,10 @@
 package com.givmed.android;
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -232,6 +234,15 @@ public class HelperActivity extends AppCompatActivity
 
     public static void httpErrorToast(Context context, int error) {
         Toast.makeText(context, (error == 1) ? context.getString(R.string.no_internet) : "Server error", Toast.LENGTH_LONG).show();
+    }
+
+    public static void disableBroadcastReceiver(Context context){
+        ComponentName receiver = new ComponentName(context, SMSReceiver.class);
+        PackageManager pm = context.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
     public static String readStream(InputStream in) {

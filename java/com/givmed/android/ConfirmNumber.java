@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ import io.fabric.sdk.android.Fabric;
 public class ConfirmNumber extends AppCompatActivity {
     private String phone;
     private String token;
+    private int returnCode;
     private EditText pin0, pin1, pin2, pin3;
     private TextView sendAgain;
     private PrefManager pref;
@@ -96,7 +98,7 @@ public class ConfirmNumber extends AppCompatActivity {
 
     };
 
-
+    //kaleitai kai otan to kinhto einai to idio kai otan einai allh suskeuh
     private BroadcastReceiver mTokenBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -113,6 +115,8 @@ public class ConfirmNumber extends AppCompatActivity {
 
                 public void onFinish() {
                     pref.createLogin();
+                    //apenergopoioume to SMSReceiver
+                    HelperActivity.disableBroadcastReceiver(getApplicationContext());
                     Intent intent = new Intent(ConfirmNumber.this, Register.class);
                     //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -265,8 +269,44 @@ public class ConfirmNumber extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main_simple, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_tick) {
+
+            if (HelperActivity.isOnline(getApplicationContext())) {
+                HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                String p1 = pin0.getText().toString().trim();
+                String p2 = pin1.getText().toString().trim();
+                String p3 = pin2.getText().toString().trim();
+                String p4 = pin3.getText().toString().trim();
+
+
+
+                if (p1.equals("") || p2.equals("") || p3.equals("") || p4.equals("")) {
+                    dialog.dismiss();
+                    Toast.makeText(getApplicationContext(), getString(R.string.fill_all_boxes), Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Intent httpIntent = new Intent(getApplicationContext(), VerifyService.class);
+                    httpIntent.putExtra("otp", p1+p2+p3+p4);
+                    if (returnCode==202)
+                        httpIntent.putExtra("oldUser", "yes");
+                    else
+                        httpIntent.putExtra("oldUser", "no");
+
+                    startService(httpIntent);
+                }
+            } else
+                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private class HttpGetTask extends AsyncTask<Void, Void, JSONObject> {
@@ -302,6 +342,7 @@ public class ConfirmNumber extends AppCompatActivity {
                 wr.write(postData);
                 InputStream in = new BufferedInputStream(conn.getInputStream());
                 data = HelperActivity.readStream(in);
+                returnCode = conn.getResponseCode();
                 Log.e("data", data);
 
                 //JSONObject obj = new JSONObject(data);
@@ -353,7 +394,6 @@ public class ConfirmNumber extends AppCompatActivity {
             }
 
             dialog.dismiss();
-            dialog = null;
         }
     }
 }

@@ -145,14 +145,12 @@ public class ConfirmNumber extends AppCompatActivity {
             }
         });
 
+        dialog = new ProgressDialog(this);
         pref = new PrefManager(this);
-
 
         sendAgain = (TextView) findViewById(R.id.fourthMes);
 
         //registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
-
-
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mTokenBroadcastReceiver,
                 new IntentFilter("token"));
@@ -167,14 +165,7 @@ public class ConfirmNumber extends AppCompatActivity {
         phone = intent.getStringExtra("phone");
         number.setText("+30 " + phone);
 
-
-
-
-
-
-        dialog = new ProgressDialog(this);
-        dialog.setMessage("Loading, Please Wait...");
-        dialog.show();
+        HelperActivity.showDialogBox(getApplicationContext(), dialog);
         new HttpGetTask().execute();
     }
 
@@ -377,10 +368,8 @@ public class ConfirmNumber extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            if (error > 0) {
-                Toast.makeText(getApplicationContext(), (error == 1) ? "skata" : "Nothing to show",
-                        Toast.LENGTH_LONG).show();
-            }
+            if (error > 0)
+                HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
                 try {
                     pref.setMobileNumber(result.get("phone").toString());

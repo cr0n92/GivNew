@@ -95,6 +95,8 @@
             android:layout_height="match_parent"
             android:layout_below="@id/buttons"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:dividerHeight="1dp"
+            android:divider="@android:color/white"
             android:drawSelectorOnTop="true"
             android:footerDividersEnabled="false"
             android:padding="@dimen/padding"

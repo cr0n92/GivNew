@@ -55,7 +55,7 @@ public class SplashActivity extends AppCompatActivity {
         new HttpPharmacies().execute();
 
         startService(new Intent(this, AlarmService.class));
-        Intent intent = new Intent(this, Number.class);
+        Intent intent = new Intent(this, Tutorial.class);
         startActivity(intent);
         finish();
     }

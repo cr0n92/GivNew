@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:id="@+id/relativity"
+    tools:context="com.givmed.android.Tutorial">
+
+    <RelativeLayout
+        android:id="@+id/tutorial1"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        >
+
+        <ImageView
+            android:id="@+id/logotypo"
+            android:layout_width="189dp"
+            android:layout_height="206dp"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:src="@drawable/ic_givmed_logo_with_msg"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/secondMes1"
+            android:layout_below="@id/logotypo"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:text="@string/tuto_layout1_msg">
+        </TextView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tutorial2"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/step2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:text="@string/step1"
+            android:layout_centerHorizontal="true">
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/icons2"
+            android:layout_below="@id/step2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/scani2"
+                android:layout_width="182dp"
+                android:layout_height="192dp"
+                android:layout_weight="1"
+                android:src="@drawable/svg_scanaro" />
+
+            <ImageView
+                android:id="@+id/typarw2"
+                android:layout_width="192dp"
+                android:layout_height="196dp"
+                android:layout_weight="1"
+                android:src="@drawable/svg_grafo" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/grammh2"
+            android:layout_below="@id/icons2"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:src="@drawable/tutorial_grammh"/>
+
+        <TextView
+            android:id="@+id/firstMes2"
+            android:layout_below="@id/grammh2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="@string/two_btn_first_msg"
+            android:layout_centerHorizontal="true">
+        </TextView>
+
+        <TextView
+            android:id="@+id/secondMes2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@id/firstMes2"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="@string/two_btn_second_msg"
+            android:layout_centerHorizontal="true" >
+        </TextView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tutorial3"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/step3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:text="@string/step2"
+            android:layout_centerHorizontal="true">
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/icons3"
+            android:layout_below="@id/step3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/scani3"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:src="@drawable/svg_mple" />
+
+            <ImageView
+                android:id="@+id/typarw3"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:src="@drawable/svg_kokkino" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/grammh3"
+            android:layout_below="@id/icons3"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:src="@drawable/tutorial_grammh"/>
+
+        <TextView
+            android:id="@+id/firstMes3"
+            android:layout_below="@id/grammh3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="@string/tuto_layout3_msg1"
+            android:layout_centerHorizontal="true">
+        </TextView>
+
+        <TextView
+            android:id="@+id/secondMes3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@id/firstMes3"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="@string/tuto_layout3_msg2"
+            android:layout_centerHorizontal="true" >
+        </TextView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tutorial4"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/step4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:text="@string/step3"
+            android:layout_centerHorizontal="true">
+        </TextView>
+
+        <LinearLayout
+            android:id="@+id/icons4"
+            android:layout_below="@id/step4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/scani4"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:src="@drawable/svg_monos" />
+
+            <ImageView
+                android:id="@+id/typarw4"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                android:src="@drawable/svg_ethelodis" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/grammh4"
+            android:layout_below="@id/icons4"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:src="@drawable/tutorial_grammh"/>
+
+        <TextView
+            android:id="@+id/firstMes4"
+            android:layout_below="@id/grammh4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="@string/tuto_layout4_msg1"
+            android:layout_centerHorizontal="true">
+        </TextView>
+
+        <TextView
+            android:id="@+id/secondMes4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_below="@id/firstMes4"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:text="@string/tuto_layout4_msg2"
+            android:layout_centerHorizontal="true" >
+        </TextView>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/skipper"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingBottom="10dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/colorPrimary"
+            android:ellipsize="end"
+            android:layout_weight="2"
+            android:textSize="16sp"
+            android:text="@string/skip" >
+        </TextView>
+
+        <ImageView
+            android:id="@+id/img1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:layout_weight="1"
+            android:src="@drawable/circle" />
+
+        <ImageView
+            android:id="@+id/img2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:layout_weight="1"
+            android:src="@drawable/circle_around" />
+
+        <ImageView
+            android:id="@+id/img3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:layout_weight="1"
+            android:src="@drawable/circle_around" />
+
+        <ImageView
+            android:id="@+id/img4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:layout_weight="1"
+            android:src="@drawable/circle_around" />
+
+        <TextView
+            android:id="@+id/learn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/colorPrimary"
+            android:ellipsize="end"
+            android:layout_weight="2"
+            android:textSize="16sp"
+            android:text="@string/learn" >
+        </TextView>
+    </LinearLayout>
+</LinearLayout>

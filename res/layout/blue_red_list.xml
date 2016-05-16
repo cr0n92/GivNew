@@ -41,18 +41,6 @@
             android:layout_centerHorizontal="true">
         </TextView>
 
-        <!--<TextView-->
-            <!--android:id="@+id/secondMes"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="@dimen/padding"-->
-            <!--android:layout_below="@id/firstMes"-->
-            <!--android:gravity="center_vertical|center_horizontal"-->
-            <!--android:textColor="@color/black"-->
-            <!--android:textSize="20sp"-->
-            <!--android:layout_centerHorizontal="true" >-->
-        <!--</TextView>-->
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -137,6 +125,8 @@
             android:layout_height="match_parent"
             android:layout_below="@id/buttons"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:dividerHeight="1dp"
+            android:divider="@android:color/white"
             android:drawSelectorOnTop="true"
             android:footerDividersEnabled="false"
             android:padding="@dimen/padding"

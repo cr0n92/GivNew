@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/medView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:gravity="start"
@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/pharView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:gravity="center"
@@ -30,7 +30,7 @@
 
     <TextView
         android:id="@+id/dateView"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
         android:gravity="end"
@@ -39,5 +39,4 @@
         android:maxLines="1"
         android:drawableEnd="@drawable/ic_velaki_listas"
         android:drawableRight="@drawable/ic_velaki_listas"/>
-
 </LinearLayout>

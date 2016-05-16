@@ -107,7 +107,8 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/medo"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:layout_weight="1"
@@ -115,7 +116,8 @@
                 android:text="@string/farmako_caps" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/regiono"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_weight="1"
@@ -123,7 +125,8 @@
                 android:text="@string/perioxh_caps" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/dato"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:layout_weight="1"

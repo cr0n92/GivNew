@@ -120,9 +120,11 @@ public class ConfirmNumber extends AppCompatActivity {
                     pref.createLogin();
                     //apenergopoioume to SMSReceiver
                     HelperActivity.disableBroadcastReceiver(getApplicationContext());
+                    pref.setNextSplash("Register");
                     Intent intent = new Intent(ConfirmNumber.this, Register.class);
-                    //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
+                    finish();
                 }
             }.start();
 
@@ -151,6 +153,8 @@ public class ConfirmNumber extends AppCompatActivity {
         dialog = new ProgressDialog(this);
         pref = new PrefManager(this);
 
+        //pref.setNextSplash("ConfirmNumber");
+
         sendAgain = (TextView) findViewById(R.id.fourthMes);
 
         //registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
@@ -167,9 +171,11 @@ public class ConfirmNumber extends AppCompatActivity {
         Intent intent = getIntent();
         phone = intent.getStringExtra("phone");
         number.setText("+30 " + phone);
-
-        HelperActivity.showDialogBox(getApplicationContext(), dialog);
-        new HttpGetTask().execute();
+        HelperActivity.enableBroadcastReceiver(getApplicationContext());
+        if (!pref.getRegDone()) {
+            HelperActivity.showDialogBox(getApplicationContext(), dialog);
+            new HttpGetTask().execute();
+        }
     }
 
     @Override
@@ -180,6 +186,7 @@ public class ConfirmNumber extends AppCompatActivity {
 
         switch (pref.getCountdown()) {
             case "first":
+
                 TimerIntent = new Intent(this, TimerService.class);
                 TimerIntent.putExtra("attempt","first");
                 pref.setCountdown("firstRunning");
@@ -199,9 +206,8 @@ public class ConfirmNumber extends AppCompatActivity {
 
                     @Override
                     public void onClick(View v) {
-                            pref.setCountdown("secondRunning");
-                            TimerIntent = new Intent(getApplicationContext(), TimerService.class);
-
+                        pref.setCountdown("secondRunning");
+                        TimerIntent = new Intent(getApplicationContext(), TimerService.class);
                         TimerIntent.putExtra("attempt", "second");
                         startService(TimerIntent);
                         sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
@@ -265,6 +271,17 @@ public class ConfirmNumber extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mTokenBroadcastReceiver);
 
 
+    }
+
+
+    @Override
+    public void onBackPressed()
+    {
+        //do whatever you want the 'Back' button to do
+        //as an example the 'Back' button is set to start a new Activity named 'NewActivity'
+        this.startActivity(new Intent(ConfirmNumber.this, Number.class));
+        finish();
+        return;
     }
 
     @Override
@@ -382,8 +399,8 @@ public class ConfirmNumber extends AppCompatActivity {
             if (error > 0)
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
-                regCount = pref.getRegCount() + 1;
-                pref.setRegCount(regCount);
+                //mporei na ksanakalesei thn reg mexri na mhn exei error
+                pref.setRegDone(true);
                 try {
                     pref.setMobileNumber(result.get("phone").toString());
                 } catch (JSONException e) {

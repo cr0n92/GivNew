@@ -45,8 +45,10 @@ public class PrefManager {
     private static final String KEY_COUNTDOWN = "countdown";
     private static final String KEY_UPDATE_DONATIONS = "update_donations";
     private static final String KEY_OLD_MONTH = "old_month";
-    private static final String KEY_REG_COUNT = "reg_count";
+    private static final String KEY_REG_DONE = "reg_done";
     private static final String KEY_OLD_USER = "old_user";
+    private static final String KEY_NEXT_SPLASH = "next_splash";
+
 
 
 
@@ -72,6 +74,14 @@ public class PrefManager {
 
     public String getMobileNumber() {
         return pref.getString(KEY_MOBILE_NUMBER, null);
+    }
+    public void setNextSplash(String splash) {
+        editor.putString(KEY_NEXT_SPLASH, splash);
+        editor.commit();
+    }
+
+    public String getNextSplash() {
+        return pref.getString(KEY_NEXT_SPLASH, "Number");
     }
 
     public void setCountdown(String countdown) {
@@ -123,8 +133,8 @@ public class PrefManager {
         return pref.getString(KEY_EMAIL, "");
     }
 
-    public void setRegCount(int count) {
-        editor.putInt(KEY_REG_COUNT, count);
+    public void setRegDone(boolean flag) {
+        editor.putBoolean(KEY_REG_DONE, flag);
         editor.commit();
     }
 
@@ -137,8 +147,8 @@ public class PrefManager {
         editor.commit();
     }
 
-    public int getRegCount() {
-        return pref.getInt(KEY_REG_COUNT, 0);
+    public boolean getRegDone() {
+        return pref.getBoolean(KEY_REG_DONE, false);
     }
 
     public void setSex(String sex) {

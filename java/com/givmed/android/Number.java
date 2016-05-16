@@ -34,18 +34,18 @@ public class Number extends AppCompatActivity {
         mToolBar.setNavigationIcon(R.drawable.ic_arrows);
         setSupportActionBar(mToolBar);
 
-        pref = new PrefManager(this);
+       // pref = new PrefManager(this);
 
-        // Checking for user session
-        // if user is already logged in, take him to elleipseis
-        if (pref.isLoggedIn()) {
-            //          pref.clearSession();
-            Intent intent = new Intent(Number.this, Elleipseis.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-
-            finish();
-        }
+//        // Checking for user session
+//        // if user is already logged in, take him to elleipseis
+//        if (pref.isLoggedIn()) {
+//            //          pref.clearSession();
+//            Intent intent = new Intent(Number.this, Elleipseis.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivity(intent);
+//
+//            finish();
+//        }
 
         mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +100,7 @@ public class Number extends AppCompatActivity {
                 Intent confIntent = new Intent(getApplicationContext(), ConfirmNumber.class);
                 confIntent.putExtra("phone", phone);
                 startActivity(confIntent);
+                finish();
             }
 
         }

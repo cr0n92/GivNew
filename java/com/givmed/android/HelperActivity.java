@@ -236,6 +236,16 @@ public class HelperActivity extends AppCompatActivity
         Toast.makeText(context, (error == 1) ? context.getString(R.string.no_internet) : "Server error", Toast.LENGTH_LONG).show();
     }
 
+    public static void enableBroadcastReceiver(Context context){
+        ComponentName receiver = new ComponentName(context, SMSReceiver.class);
+        PackageManager pm = context.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+        Toast.makeText(context, "Enabled broadcast receiver", Toast.LENGTH_SHORT).show();
+    }
+
     public static void disableBroadcastReceiver(Context context){
         ComponentName receiver = new ComponentName(context, SMSReceiver.class);
         PackageManager pm = context.getPackageManager();
@@ -243,6 +253,8 @@ public class HelperActivity extends AppCompatActivity
         pm.setComponentEnabledSetting(receiver,
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
+        Toast.makeText(context, "Disabled broadcast receiver", Toast.LENGTH_SHORT).show();
+
     }
 
     public static String readStream(InputStream in) {

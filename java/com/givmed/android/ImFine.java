@@ -25,6 +25,8 @@ public class ImFine extends HelperActivity
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(getApplicationContext(), TwoButtons.class);
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(myIntent);
             }
         });
@@ -39,5 +41,13 @@ public class ImFine extends HelperActivity
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent myIntent = new Intent(getApplicationContext(), TwoButtons.class);
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        myIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(myIntent);
     }
 }

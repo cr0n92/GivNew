@@ -16,13 +16,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
@@ -55,8 +51,12 @@ public class Register extends HelperActivity {
         super.setMenu(R.menu.menu_main);
         super.helperOnCreate(R.layout.register, R.string.profile, false);
 
+
+
         dialog = new ProgressDialog(this);
         pref = new PrefManager(this);
+
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.prof_age_warning))
@@ -132,6 +132,14 @@ public class Register extends HelperActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_tick) {
+                if (allIsEmpty()) {
+                    if (pref.getNextSplash().equals("Register"))
+                        pref.setNextSplash("TwoButtons");
+
+                    Intent intent = new Intent(getApplicationContext(), TwoButtons.class);
+                    startActivity(intent);
+                }
+
                 if (submitForm()) {
                     if (isOnline(getApplicationContext())) {
                         showDialogBox(getApplicationContext(), dialog);
@@ -241,6 +249,9 @@ public class Register extends HelperActivity {
                     pref.setSex(sex);
                     pref.setEmail(email);
 
+                    if (pref.getNextSplash().equals("Register"))
+                        pref.setNextSplash("TwoButtons");
+
                     Intent intent = new Intent(getApplicationContext(), TwoButtons.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -259,6 +270,18 @@ public class Register extends HelperActivity {
             return false;
 
         return true;
+    }
+
+    private boolean allIsEmpty() {
+        if (mUsername.getText().toString().trim().isEmpty() && mEmail.getText().toString().trim().isEmpty() &&
+                mDate.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Parakampsh", Toast.LENGTH_SHORT).show();
+
+            return true;
+        } else
+           return false;
+
+
     }
 
     private boolean validateName() {

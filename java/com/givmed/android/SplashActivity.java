@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -20,7 +19,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.Calendar;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -38,10 +36,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
 
-        Calendar calendar = Calendar.getInstance();
-//        Log.e("Day",""+calendar.get(Calendar.DAY_OF_MONTH));
-//        Log.e("Month",""+calendar.get(Calendar.MONTH));
-//        Log.e("Day of Year",""+calendar.get(Calendar.DAY_OF_YEAR));
+
 
 
         db = new DBHandler(getApplicationContext());
@@ -53,9 +48,18 @@ public class SplashActivity extends AppCompatActivity {
         pharDate = pref.getPharDate();
         needDate = pref.getNeedDate();
         new HttpPharmacies().execute();
-
+        Intent intent;
         startService(new Intent(this, AlarmService.class));
-        Intent intent = new Intent(this, Tutorial.class);
+        switch (pref.getNextSplash()) {
+            case "Tutorial":
+                intent = new Intent(this, Tutorial.class);
+                break;
+            case "Register":
+                intent = new Intent(this, Register.class);
+                break;
+            default:
+                intent = new Intent(this, TwoButtons.class);
+        }
         startActivity(intent);
         finish();
     }

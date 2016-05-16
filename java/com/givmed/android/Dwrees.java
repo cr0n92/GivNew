@@ -15,7 +15,7 @@ import io.fabric.sdk.android.Fabric;
 
 public class Dwrees extends HelperActivity implements AdapterView.OnItemClickListener {
     private final String TAG = "Dwrees";
-    private static boolean inDone = false,prog = true;
+    private static boolean inDone = false;
     private String progDonationMsg, doneDonationMsg;
     private String left, right, mid_plu, mid_sin, progLeft, progRight_sin, progRight_plu;
     public static DonationAdapter progAdapter,doneAdapter;
@@ -63,8 +63,7 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         list.setOnItemClickListener(this);
         list.setAdapter(progAdapter);
 
-        getProgrammed();
-        getDone();
+
 
 
 
@@ -78,6 +77,7 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
                 changeButtonsLayout(progButton, doneButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right);
                 msgView.setText(progDonationMsg);
                 msgView2.setVisibility(View.VISIBLE);
+
 
                 list.setAdapter(progAdapter);
             }
@@ -123,14 +123,13 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-            getDone();
+        getDone();
             getProgrammed();
     }
 
 
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-        if (!prog)
-            return;
+        if (inDone) return;
         Donation progDonation = (Donation) progAdapter.getItem(position);
         Intent intent;
 

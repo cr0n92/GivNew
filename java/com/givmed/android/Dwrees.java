@@ -3,7 +3,6 @@ package com.givmed.android;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -16,10 +15,10 @@ import io.fabric.sdk.android.Fabric;
 
 public class Dwrees extends HelperActivity implements AdapterView.OnItemClickListener {
     private final String TAG = "Dwrees";
-    private static boolean inDone = false;
+    private static boolean inDone = false,prog = true;
     private String progDonationMsg, doneDonationMsg;
     private String left, right, mid_plu, mid_sin, progLeft, progRight_sin, progRight_plu;
-    public static DonationAdapter mAdapter;
+    public static DonationAdapter progAdapter,doneAdapter;
     private TextView msgView, msgView2;
     private static Button progButton, doneButton;
     DBHandler db;
@@ -52,6 +51,25 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         progDonationMsg = progLeft + " 0 " + progRight_plu;
         msgView.setText(progDonationMsg);
 
+
+
+
+
+        progAdapter = new DonationAdapter(getApplicationContext(),true);
+        doneAdapter = new DonationAdapter(getApplicationContext(),false);
+
+        final ListView list = (ListView) findViewById(R.id.list);
+        list.setFooterDividersEnabled(true);
+        list.setOnItemClickListener(this);
+        list.setAdapter(progAdapter);
+
+        getProgrammed();
+        getDone();
+
+
+
+
+
         progButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -60,7 +78,8 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
                 changeButtonsLayout(progButton, doneButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right);
                 msgView.setText(progDonationMsg);
                 msgView2.setVisibility(View.VISIBLE);
-                getProgrammed();
+
+                list.setAdapter(progAdapter);
             }
         });
 
@@ -72,31 +91,27 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
                 changeButtonsLayout(doneButton, progButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left);
                 msgView.setText(doneDonationMsg);
                 msgView2.setVisibility(View.GONE);
-                getDone();
+                list.setAdapter(doneAdapter);
+
             }
         });
 
-        mAdapter = new DonationAdapter(getApplicationContext());
 
-        ListView list = (ListView) findViewById(R.id.list);
-        list.setFooterDividersEnabled(true);
-        list.setOnItemClickListener(this);
-        list.setAdapter(mAdapter);
 
-        getProgrammed();
+
     }
 
     public void getProgrammed() {
-        mAdapter.clear();
-        int count = db.getAllDonations(mAdapter);
+        progAdapter.clear();
+        int count = db.getAllDonations(progAdapter);
         String right_msg = (count == 1) ? progRight_sin : progRight_plu;
         progDonationMsg = progLeft + " " + count + " " + right_msg;
         msgView.setText(progDonationMsg);
     }
 
     public void getDone() {
-        mAdapter.clear();
-        int[] info = db.getAllDoneDonations(mAdapter);
+        doneAdapter.clear();
+        int[] info = db.getAllDoneDonations(doneAdapter);
         int count = info[0];
         int price = info[1];
         String mid_msg = (count == 1) ? mid_sin : mid_plu;
@@ -108,15 +123,15 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-        if (inDone)
             getDone();
-        else
             getProgrammed();
     }
 
 
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-        Donation progDonation = (Donation) mAdapter.getItem(position);
+        if (!prog)
+            return;
+        Donation progDonation = (Donation) progAdapter.getItem(position);
         Intent intent;
 
         if (progDonation.getVolunteer().equals("V")) {

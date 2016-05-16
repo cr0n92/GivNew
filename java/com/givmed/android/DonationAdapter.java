@@ -18,9 +18,11 @@ public class DonationAdapter extends BaseAdapter {
 
     public final List<Donation> mItems = new ArrayList<Donation>();
     private final Context mContext;
+    private final boolean mProg;
 
-    public DonationAdapter(Context context) {
+    public DonationAdapter(Context context,boolean prog) {
         mContext = context;
+        mProg = prog;
     }
 
     public void add(Donation item) {
@@ -61,11 +63,16 @@ public class DonationAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) { //called after setAdapter,notifyDataSetChanged
         final Donation don = (Donation) getItem(position);
-
+        LinearLayout itemLayout;
         // from donation.xml
-        LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(mContext).inflate(
+        LinearLayout itemLayout1 = (LinearLayout) LayoutInflater.from(mContext).inflate(
                 R.layout.donation, parent, false);
-
+        LinearLayout itemLayout2 = (LinearLayout) LayoutInflater.from(mContext).inflate(
+                R.layout.done_donation, parent, false);
+        if (mProg)
+            itemLayout = itemLayout1;
+        else
+            itemLayout = itemLayout2;
         // Fill in specific Donation data
         // Remember that the data that goes in this View
         // corresponds to the user interface elements defined

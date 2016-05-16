@@ -81,7 +81,7 @@ public class PrefManager {
     }
 
     public String getNextSplash() {
-        return pref.getString(KEY_NEXT_SPLASH, "Number");
+        return pref.getString(KEY_NEXT_SPLASH, "Tutorial");
     }
 
     public void setCountdown(String countdown) {

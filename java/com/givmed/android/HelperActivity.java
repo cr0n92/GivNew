@@ -161,9 +161,9 @@ public class HelperActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings && !class_name.equals("Settings")) {
             startActivity(new Intent(getApplicationContext(), Settings.class));
             started = true;
-        } else if (id == R.id.nav_odhgies && !class_name.equals("Odhgies")) {
-            //startActivity(new Intent(getApplicationContext(), Odhgies.class));
-            //started = true;
+        } else if (id == R.id.nav_odhgies && !class_name.equals("Tutorial")) {
+            startActivity(new Intent(getApplicationContext(), Tutorial.class));
+            started = true;
         } else if (id == R.id.nav_faq && !class_name.equals("Faq")) {
             startActivity(new Intent(getApplicationContext(), Faq.class));
             started = true;

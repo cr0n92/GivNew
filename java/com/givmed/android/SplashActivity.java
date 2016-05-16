@@ -51,11 +51,8 @@ public class SplashActivity extends AppCompatActivity {
         Intent intent;
         startService(new Intent(this, AlarmService.class));
         switch (pref.getNextSplash()) {
-            case "Number":
-                intent = new Intent(this, Number.class);
-                break;
-            case "ConfirmNumber":
-                intent = new Intent(this, ConfirmNumber.class);
+            case "Tutorial":
+                intent = new Intent(this, Tutorial.class);
                 break;
             case "Register":
                 intent = new Intent(this, Register.class);

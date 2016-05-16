@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -62,10 +61,13 @@ public class Outputer extends HelperActivity {
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent TedxIntent = new Intent(getApplicationContext(), ImFine.class);
-                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        startActivity(TedxIntent);
+                        onBackPressed();
+//                        Intent TedxIntent = new Intent(getApplicationContext(), ImFine.class);
+////                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//                        startActivity(TedxIntent);
+//                        finish();
                     }
                 });
         alert = builder.create();
@@ -232,9 +234,10 @@ public class Outputer extends HelperActivity {
                     // If set, and the activity being launched is already running in the current task, then instead of
                     // launching a new instance of that activity, all of the other activities on top of it will be closed and
                     // this Intent will be delivered to the (now on top) old activity as a new Intent.
-                    showItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //showItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     // If set, the activity will not be launched if it is already running at the top of the history stack.
-                    showItemIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    //showItemIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    showItemIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(showItemIntent);
                 }
             }

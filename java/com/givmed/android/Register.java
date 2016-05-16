@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -131,6 +132,14 @@ public class Register extends HelperActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_tick) {
+                if (allIsEmpty()) {
+                    if (pref.getNextSplash().equals("Register"))
+                        pref.setNextSplash("TwoButtons");
+
+                    Intent intent = new Intent(getApplicationContext(), TwoButtons.class);
+                    startActivity(intent);
+                }
+
                 if (submitForm()) {
                     if (isOnline(getApplicationContext())) {
                         showDialogBox(getApplicationContext(), dialog);
@@ -261,6 +270,18 @@ public class Register extends HelperActivity {
             return false;
 
         return true;
+    }
+
+    private boolean allIsEmpty() {
+        if (mUsername.getText().toString().trim().isEmpty() && mEmail.getText().toString().trim().isEmpty() &&
+                mDate.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Parakampsh", Toast.LENGTH_SHORT).show();
+
+            return true;
+        } else
+           return false;
+
+
     }
 
     private boolean validateName() {

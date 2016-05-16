@@ -168,6 +168,19 @@
     <!-- Αναζήτηση -->
     <string name="med_name_drastikh">Όνομα Φαρμάκου/Δραστική Ουσία</string>
 
+    <!-- Tutorial -->
+    <string name="tuto_layout1_msg">"Γίνε μέλος της GIVMED κοινότητας.\n Σώσε μια ζωή, σήμερα.</string>
+    <string name="step1">Βήμα 1</string>
+    <string name="step2">Βήμα 2</string>
+    <string name="step3">Βήμα 3</string>
+    <string name="tuto_layout3_msg1">Πότε θέλεις να τα δωρίσεις;</string>
+    <string name="tuto_layout3_msg2">Μπλέ τικ: Αμέσως!\nΚόκκινο τικ: Λίγο πριν λήξουν.\nΌσα δεν επιλέξεις θα είναι στο προσωπικό σου φαρμακείο.</string>
+    <string name="tuto_layout4_msg1">Ήρθε η ώρα τις δωρεάς!</string>
+    <string name="tuto_layout4_msg2">Κανόνισε πως θα φθάσει το φάρμακο στον προορισμό του. Μπορείς να το πας μόνος σου ή να σε βοηθήσουμε εμείς!</string>
+    <string name="skip">ΠΑΡΑΛΕΙΨΗ</string>
+    <string name="learn">ΜΑΘΕ ΠΩΣ</string>
+    <string name="next">ΕΠΟΜΕΝΟ</string>
+
     <!-- Share -->
     <string name="share_first_msg">Μια ανθρώπινη ζωή μπορεί να σωθεί χάρη στα περισσευούμενα φαρμακά σου!</string>
     <string name="share_seconf_msg">Κάλεσε τους φίλους σου να συμβάλουν και αυτοί!</string>

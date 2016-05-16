@@ -88,7 +88,7 @@ public class SMSReceiver extends BroadcastReceiver {
 
         String firstWord = arr[0];
 
-        if (firstWord.equals("Χαιρόμαστε"))
+        if (firstWord.equals("ΧΑΙΡΟΜΑΣΤΕ"))
             old_user = true;
 
         if (index != -1) {

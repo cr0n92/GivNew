@@ -33,7 +33,7 @@
 
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_givmed_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"

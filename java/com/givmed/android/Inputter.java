@@ -263,6 +263,7 @@ public class Inputter extends HelperActivity {
                 showItemIntent.putExtra("barcode", code);
                 showItemIntent.putExtra("eofcode", eof);
                 startActivity(showItemIntent);
+                finish();
             }
 
             dialog.dismiss();

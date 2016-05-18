@@ -90,8 +90,11 @@ public class VerifyService extends IntentService {
                 LocalBroadcastManager.getInstance(this).sendBroadcast(TokenIntent);
             }
             else {
-                //deikse ston xrhsth oti ta mageirepsame kai dn vghke
-                //ara prepei na to valei monos tou
+                Intent TokenIntent = new Intent("token");
+                TokenIntent.putExtra("error", "error");
+                LocalBroadcastManager.getInstance(this).sendBroadcast(TokenIntent);
+
+
             }
 
             Log.e("django response", ""+code);

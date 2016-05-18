@@ -142,6 +142,9 @@
     <string name="prof_name_exists">Το όνομα υπάρχει ήδη!</string>
     <string name="prof_sex">Φύλο</string>
     <string name="prof_birth_date">Έτος Γέννησης</string>
+    <string name="prof_get_old_data">Φορτώστε τα δεδομένά σας!</string>
+    <string name="prof_get_old_data_no_internet">Aπαιτείται πρόσβαση στο Internet για την ανάκληση των δεδομένων σας!Προσπαθήστε αργότερα!</string>
+
     <string name="prof_email">Email</string>
     <string name="prof_email_warning">Λάθος email</string>
     <string name="prof_age_warning">Λόγω των όρων χρήσης μας, μόνο άτομα άνω των 18 μπορούν να χρησιμοποιήσουν το GIVMED!</string>
@@ -169,6 +172,8 @@
     <string name="conf_insert_pin">Πληκτρολόγησε τον αριθμό PIN που έλαβες στο</string>
     <string name="conf_send_again"><u>Αποστολή ξανά</u></string>
     <string name="conf_error"><b>Μη έγκυρος αριθμός!</b></string>
+    <string name="conf_wrong_pin"><b>Λάθος PIN!</b></string>
+
 
     <!-- Αναζήτηση -->
     <string name="med_name_drastikh">Όνομα Φαρμάκου/Δραστική Ουσία</string>

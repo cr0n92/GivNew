@@ -64,7 +64,6 @@ public class Number extends AppCompatActivity {
         numAlert = builder.create();
         numAlert.show();
 
-        //AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.conf_error))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -99,15 +98,20 @@ public class Number extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_tick) {
-            phone = mPhoneView.getText().toString().trim();
+            if (!HelperActivity.isOnline(getApplicationContext())) {
+                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+            }
+            else {
+                phone = mPhoneView.getText().toString().trim();
 
-            if (phone.length() != 10 || !phone.matches("[0-9]+") || !phone.startsWith("69")) {
-                alert.show();
-            } else {
-                Intent confIntent = new Intent(getApplicationContext(), ConfirmNumber.class);
-                confIntent.putExtra("phone", phone);
-                startActivity(confIntent);
-                finish();
+            	if (phone.length() != 10 || !phone.matches("[0-9]+") || !phone.startsWith("69")) {
+                	alert.show();
+            	} else {
+                    Intent confIntent = new Intent(getApplicationContext(), ConfirmNumber.class);
+                    confIntent.putExtra("phone", phone);
+                    startActivity(confIntent);
+                    finish();
+                }
             }
 
         }

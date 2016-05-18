@@ -2,6 +2,7 @@ package com.givmed.android;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -59,7 +60,7 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
             @Override
             public void onClick(View v) {
                 inDone = false;
-                changeButtonsLayout(progButton, doneButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right);
+                changeButtonsLayout(progButton, doneButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right, Color.WHITE, Color.BLACK);
                 msgView.setText(progDonationMsg);
                 msgView2.setVisibility(View.VISIBLE);
                 list.setAdapter(progAdapter);
@@ -71,7 +72,7 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
             @Override
             public void onClick(View v) {
                 inDone = true;
-                changeButtonsLayout(doneButton, progButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left);
+                changeButtonsLayout(doneButton, progButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left, Color.WHITE, Color.BLACK);
                 msgView.setText(doneDonationMsg);
                 msgView2.setVisibility(View.GONE);
                 list.setAdapter(doneAdapter);

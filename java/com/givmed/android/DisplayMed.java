@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -31,10 +33,10 @@ import io.fabric.sdk.android.Fabric;
 
 public class DisplayMed extends AppCompatActivity {
     private EditText mNotes;
-    private RadioGroup mConditionGroup, mDonationGroup;
-    private RadioButton mBefore, mNow, mNo, mOpen, mClose;
+    private Button mBefore, mNow, mOpen, mClose;
     private String phone, notes, state, forDonation;
     private static Medicine med;
+    public boolean isOpen, isDonated;
     AlertDialog sirupAlert, deleteAlert;
     ProgressDialog dialog;
     DBHandler db;
@@ -100,13 +102,10 @@ public class DisplayMed extends AppCompatActivity {
         EditText mExp = (EditText) findViewById(R.id.expiration);
         EditText mCategory = (EditText) findViewById(R.id.category);
         EditText mBarcode = (EditText) findViewById(R.id.barcode);
-        mConditionGroup = (RadioGroup) findViewById(R.id.conditionGroup);
-        mOpen = (RadioButton) findViewById(R.id.opend);
-        mClose = (RadioButton) findViewById(R.id.closed);
-        mDonationGroup = (RadioGroup) findViewById(R.id.donationGroup);
-        mNow = (RadioButton) findViewById(R.id.now);
-        mBefore = (RadioButton) findViewById(R.id.before);
-        mNo = (RadioButton) findViewById(R.id.no);
+        mOpen = (Button) findViewById(R.id.opend);
+        mClose = (Button) findViewById(R.id.closed);
+        mNow = (Button) findViewById(R.id.now);
+        mBefore = (Button) findViewById(R.id.before);
         mNotes = (EditText) findViewById(R.id.notes);
 
         mName.setKeyListener(null);
@@ -114,8 +113,8 @@ public class DisplayMed extends AppCompatActivity {
         mBarcode.setKeyListener(null);
         mCategory.setKeyListener(null);
 
-        setConditionRadioGroup();
-        setDonationRadioGroup();
+        setCondition();
+        setDonation();
 
         mName.setText(med.getName());
         mCategory.setText(med.getCategory());
@@ -130,68 +129,111 @@ public class DisplayMed extends AppCompatActivity {
         return true;
     }
 
-    private void setConditionRadioGroup() {
+    private void setCondition() {
         switch (med.getState()) {
             case "O":
-                mClose.setChecked(false);
-                mOpen.setChecked(true);
+                isOpen = true;
+                HelperActivity.changeButtonsLayout(mOpen, mClose, R.drawable.button_gray_pressed,
+                        R.drawable.button_gray_unpressed, Color.WHITE, Color.GRAY);
                 break;
             case "C":
-                mClose.setChecked(true);
-                mOpen.setChecked(false);
+                isOpen = false;
+                HelperActivity.changeButtonsLayout(mClose, mOpen, R.drawable.button_gray_pressed,
+                        R.drawable.button_gray_unpressed, Color.WHITE, Color.GRAY);
                 break;
         }
+
+        mClose.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                isOpen = false;
+                HelperActivity.changeButtonsLayout(mClose, mOpen, R.drawable.button_gray_pressed,
+                        R.drawable.button_gray_unpressed, Color.WHITE, Color.GRAY);
+            }
+        });
+
+        mOpen.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                isOpen = true;
+                HelperActivity.changeButtonsLayout(mOpen, mClose, R.drawable.button_gray_pressed,
+                        R.drawable.button_gray_unpressed, Color.WHITE, Color.GRAY);
+            }
+        });
     }
 
-    private void setDonationRadioGroup() {
+    private void setDonation() {
         switch (med.getStatus()) {
             case "D":
                 mNow.setEnabled(false);
                 mBefore.setEnabled(false);
                 return;
-            case "N":
-            case "SN":
-                mNow.setChecked(false);
-                mBefore.setChecked(false);
-                mNo.setChecked(true);
-                break;
             case "Y":
             case "SY":
-                mNow.setChecked(true);
-                mBefore.setChecked(false);
-                mNo.setChecked(false);
+                HelperActivity.changeButtonsLayout(mNow, mBefore, R.drawable.button_gray_pressed,
+                        R.drawable.button_gray_unpressed, Color.WHITE, Color.GRAY);
                 break;
             case "B":
             case "SB":
-                mNow.setChecked(false);
-                mBefore.setChecked(true);
-                mNo.setChecked(false);
+                HelperActivity.changeButtonsLayout(mBefore, mNow, R.drawable.button_gray_pressed,
+                        R.drawable.button_gray_unpressed, Color.WHITE, Color.GRAY);
                 break;
         }
+
+        mNow.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (mBefore.getCurrentTextColor() == Color.WHITE)
+                    HelperActivity.changeButtonsLayout(mNow, mBefore, R.drawable.button_gray_pressed,
+                        R.drawable.button_gray_unpressed, Color.WHITE, Color.GRAY);
+                else {
+                    if (mNow.getCurrentTextColor() == Color.WHITE) {
+                        mNow.setTextColor(Color.GRAY);
+                        mNow.setBackgroundResource(R.drawable.button_gray_unpressed);
+                    }
+                    else {
+                        mNow.setTextColor(Color.WHITE);
+                        mNow.setBackgroundResource(R.drawable.button_gray_pressed);
+                    }
+                }
+            }
+        });
+
+        mBefore.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (mNow.getCurrentTextColor() == Color.WHITE)
+                    HelperActivity.changeButtonsLayout(mBefore, mNow, R.drawable.button_gray_pressed,
+                            R.drawable.button_gray_unpressed, Color.WHITE, Color.GRAY);
+                else {
+                    if (mBefore.getCurrentTextColor() == Color.WHITE) {
+                        mBefore.setTextColor(Color.GRAY);
+                        mBefore.setBackgroundResource(R.drawable.button_gray_unpressed);
+                    }
+                    else {
+                        mBefore.setTextColor(Color.WHITE);
+                        mBefore.setBackgroundResource(R.drawable.button_gray_pressed);
+                    }
+                }
+            }
+        });
     }
 
     private boolean isOpen() {
-
-        switch (mConditionGroup.getCheckedRadioButtonId()) {
-            case R.id.closed:
-                return false;
-            default:
-                return true;
-        }
+        return isOpen;
     }
 
     private void isDonatedNow() {
-
-        switch (mDonationGroup.getCheckedRadioButtonId()) {
-            case R.id.before:
-                forDonation = "B";
-                return;
-            case R.id.now:
-                forDonation = "Y";
-                return;
-            default:
-                forDonation = "N";
-        }
+        if (mBefore.getCurrentTextColor() == Color.GRAY)
+            forDonation = "B";
+        else if (mNow.getCurrentTextColor() == Color.GRAY)
+            forDonation = "Y";
+        else
+            forDonation = "N";
     }
 
     @Override
@@ -282,7 +324,6 @@ public class DisplayMed extends AppCompatActivity {
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
                 if (result == 200 || result == 204) {
-                    // TODO: diagrafoume kai apo programmatismenes an yparxei
                     db.deleteMed(med, HelperActivity.firstWord(med.getName()));
 
                     Intent afterdel = new Intent(getApplicationContext(), Farmakeio.class);

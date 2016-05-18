@@ -20,6 +20,10 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -39,7 +43,8 @@ public class Register extends HelperActivity {
     private TextInputLayout nameLayout, emailLayout;
     private PrefManager pref;
     ProgressDialog dialog;
-    AlertDialog alert;
+    DBHandler db;
+    AlertDialog alert,alert1,alert2;
     String username = "", email = "", date = "", sex = "", phone = "", mDate1="";
     Boolean is_male = false;
 
@@ -51,8 +56,15 @@ public class Register extends HelperActivity {
         super.setMenu(R.menu.menu_main);
         super.helperOnCreate(R.layout.register, R.string.profile, false);
 
+        db = new DBHandler(getApplicationContext());
+
+
+
+
         dialog = new ProgressDialog(this);
         pref = new PrefManager(this);
+
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.prof_age_warning))
@@ -63,6 +75,28 @@ public class Register extends HelperActivity {
                     }
                 });
         alert = builder.create();
+
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setMessage(getString(R.string.prof_get_old_data))
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        new HttpGetData().execute();
+
+                    }
+                });
+        alert1 = builder1.create();
+
+        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+        builder2.setMessage(getString(R.string.prof_get_old_data_no_internet))
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        new HttpGetData().execute();
+
+                    }
+                });
+        alert2 = builder2.create();
 
         mUsername = (EditText) findViewById(R.id.username_text);
         mEmail = (EditText) findViewById(R.id.email_text);
@@ -93,6 +127,18 @@ public class Register extends HelperActivity {
             }
         });
 
+        //an einai palios xrhsths kai mpainoume prwth fora sto profil
+        if (pref.getOldUser() && pref.getNextSplash().equals("Register")) {
+            if (isOnline(getApplicationContext()))
+                alert1.show();
+            else {
+                alert2.show();
+                finish();
+                System.exit(0);
+            }
+
+        }
+
         phone = pref.getMobileNumber();
         username = pref.getUsername();
         email = pref.getEmail();
@@ -121,6 +167,15 @@ public class Register extends HelperActivity {
 
         mEmail.addTextChangedListener(new MyTextWatcher(mEmail));
         mUsername.addTextChangedListener(new MyTextWatcher(mUsername));
+    }
+
+    private String dateWithSlash(String date) {
+        Log.e("Old date",date+"");
+        String[] help = date.split("-");
+        Log.e("New date",help[1]+"/"+help[0]);
+
+
+        return help[1]+"/"+help[0];
     }
 
     @Override
@@ -260,6 +315,120 @@ public class Register extends HelperActivity {
         }
     }
 
+    private class HttpGetData extends AsyncTask<Void, Void, Integer> {
+
+        private static final String TAG = "HttpGetTask";
+        private int error = -1;
+        String data ;
+
+
+        @Override
+        protected Integer doInBackground(Void... arg0) {
+            String URL = server + "/data/" + pref.getMobileNumber() + "/";
+            Integer out = 0;
+            java.net.URL url = null;
+            HttpURLConnection conn = null;
+
+            try {
+                url = new URL(URL);
+
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setDoInput(true);
+                conn.setRequestProperty("Connection", "keep-alive");
+
+                InputStream in = new BufferedInputStream(conn.getInputStream());
+                data = readStream(in);
+                out = conn.getResponseCode();
+
+            } catch (ProtocolException e) {
+                error = 1;
+                Crashlytics.logException(e);
+                Log.e(TAG, "ProtocolException");
+            } catch (MalformedURLException e) {
+                error = 1;
+                Crashlytics.logException(e);
+                Log.e(TAG, "MalformedURLException");
+            } catch (IOException e) {
+                error = 1;
+                Crashlytics.logException(e);
+                Log.e(TAG, "IOException"+e);
+            } finally {
+                if (null != conn)
+                    conn.disconnect();
+            }
+
+            return out;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (error > 0) {
+                httpErrorToast(getApplicationContext(), error);
+            } else {
+                try {
+
+                    JSONObject obj = new JSONObject(data);
+                    JSONArray meds = obj.getJSONArray("meds");
+                    JSONArray done_donations = obj.getJSONArray("done_donations");
+                    JSONArray donations = obj.getJSONArray("donations");
+
+                    for(int i = 0; i < meds.length(); i++)
+                    {
+
+                        JSONObject object = meds.getJSONObject(i);
+                        String what1,what2;
+
+                        what1 = object.getString("medSubstance");
+
+                        what2 = object.getString("medCategory");
+
+
+
+                        db.addMed(new Medicine(object.getString("barcode"), object.getString("eofcode"), object.getString("medName"),
+                               dateWithSlash(object.getString("expirationDate")), object.getString("medPrice"), object.getString("notes"),
+                                object.getString("state"),what1,what2,
+                                object.getString("forDonation")),firstWord(object.getString("medName")));
+
+
+                    }
+
+                    for(int i = 0; i < done_donations.length(); i++)
+                    {
+
+                        JSONObject object = done_donations.getJSONObject(i);
+                        db.addDoneDonation(object.getString("donePrice"), firstWord(object.getString("doneName")),
+                                object.getString("pharmacyName"), object.getString("doneDate"));
+                    }
+
+                    for(int i = 0; i < donations.length(); i++)
+                    {
+
+                        JSONObject object = donations.getJSONObject(i);
+                        db.addDonation(object.getString("donationBarcode"), object.getString("donatedPhone"),
+                                object.getString("deliveryDate1"),object.getString("deliveryDate2"),
+                                object.getString("deliveryDate3"), object.getString("deliveryType"),
+                                object.getString("donationAddress"));
+                    }
+
+
+
+
+                } catch (JSONException e) {
+
+                    Crashlytics.logException(e);
+                    e.printStackTrace();
+                    dialog.dismiss();
+                    httpErrorToast(getApplicationContext(), 2);
+                    return;
+                }
+
+
+
+            }
+            dialog.dismiss();
+        }
+    }
+
     private boolean submitForm() {
         if (!validateName())
             return false;
@@ -270,11 +439,13 @@ public class Register extends HelperActivity {
         return true;
     }
 
+
+
     private boolean allIsEmpty() {
         if (mUsername.getText().toString().trim().isEmpty() && mEmail.getText().toString().trim().isEmpty() &&
-                mDate.getText().toString().trim().isEmpty()) {
-            return true;
-        } else
+                mDate.getText().toString().trim().isEmpty())
+			return true;
+        else
            return false;
 
 

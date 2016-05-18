@@ -288,7 +288,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
             if (yearN * 12 + monthN < yearP * 12 + monthP)
                 name.setDate(monthN + "/" + yearN);
-
             this.updateMedName(name);
         }
 
@@ -332,9 +331,16 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_STATUS, "B");
+        values.put(KEY_STATUS, "Y");
 
-        db.update(TABLE_MEDS, values, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?", new String[]{"A", three_months_later});
+
+
+        db.update(TABLE_MEDS, values, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?", new String[]{"B", three_months_later});
+        ContentValues values1 = new ContentValues();
+
+        values1.put(KEY_STATUS, "SY");
+
+        db.update(TABLE_MEDS, values1, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?", new String[]{"SB", three_months_later});
         db.close();
 
     }

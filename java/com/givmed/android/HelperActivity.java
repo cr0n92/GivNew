@@ -206,10 +206,10 @@ public class HelperActivity extends AppCompatActivity
     }
 
     // synarthsh pou allazei ta xrwmata sta koumpia otan ta patame
-    public static void changeButtonsLayout(Button pressed, Button unpressed, int presDraw, int unpresDraw) {
-        pressed.setTextColor(Color.WHITE);
+    public static void changeButtonsLayout(Button pressed, Button unpressed, int presDraw, int unpresDraw, int presColor, int unpresColor) {
+        pressed.setTextColor(presColor);
         pressed.setBackgroundResource(presDraw);
-        unpressed.setTextColor(Color.BLACK);
+        unpressed.setTextColor(unpresColor);
         unpressed.setBackgroundResource(unpresDraw);
     }
 

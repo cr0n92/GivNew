@@ -108,9 +108,7 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         progDonationMsg = progLeft + " " + count + " " + right_msg;
         msgView.setText(progDonationMsg);
 
-        mAdapter.add(new Donation("deponakikaietsi", "16/7/16", "V", "1234", "AmarousioKaietsi", ""));
-        mAdapter.add(new Donation("deponakikaietsi", "16/7/16", "V", "1234", "nikaia", ""));
-        mAdapter.add(new Donation("papi", "16/7/16", "V", "1234", "AmarousioKaietsi", ""));
+
     }
 
     public void getDone() {

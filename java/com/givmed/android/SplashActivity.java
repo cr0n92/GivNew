@@ -19,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.Calendar;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -35,6 +36,34 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
+
+
+
+        Calendar calendar1 = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        calendar1.add(Calendar.DATE, 21);
+        calendar2.set(Calendar.YEAR, 2016);
+        calendar2.set(Calendar.MONTH,4);
+        calendar2.set(Calendar.DAY_OF_MONTH, 29);
+        Log.e("Date comparison", "" + calendar1.after(calendar2));
+        calendar1 = Calendar.getInstance();
+        calendar2 = Calendar.getInstance();
+        calendar1.add(Calendar.DATE, 20);
+        calendar2.set(Calendar.YEAR, 2016);
+        calendar2.set(Calendar.MONTH, 5);
+        calendar2.set(Calendar.DAY_OF_MONTH,8);
+        Log.e("Date comparison", "" + calendar1.after(calendar2));
+
+        calendar1 = Calendar.getInstance();
+        calendar2 = Calendar.getInstance();
+        calendar1.add(Calendar.DATE, 20);
+        calendar2.set(Calendar.YEAR, 2016);
+        calendar2.set(Calendar.MONTH,5);
+        calendar2.set(Calendar.DAY_OF_MONTH,6);
+        Log.e("Date comparison",""+calendar1.after(calendar2));
+
+
+
 
 
 

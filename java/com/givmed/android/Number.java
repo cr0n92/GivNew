@@ -91,16 +91,21 @@ public class Number extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_tick) {
-            phone = mPhoneView.getText().toString().trim();
+            if (!HelperActivity.isOnline(getApplicationContext())) {
+                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+            }
+            else {
+                phone = mPhoneView.getText().toString().trim();
 
-            if (phone.length() != 10 || !phone.matches("[0-9]+")) {
-                alert.show();
-            } else {
+                if (phone.length() != 10 || !phone.matches("[0-9]+")) {
+                    alert.show();
+                } else {
 
-                Intent confIntent = new Intent(getApplicationContext(), ConfirmNumber.class);
-                confIntent.putExtra("phone", phone);
-                startActivity(confIntent);
-                finish();
+                    Intent confIntent = new Intent(getApplicationContext(), ConfirmNumber.class);
+                    confIntent.putExtra("phone", phone);
+                    startActivity(confIntent);
+                    finish();
+                }
             }
 
         }

@@ -105,28 +105,37 @@ public class ConfirmNumber extends AppCompatActivity {
     private BroadcastReceiver mTokenBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            token=intent.getStringExtra("token");
-            pin0.setText("" + token.charAt(0));
-            pin1.setText(""+token.charAt(1));
-            pin2.setText(""+token.charAt(2));
-            pin3.setText(""+token.charAt(3));
+            if (intent.hasExtra("error")) {
+                Toast.makeText(getApplicationContext(), getString(R.string.conf_wrong_pin), Toast.LENGTH_LONG).show();
 
-            new CountDownTimer(4000, 5000) {
+            }
+            else {
+                token = intent.getStringExtra("token");
+                pin0.setText("" + token.charAt(0));
+                pin1.setText("" + token.charAt(1));
+                pin2.setText("" + token.charAt(2));
+                pin3.setText("" + token.charAt(3));
 
-                public void onTick(long millisUntilFinished) {
-                }
+                new CountDownTimer(4000, 5000) {
 
-                public void onFinish() {
-                    pref.createLogin();
-                    //apenergopoioume to SMSReceiver
-                    HelperActivity.disableBroadcastReceiver(getApplicationContext());
-                    pref.setNextSplash("Register");
-                    Intent intent = new Intent(ConfirmNumber.this, Register.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
-                }
-            }.start();
+                    public void onTick(long millisUntilFinished) {
+                    }
+
+                    public void onFinish() {
+                        pref.createLogin();
+                        //apenergopoioume to SMSReceiver
+                        HelperActivity.disableBroadcastReceiver(getApplicationContext());
+                        pref.setNextSplash("Register");
+                        if (pref.getOldUser()) {
+
+                        }
+                        Intent intent = new Intent(ConfirmNumber.this, Register.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+                }.start();
+            }
 
         }
     };

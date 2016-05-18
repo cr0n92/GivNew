@@ -96,6 +96,18 @@ public class Outputer extends HelperActivity {
 
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        //do whatever you want the 'Back' button to do
+        //as an example the 'Back' button is set to start a new Activity named 'NewActivity'
+        Intent newIntent = new Intent(Outputer.this, Inputter.class);
+        newIntent.putExtra("barcode",barcode);
+        this.startActivity(newIntent);
+        finish();
+        return;
+    }
+
     private boolean isOpen() {
 
         switch (mConditionGroup.getCheckedRadioButtonId()) {
@@ -239,6 +251,7 @@ public class Outputer extends HelperActivity {
                     //showItemIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     showItemIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(showItemIntent);
+                    finish();
                 }
             }
             dialog.dismiss();

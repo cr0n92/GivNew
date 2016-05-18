@@ -1,5 +1,6 @@
 package com.givmed.android;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -23,16 +24,16 @@ public class Settings extends HelperActivity
         final PrefManager pref = new PrefManager(getApplicationContext());
 
         if (pref.getNotificiationPermission())
-          changeButtonsLayout(yesButton1, noButton1, R.drawable.button_pressed_left, R.drawable.button_unpressed_right);
+          changeButtonsLayout(yesButton1, noButton1, R.drawable.button_pressed_left, R.drawable.button_unpressed_right, Color.WHITE, Color.BLACK);
         else
-          changeButtonsLayout(noButton1, yesButton1, R.drawable.button_pressed_right, R.drawable.button_unpressed_left);
+          changeButtonsLayout(noButton1, yesButton1, R.drawable.button_pressed_right, R.drawable.button_unpressed_left, Color.WHITE, Color.BLACK);
 
 
         yesButton1.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                changeButtonsLayout(yesButton1, noButton1, R.drawable.button_pressed_left, R.drawable.button_unpressed_right);
+                changeButtonsLayout(yesButton1, noButton1, R.drawable.button_pressed_left, R.drawable.button_unpressed_right, Color.WHITE, Color.BLACK);
                 pref.setNotificationPermission(true);
             }
         });
@@ -41,7 +42,7 @@ public class Settings extends HelperActivity
 
             @Override
             public void onClick(View v) {
-                changeButtonsLayout(noButton1, yesButton1, R.drawable.button_pressed_right, R.drawable.button_unpressed_left);
+                changeButtonsLayout(noButton1, yesButton1, R.drawable.button_pressed_right, R.drawable.button_unpressed_left, Color.WHITE, Color.BLACK);
                 pref.setNotificationPermission(false);
             }
         });

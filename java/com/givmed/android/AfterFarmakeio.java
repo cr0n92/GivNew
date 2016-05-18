@@ -1,6 +1,7 @@
 package com.givmed.android;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +27,8 @@ public class AfterFarmakeio extends AppCompatActivity implements AdapterView.OnI
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.pharmacy);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("name"))

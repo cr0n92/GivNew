@@ -1,8 +1,5 @@
 package com.givmed.android;
 
-/**
- * Created by agroikos on 29/12/2015.
- */
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,37 +10,24 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 
-
-/**
- * Created by Ravi on 09/07/15.
- */
 public class SMSReceiver extends BroadcastReceiver {
     private static final String TAG = SMSReceiver.class.getSimpleName();
     private boolean old_user = false;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-
-
         SmsMessage smsMessage;
 
-        if(Build.VERSION.SDK_INT>=19) { //KITKAT
-
+        if(Build.VERSION.SDK_INT >= 19) { //KITKAT
             SmsMessage[] msgs = Telephony.Sms.Intents.getMessagesFromIntent(intent);
-
             smsMessage = msgs[0];
-
         }
-
         else {
             final Bundle bundle = intent.getExtras();
             Object pdus[] = (Object[]) bundle.get("pdus");
 
             smsMessage = SmsMessage.createFromPdu((byte[]) pdus[0]);
-
         }
-
 
         String senderAddress = smsMessage.getDisplayOriginatingAddress();
         String message = smsMessage.getDisplayMessageBody();
@@ -67,10 +51,7 @@ public class SMSReceiver extends BroadcastReceiver {
         else
             httpIntent.putExtra("oldUser", "no");
 
-
         context.startService(httpIntent);
-
-
     }
 
     /**

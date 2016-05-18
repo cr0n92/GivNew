@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -136,29 +135,12 @@ public class DwreaUser extends AppCompatActivity {
         mPhone.setKeyListener(null);
 
         final Button doneButton = (Button) findViewById(R.id.button1);
-        doneButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (HelperActivity.isOnline(getApplicationContext())) {
-                    HelperActivity.showDialogBox(getApplicationContext(), dialog);
-
-                    Date date1 = new Date();
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(date1);
-                    todayDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
-
-                    new HttpDone().execute();
-                }
-                else
-                    HelperActivity.httpErrorToast(getApplicationContext(), 1);
-            }
-        });
-
+        
         TextView voluMsg = (TextView) findViewById(R.id.voluMsg);
         final Button voluButton = (Button) findViewById(R.id.button2);
 
         if (showVoluButton) {
+            doneButton.setVisibility(View.VISIBLE);
             voluButton.setVisibility(View.VISIBLE);
             voluMsg.setVisibility(View.VISIBLE);
 
@@ -171,8 +153,31 @@ public class DwreaUser extends AppCompatActivity {
                     dialog.dismiss();
 
                     Intent intent = new Intent(getApplicationContext(), DwreaVolunteer.class);
+                    intent.putExtra("pharName", pharmname);
+                    intent.putExtra("barcode", barcode);
+                    intent.putExtra("medName", medname);
                     startActivity(intent);
                     finish();
+                }
+            });
+
+            doneButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (HelperActivity.isOnline(getApplicationContext())) {
+                        HelperActivity.showDialogBox(getApplicationContext(), dialog);
+
+                        Date date1 = new Date();
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(date1);
+                        todayDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
+                        todayDateAndroid = cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + (cal.get(Calendar.DATE) % 100);
+
+                        new HttpDone().execute();
+                    }
+                    else
+                        HelperActivity.httpErrorToast(getApplicationContext(), 1);
                 }
             });
         }
@@ -180,7 +185,7 @@ public class DwreaUser extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main_delete, menu);
         return true;
     }
 
@@ -201,6 +206,14 @@ public class DwreaUser extends AppCompatActivity {
                 }
 
                 new HttpUser().execute();
+            } else
+                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+        }
+        else if (id == R.id.action_delete) {
+
+            if (HelperActivity.isOnline(getApplicationContext())) {
+                HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                deleteAlert.show();
             } else
                 HelperActivity.httpErrorToast(getApplicationContext(), 1);
         }
@@ -273,6 +286,69 @@ public class DwreaUser extends AppCompatActivity {
         }
     }
 
+ private class HttpDelete extends AsyncTask<String, Void, Integer> {
+
+        private static final String TAG = "HttpDelete";
+        private int error = -1;
+        private int result;
+
+        @Override
+        protected Integer doInBackground(String... input) {
+            java.net.URL url = null;
+            HttpURLConnection conn = null;
+
+            String URL = HelperActivity.server + "/donation_delete/" + barcode + "/";
+
+            try {
+                url = new URL(URL);
+
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("DELETE");
+                result = conn.getResponseCode();
+                Log.e(TAG, "Received HTTP response: " + result);
+
+            } catch (ProtocolException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "ProtocolException");
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "MalformedURLException");
+            } catch (IOException e) {
+                Crashlytics.logException(e);
+                error = 2;
+                Log.e(TAG, "IOException");
+            } finally {
+                if (null != conn)
+                    conn.disconnect();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (error > 0)
+                HelperActivity.httpErrorToast(getApplicationContext(), error);
+            else {
+                if (result == 200 || result == 204) {
+                    db.deleteProgDonation(barcode);
+                    dialog.dismiss();
+
+                    Intent afterdel = new Intent(getApplicationContext(), Dwrees.class);
+                    afterdel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    afterdel.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(afterdel);
+                    finish();
+                } else
+                    HelperActivity.httpErrorToast(getApplicationContext(), 2);
+            }
+            dialog.dismiss();
+        }
+    }
+
     private class HttpDone extends AsyncTask<Void, Void, Integer> {
 
         private static final String TAG = "HttpGetTask";
@@ -339,14 +415,9 @@ public class DwreaUser extends AppCompatActivity {
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
                 if (result == 201) {
-                    db.progToDoneDonation(barcode, pharmname, todayDate, medname);
+                    db.progToDoneDonation(barcode, pharmname, todayDateAndroid, medname);
                     dialog.dismiss();
-
-                    Intent intent = new Intent(getApplicationContext(), Dwrees.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(intent);
-                    finish();
+                    deliveredAlert.show();
 
                     return;
                 } else

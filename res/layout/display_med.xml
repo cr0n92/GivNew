@@ -135,41 +135,44 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
                 android:drawableStart="@drawable/ic_elleipseis"
                 android:drawableLeft="@drawable/ic_elleipseis"
                 android:theme="@style/MyEditTextTheme">
             </TextView>
 
-            <RadioGroup
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/conditionGroup"
+                android:layout_below="@id/conditionMsg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_below="@id/conditionMsg"
-                android:orientation="horizontal"
-                android:text="@string/out_condition"
-                android:theme="@style/MyEditTextTheme" >
+                android:layout_marginStart="10dp"
+                android:padding="@dimen/padding"
+                android:orientation="horizontal" >
 
-                <RadioButton
+                <Button
                     android:id="@+id/closed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="@string/out_closed" />
+                    android:text="@string/out_closed"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="18sp"
+                    android:layout_width="120dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/button_gray_unpressed" />
 
-                <RadioButton
+                <Button
                     android:id="@+id/opend"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/out_open" />
-            </RadioGroup>
+                    android:text="@string/out_open"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="120dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/button_gray_unpressed" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/donationMsg"
@@ -182,47 +185,44 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
                 android:drawableStart="@drawable/ic_dwrees"
                 android:drawableLeft="@drawable/ic_dwrees"
                 android:theme="@style/MyEditTextTheme">
             </TextView>
 
-            <RadioGroup
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/donationGroup"
+                android:layout_below="@id/donationMsg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_below="@id/donationMsg"
-                android:orientation="horizontal"
-                android:text="@string/out_condition"
-                android:theme="@style/MyEditTextTheme" >
+                android:layout_marginStart="10dp"
+                android:padding="@dimen/padding"
+                android:orientation="horizontal" >
 
-                <RadioButton
+                <Button
                     android:id="@+id/now"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/out_now" />
+                    android:text="@string/out_now"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="18sp"
+                    android:layout_width="120dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/button_gray_unpressed" />
 
-                <RadioButton
+                <Button
                     android:id="@+id/before"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/out_before" />
-
-                <RadioButton
-                    android:id="@+id/no"
-                    android:enabled="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="OXI" />
-            </RadioGroup>
+                    android:text="@string/out_before"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="120dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/button_gray_unpressed" />
+            </LinearLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/notesLayout"
@@ -250,6 +250,11 @@
                 </EditText>
 
             </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/notesLayout" />
         </RelativeLayout>
     </ScrollView>
 </RelativeLayout>

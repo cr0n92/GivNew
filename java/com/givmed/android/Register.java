@@ -196,6 +196,8 @@ public class Register extends HelperActivity {
 
                     Intent intent = new Intent(getApplicationContext(), TwoButtons.class);
                     startActivity(intent);
+                    finish();
+                    return true;
                 }
 
                 if (submitForm()) {
@@ -329,8 +331,7 @@ public class Register extends HelperActivity {
 
         @Override
         protected Integer doInBackground(Void... arg0) {
-            //String URL = server + "/data/" + pref.getMobileNumber() + "/";
-            String URL = server + "/data/6975766571/";
+            String URL = server + "/data/" + pref.getMobileNumber() + "/";
             Integer out = 0;
             java.net.URL url = null;
             HttpURLConnection conn = null;
@@ -338,12 +339,9 @@ public class Register extends HelperActivity {
             try {
                 url = new URL(URL);
 
-
-
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setDoInput(true);
                 conn.setRequestProperty("Connection", "keep-alive");
-
 
                 InputStream in = new BufferedInputStream(conn.getInputStream());
                 data = readStream(in);
@@ -452,11 +450,9 @@ public class Register extends HelperActivity {
 
     private boolean allIsEmpty() {
         if (mUsername.getText().toString().trim().isEmpty() && mEmail.getText().toString().trim().isEmpty() &&
-                mDate.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Parakampsh", Toast.LENGTH_SHORT).show();
-
-            return true;
-        } else
+                mDate.getText().toString().trim().isEmpty())
+			return true;
+        else
            return false;
 
 

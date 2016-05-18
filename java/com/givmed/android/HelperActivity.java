@@ -38,7 +38,7 @@ import java.lang.reflect.Field;
 public class HelperActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
-    public static String server = "http://52.29.235.81:81";
+    public static String server = "http://www.givmed.com:81";
 
     public int myMenu;
 
@@ -206,10 +206,10 @@ public class HelperActivity extends AppCompatActivity
     }
 
     // synarthsh pou allazei ta xrwmata sta koumpia otan ta patame
-    public static void changeButtonsLayout(Button pressed, Button unpressed, int presDraw, int unpresDraw) {
-        pressed.setTextColor(Color.WHITE);
+    public static void changeButtonsLayout(Button pressed, Button unpressed, int presDraw, int unpresDraw, int presColor, int unpresColor) {
+        pressed.setTextColor(presColor);
         pressed.setBackgroundResource(presDraw);
-        unpressed.setTextColor(Color.BLACK);
+        unpressed.setTextColor(unpresColor);
         unpressed.setBackgroundResource(unpresDraw);
     }
 
@@ -243,7 +243,6 @@ public class HelperActivity extends AppCompatActivity
         pm.setComponentEnabledSetting(receiver,
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP);
-        Toast.makeText(context, "Enabled broadcast receiver", Toast.LENGTH_SHORT).show();
     }
 
     public static void disableBroadcastReceiver(Context context){
@@ -253,8 +252,6 @@ public class HelperActivity extends AppCompatActivity
         pm.setComponentEnabledSetting(receiver,
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
                 PackageManager.DONT_KILL_APP);
-        Toast.makeText(context, "Disabled broadcast receiver", Toast.LENGTH_SHORT).show();
-
     }
 
     public static String readStream(InputStream in) {

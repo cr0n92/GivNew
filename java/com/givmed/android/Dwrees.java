@@ -2,6 +2,7 @@ package com.givmed.android;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,7 +18,7 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
     private final String TAG = "Dwrees";
     private static boolean inDone = false;
     private String progDonationMsg, doneDonationMsg;
-    private String left, right, mid_plu, mid_sin, progLeft, progRight_sin, progRight_plu;
+    private String left, right, mid_plu, mid_sin, progRight_sin, progRight_plu;
     public static DonationAdapter progAdapter,doneAdapter;
     private TextView msgView, msgView2;
     private static Button progButton, doneButton;
@@ -38,7 +39,6 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         mid_plu = getResources().getString(R.string.donation_values);
         mid_sin = getResources().getString(R.string.donation_value);
 
-        progLeft = getResources().getString(R.string.donation_done_left);
         progRight_sin = getResources().getString(R.string.donation_done_right);
         progRight_plu = getResources().getString(R.string.donation_done_rights);
 
@@ -46,14 +46,6 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         msgView2 = (TextView) findViewById(R.id.secondMes);
         progButton = (Button) findViewById(R.id.progButton);
         doneButton = (Button) findViewById(R.id.doneButton);
-
-        doneDonationMsg = left + " 0 " + mid_plu + " 0 " + right;
-        progDonationMsg = progLeft + " 0 " + progRight_plu;
-        msgView.setText(progDonationMsg);
-
-
-
-
 
         progAdapter = new DonationAdapter(getApplicationContext(),true);
         doneAdapter = new DonationAdapter(getApplicationContext(),false);
@@ -63,22 +55,14 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         list.setOnItemClickListener(this);
         list.setAdapter(progAdapter);
 
-
-
-
-
-
-
         progButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 inDone = false;
-                changeButtonsLayout(progButton, doneButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right);
+                changeButtonsLayout(progButton, doneButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right, Color.WHITE, Color.BLACK);
                 msgView.setText(progDonationMsg);
                 msgView2.setVisibility(View.VISIBLE);
-
-
                 list.setAdapter(progAdapter);
             }
         });
@@ -88,27 +72,19 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
             @Override
             public void onClick(View v) {
                 inDone = true;
-                changeButtonsLayout(doneButton, progButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left);
+                changeButtonsLayout(doneButton, progButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left, Color.WHITE, Color.BLACK);
                 msgView.setText(doneDonationMsg);
                 msgView2.setVisibility(View.GONE);
                 list.setAdapter(doneAdapter);
-
             }
         });
-
-
-
-
     }
 
     public void getProgrammed() {
         progAdapter.clear();
         int count = db.getAllDonations(progAdapter);
-        String right_msg = (count == 1) ? progRight_sin : progRight_plu;
-        progDonationMsg = progLeft + " " + count + " " + right_msg;
+        progDonationMsg = (count == 1) ? count + " " + progRight_sin : count + " " + progRight_plu;
         msgView.setText(progDonationMsg);
-
-
     }
 
     public void getDone() {
@@ -116,9 +92,16 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         int[] info = db.getAllDoneDonations(doneAdapter);
         int count = info[0];
         int price = info[1];
-        String mid_msg = (count == 1) ? mid_sin : mid_plu;
-        doneDonationMsg =  left + " " + count + " " + mid_msg + " " + price + right;;
-        msgView.setText(doneDonationMsg);
+
+        if (count == 0) {
+            doneDonationMsg = getString(R.string.donation_done_zero);
+            msgView.setText(doneDonationMsg);
+        }
+        else {
+            String mid_msg = (count == 1) ? mid_sin : mid_plu;
+            doneDonationMsg = left + " " + count + " " + mid_msg + " " + price + " " + right;
+            msgView.setText(doneDonationMsg);
+        }
     }
 
     @Override
@@ -126,12 +109,13 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         super.onResume();  // Always call the superclass method first
 
         getDone();
-            getProgrammed();
+        getProgrammed();
     }
 
 
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
         if (inDone) return;
+
         Donation progDonation = (Donation) progAdapter.getItem(position);
         Intent intent;
 

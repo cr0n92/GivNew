@@ -49,12 +49,7 @@ public class AlarmService extends Service {
 
         }
 
-
-
-        Toast.makeText(getApplicationContext(), "Alarm turned on!",
-                Toast.LENGTH_LONG).show();
         Log.e("Date", "" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR));
-
         Log.e("Alarm", "re");
 
         //reschedule me to check again tomorrow

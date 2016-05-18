@@ -10,12 +10,4 @@
         android:icon="@drawable/ic_tick"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_divider"
-        android:orderInCategory="100"
-        android:title="bar"
-        android:enabled="false"
-        android:icon="@drawable/ic_bar"
-        app:showAsAction="always" />
-
 </menu>

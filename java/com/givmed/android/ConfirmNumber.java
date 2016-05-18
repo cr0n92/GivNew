@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -146,6 +147,8 @@ public class ConfirmNumber extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.confirm_number);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.confirm);
@@ -181,6 +184,9 @@ public class ConfirmNumber extends AppCompatActivity {
         phone = intent.getStringExtra("phone");
         number.setText("+30 " + phone);
         HelperActivity.enableBroadcastReceiver(getApplicationContext());
+
+        Log.e("kakakika", "" + pref.getRegDone());
+
         if (!pref.getRegDone()) {
             HelperActivity.showDialogBox(getApplicationContext(), dialog);
             new HttpGetTask().execute();
@@ -342,7 +348,7 @@ public class ConfirmNumber extends AppCompatActivity {
 
         @Override
         protected JSONObject doInBackground(Void... arg0) {
-            String URL = "http://givmed.com:81/reg/";
+            String URL = HelperActivity.server + "/reg/";
             String data = "";
             JSONObject out = new JSONObject();
 

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +45,7 @@ public class Outputer extends HelperActivity {
         Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main);
         super.helperOnCreate(R.layout.outputs, R.string.outputer, true);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         db = new DBHandler(getApplicationContext());
         pref = new PrefManager(this);

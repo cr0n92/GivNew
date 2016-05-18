@@ -19,7 +19,7 @@ import io.fabric.sdk.android.Fabric;
 public class Number extends AppCompatActivity {
     EditText mPhoneView;
     String phone;
-    AlertDialog alert;
+    AlertDialog alert, numAlert;
     private PrefManager pref;
 
 
@@ -33,6 +33,12 @@ public class Number extends AppCompatActivity {
         mToolBar.setTitle(R.string.number);
         mToolBar.setNavigationIcon(R.drawable.ic_arrows);
         setSupportActionBar(mToolBar);
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
        // pref = new PrefManager(this);
 
@@ -47,14 +53,18 @@ public class Number extends AppCompatActivity {
 //            finish();
 //        }
 
-        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.num_alert))
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog2, int id) {
+
+                    }
+                });
+        numAlert = builder.create();
+        numAlert.show();
+
+        //AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.conf_error))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -71,11 +81,9 @@ public class Number extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                /* TODO: na ftiaxoume to drawer stous orous xrhshs
-                 *      edw prepei h na stelnoume kati stous orous xrhshs, h kapws na vlepoume apo poio activity
-                 *      kaleite to OroiXrhsh.class etsi wste na mhn tou deixnoume to drawer
-                 */
-                startActivity(new Intent(getApplicationContext(), OroiXrhshs.class));
+                Intent oroi = new Intent(getApplicationContext(), OroiXrhshs.class);
+                oroi.putExtra("number", "number");
+                startActivity(oroi);
             }
         });
     }
@@ -93,10 +101,9 @@ public class Number extends AppCompatActivity {
         if (id == R.id.action_tick) {
             phone = mPhoneView.getText().toString().trim();
 
-            if (phone.length() != 10 || !phone.matches("[0-9]+")) {
+            if (phone.length() != 10 || !phone.matches("[0-9]+") || !phone.startsWith("69")) {
                 alert.show();
             } else {
-
                 Intent confIntent = new Intent(getApplicationContext(), ConfirmNumber.class);
                 confIntent.putExtra("phone", phone);
                 startActivity(confIntent);

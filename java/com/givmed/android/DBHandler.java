@@ -650,9 +650,16 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // Deleting single programmed donation
     public void deleteProgDonation(String barcode) {
+        Medicine medo = this.getMed(barcode);
         SQLiteDatabase db = this.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+        if (medo.getStatus().charAt(0) == 'S') values.put(KEY_STATUS, "SB");
+        else values.put(KEY_STATUS, "B");
+
         db.delete(TABLE_DONATIONS, KEY_BARCODE + " = ?", new String[]{barcode});
+        db.update(TABLE_MEDS, values, KEY_BARCODE + " = ?", new String[]{barcode});
+
         db.close();
     }
 

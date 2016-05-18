@@ -63,20 +63,9 @@ public class DonationAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) { //called after setAdapter,notifyDataSetChanged
         final Donation don = (Donation) getItem(position);
-        LinearLayout itemLayout;
-        // from donation.xml
-        LinearLayout itemLayout1 = (LinearLayout) LayoutInflater.from(mContext).inflate(
+
+        LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(mContext).inflate(
                 R.layout.donation, parent, false);
-        LinearLayout itemLayout2 = (LinearLayout) LayoutInflater.from(mContext).inflate(
-                R.layout.done_donation, parent, false);
-        if (mProg)
-            itemLayout = itemLayout1;
-        else
-            itemLayout = itemLayout2;
-        // Fill in specific Donation data
-        // Remember that the data that goes in this View
-        // corresponds to the user interface elements defined
-        // in the layout file
 
         final TextView titleView = (TextView) itemLayout.findViewById(R.id.medView);
         titleView.setText(don.getName());
@@ -86,6 +75,7 @@ public class DonationAdapter extends BaseAdapter {
 
         final TextView dateView = (TextView) itemLayout.findViewById(R.id.dateView);
         dateView.setText(don.getDate1());
+        if (mProg) dateView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_velaki_listas, 0);
 
         // Return the View you just created
         return itemLayout;

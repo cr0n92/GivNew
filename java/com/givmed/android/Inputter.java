@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,7 @@ public class Inputter extends HelperActivity {
         Fabric.with(this, new Crashlytics());
         super.setMenu(R.menu.menu_main);
         super.helperOnCreate(R.layout.input_byhand, R.string.inputter, true);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         dialog = new ProgressDialog(this);
         mEditText = (EditText) findViewById(R.id.edit1);
@@ -75,9 +77,6 @@ public class Inputter extends HelperActivity {
     public void onResume() {
         super.onResume();  // Always call the superclass method first
         GivmedApplication.getInstance().trackScreenView("Inputter");
-
-
-
     }
 
     @Override

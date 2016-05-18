@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +30,7 @@ import java.nio.charset.Charset;
 import io.fabric.sdk.android.Fabric;
 
 public class DisplayMed extends AppCompatActivity {
-    private EditText mName, mExp, mBarcode, mNotes, mCategory;
+    private EditText mNotes;
     private RadioGroup mConditionGroup, mDonationGroup;
     private RadioButton mBefore, mNow, mNo, mOpen, mClose;
     private String phone, notes, state, forDonation;
@@ -37,13 +38,13 @@ public class DisplayMed extends AppCompatActivity {
     AlertDialog sirupAlert, deleteAlert;
     ProgressDialog dialog;
     DBHandler db;
-    private PrefManager pref;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.display_med);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.farmako);
@@ -58,7 +59,7 @@ public class DisplayMed extends AppCompatActivity {
 
         db = new DBHandler(getApplicationContext());
         dialog = new ProgressDialog(this);
-        pref = new PrefManager(this);
+        PrefManager pref = new PrefManager(this);
         phone = pref.getMobileNumber();
 
         Intent intent = getIntent();
@@ -77,7 +78,6 @@ public class DisplayMed extends AppCompatActivity {
                 });
         sirupAlert = builder.create();
 
-        //AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.delete_sure))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -96,10 +96,10 @@ public class DisplayMed extends AppCompatActivity {
                 });
         deleteAlert = builder.create();
 
-        mName = (EditText) findViewById(R.id.name);
-        mExp = (EditText) findViewById(R.id.expiration);
-        mCategory = (EditText) findViewById(R.id.category);
-        mBarcode = (EditText) findViewById(R.id.barcode);
+        EditText mName = (EditText) findViewById(R.id.name);
+        EditText mExp = (EditText) findViewById(R.id.expiration);
+        EditText mCategory = (EditText) findViewById(R.id.category);
+        EditText mBarcode = (EditText) findViewById(R.id.barcode);
         mConditionGroup = (RadioGroup) findViewById(R.id.conditionGroup);
         mOpen = (RadioButton) findViewById(R.id.opend);
         mClose = (RadioButton) findViewById(R.id.closed);

@@ -4,9 +4,15 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +28,8 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
     ProgressDialog dialog;
     public static BlueRedAdapter mAdapter;
     public static boolean inRed = false;
-    private static TextView firstMes;
+    private TextView firstMes;
+    private SpannableStringBuilder redBuilder, blueBuilder;
     AlertDialog matchAlert;
     DBHandler db;
 
@@ -31,6 +38,7 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
         super.onCreate(savedInstanceState);
         super.setMenu(R.menu.menu_main);
         super.helperOnCreate(R.layout.blue_red_list, R.string.two_buttons, true);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         db = new DBHandler(getApplicationContext());
 
@@ -41,9 +49,23 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
         list.setFooterDividersEnabled(true);
         list.setAdapter(mAdapter);
 
+        // gia na kanoume tis le3eis kokkino kai mple me to idio xrwma me ta onomata tous
+        redBuilder = new SpannableStringBuilder();
+        blueBuilder = new SpannableStringBuilder();
+
+        String red = getString(R.string.br_first_msg_red);
+        SpannableString redSpannable= new SpannableString(red);
+        redSpannable.setSpan(new ForegroundColorSpan(Color.RED), red.length()-8, red.length()-1, 0);
+        redBuilder.append(redSpannable);
+
+        String blue = getString(R.string.br_first_msg_blue);
+        SpannableString blueSpannable = new SpannableString(blue);
+        blueSpannable.setSpan(new ForegroundColorSpan(Color.BLUE), blue.length()-5, blue.length()-1, 0);
+        blueBuilder.append(blueSpannable);
+
         if(savedInstanceState == null || !savedInstanceState.containsKey("blueRedList")) {
             inRed = false;
-            firstMes.setText(getString(R.string.br_first_msg_blue));
+            firstMes.setText(blueBuilder, TextView.BufferType.SPANNABLE);
 
             mAdapter.clear();
             boolean hasUnknown = db.getUnknownMedsToAdapter(mAdapter);
@@ -56,9 +78,9 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
         else {
             inRed = savedInstanceState.getBoolean("inRed");
             if (inRed)
-                firstMes.setText(getString(R.string.br_first_msg_red));
+                firstMes.setText(redBuilder, TextView.BufferType.SPANNABLE);
             else
-                firstMes.setText(getString(R.string.br_first_msg_blue));
+                firstMes.setText(blueBuilder, TextView.BufferType.SPANNABLE);
 
             mAdapter.mItems = savedInstanceState.getParcelableArrayList("blueRedList");
         }
@@ -79,7 +101,7 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
                 matching();
             } else {
                 inRed = true;
-                firstMes.setText(getString(R.string.br_first_msg_red));
+                firstMes.setText(redBuilder, TextView.BufferType.SPANNABLE);
             }
         }
 
@@ -94,7 +116,7 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
         } else {
             if (inRed) {
                 inRed = false;
-                firstMes.setText(getString(R.string.br_first_msg_blue));
+                firstMes.setText(blueBuilder, TextView.BufferType.SPANNABLE);
                 mAdapter.notifyDataSetChanged();
             } else {
                 super.onBackPressed();

@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -39,12 +40,12 @@ import java.util.Date;
 public class DwreaVolunteer extends AppCompatActivity {
 
     private static EditText dateChoose1, dateChoose2, dateChoose3, dateChoosed, mAddress;
-    public static String medName =  "", barcode = "", pharPhone = "", pharName = "", address = "";
-    private static String sdate1 = "", sdate2 = "", sdate3 = "", todayDate;
+    public static String medName =  "", barcode = "", pharPhone = "", pharName = "", address = "", pharNameGen = "";
+    private static String sdate1 = "", sdate2 = "", sdate3 = "", todayDate = "", todayDateAndroid = "";
     private static String date1 = "", date2 = "", date3 = "";
     private static int datesCnt = 1;
     public ProgressDialog dialog;
-    public AlertDialog alert;
+    public AlertDialog alert, doneAlert;
     public PrefManager pref;
     public DBHandler db;
 
@@ -52,6 +53,7 @@ public class DwreaVolunteer extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dwrea_volunteer);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         boolean showDoneButton = false;
         Intent intent = getIntent();
@@ -71,6 +73,8 @@ public class DwreaVolunteer extends AppCompatActivity {
         String[] pharInfo = new String[5];
         db.getPharmacy(pharName, pharInfo);
         pharPhone = pharInfo[0];
+        pharName = pharInfo[3];
+        pharNameGen = pharInfo[4];
 
         String[] donationInfo = new String[7];
         db.getProgDonation(barcode, donationInfo);
@@ -92,6 +96,9 @@ public class DwreaVolunteer extends AppCompatActivity {
                     }
                 });
         alert = builder.create();
+
+        builder.setMessage(getString(R.string.choo_done_volu_msg) + " " + pharNameGen + "!");
+        doneAlert = builder.create();
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.volunteer);
@@ -200,6 +207,7 @@ public class DwreaVolunteer extends AppCompatActivity {
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(date1);
                         todayDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
+                        todayDateAndroid = cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + (cal.get(Calendar.DATE) % 100);
 
                         new HttpDone().execute();
                     } else
@@ -365,9 +373,9 @@ public class DwreaVolunteer extends AppCompatActivity {
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
                 if (result == 201) {
-                    db.progToDoneDonation(barcode, pharName, todayDate, medName);
+                    db.progToDoneDonation(barcode, pharName, todayDateAndroid, medName);
                     dialog.dismiss();
-                    alert.show();
+                    doneAlert.show();
                     return;
                 } else
                     HelperActivity.httpErrorToast(getApplicationContext(), 2);

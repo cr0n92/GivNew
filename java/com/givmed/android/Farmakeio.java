@@ -32,22 +32,20 @@ public class Farmakeio extends HelperActivity implements AdapterView.OnItemClick
         right_sin = getResources().getString(R.string.pharm_right_half_msg_single);
         left = getResources().getString(R.string.pharm_left_half_msg);
         msgView = (TextView) findViewById(R.id.secondMes);
-        msgView.setText(left + " (0) " + right_plu);
+        msgView.setText(left + " 0 " + right_plu);
 
         mAdapter = new MedNameAdapter(getApplicationContext());
         ListView list = (ListView)findViewById(R.id.list);
         list.setOnItemClickListener(this);
         list.setFooterDividersEnabled(true);
         list.setAdapter(mAdapter);
-
-        putMedsToList();
     }
 
     private void putMedsToList() {
         mAdapter.clear();
         count = db.getAllNamesToAdapter(mAdapter);
         String right_msg = (count == 1) ? right_sin : right_plu;
-        msgView.setText(left + " (" + count + ") " + right_msg);
+        msgView.setText(left + " " + count + " " + right_msg);
     }
 
     @Override

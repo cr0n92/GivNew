@@ -75,7 +75,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:layout_weight="1"
@@ -83,7 +83,7 @@
                     android:text="@string/naming_caps" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:layout_weight="1"
@@ -106,13 +106,14 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_below="@id/downLine"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:dividerHeight="1dp"
                 android:divider="@android:color/white"
                 android:drawSelectorOnTop="true"
                 android:footerDividersEnabled="false"
-                android:padding="5dp"
                 android:scrollbarStyle="outsideOverlay"
                 android:id="@+id/list">
             </ListView>

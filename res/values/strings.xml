@@ -44,6 +44,8 @@
     <string name="out_before">ΠΡΙΝ ΛΗΞΕΙ</string>
     <string name="out_category">Kατηγορία</string>
     <string name="out_is_sirup">Δυστυχώς τα κοινωνικά φαρμακεία δεν δέχονται φάρμακα που χρειάζονται ψυγείο ή ανοιχτά σιρόπια.</string>
+    <string name="out_matched">υπάρχει σε έλλειψη! Κανόνισε τη δωρεά σου!</string>
+    <string name="out_unmatched">Υπάρχει προγραμματισμένη δωρεά γι’αυτό το φάρμακο! Θέλεις να ακυρωθεί;</string>
 
     <!-- Προσωπικό Φαρμακείο -->
     <string name="home_message">Δες πόσα φάρμακα έχεις στο σπίτι σου, παρακάτω!</string>
@@ -60,10 +62,10 @@
     <string name="donation_values">δωρεές αξίας</string>
     <string name="donation_value">δωρεά αξίας</string>
     <string name="donation_euros">ευρώ!</string>
-    <string name="donation_done_left">Έχεις</string>
-    <string name="donation_done_rights">φάρμακα προς άμεση δωρεά!</string>
-    <string name="donation_done_right">φάρμακο προς άμεση δωρεά!</string>
+    <string name="donation_done_rights">από τα φάρμακά σου βρίσκονται σε έλλειψη!</string>
+    <string name="donation_done_right">από τα φάρμακά σου βρίσκεται σε έλλειψη!</string>
     <string name="donation_choose_msg">Επίλεξε ποιό θέλεις να δωρίσεις πρώτο από την παρακάτω λίστα.</string>
+    <string name="donation_done_zero">Δεν έχει ολοκληρωθεί ακόμα κάποια δωρεά.</string>
 
     <string name="scheduled">Προγραμματισμενες</string>
     <string name="done">Ολοκληρωμενες</string>
@@ -77,8 +79,8 @@
     <string name="choo_mid_first_msg">στο κοινωνικό φαρμακείο</string>
     <string name="choo_second_msg">Πώς θέλεις να φθάσουν τα φάρμακά σου σε αυτόν;</string>
     <string name="choo_pharm_msg">Διάλεξε το κοινωνικό φαρμακείο που θέλεις να δωρίσεις το φαρμακό σου:</string>
-    <string name="user_btn">Θα το παω εγω!</string>
-    <string name="volu_btn">Θελω να σταλει με εθελοντη</string>
+    <string name="user_btn">Θα το πάω εγώ!</string>
+    <string name="volu_btn">Θέλω να σταλεί με εθελοντή</string>
     <string name="choo_cng_msg">Μπορείς να αλλάξεις τον τρόπο μεταφοράς ανα πάσα στιγμή από το menu Προγραμματισμένες Δωρεές</string>
 
     <!-- Μόνος Μου & Εθελοντής -->
@@ -86,26 +88,28 @@
     <string name="choo_phone">Τηλέφωνο</string>
     <string name="choo_pick_date">Ημ. Παράδοσης</string>
     <string name="choo_delivered">Το παρέδωσα!</string>
-    <string name="choo_want_volu">Θελω να σταλει με εθελοντη</string>
+    <string name="choo_want_volu">Θέλω να σταλεί με εθελοντή</string>
     <string name="choo_volu_msg">Δεν μπορείς τελικά; Ζήτα κάποιον από το δίκτυό μας να σε βοηθήσει!</string>
-    <string name="choo_user_first">Ευκαιρία να γνωρίσεις και τους εθελοντές του κοινωνικού φαρμακείου!</string>
+    <string name="choo_user_first">Το κοινωνικό φαρμακείο και οι εθελοντές του σε περιμένουν!</string>
     <string name="choo_user_second">Μέχρι πότε θα μπορούσες να το πας μέσα στις επόμενες 20 μέρες;</string>
+    <string name="choo_user_delivery">Όλη η κοινότητα του GIVMED είναι περήφανη για σένα! Συνέχισε έτσι!</string>
 
     <string name="choo_volu_first">Δεν χρειάζεται να κάνεις τίποτα άλλο!</string>
     <string name="choo_volu_second">Επίλεξε τις ημέρες που μπορεί να το παραλάβει κάποιος εθελοντής.</string>
     <string name="choo_add_dates"><u>Πρόσθεσε ημερομηνίες</u></string>
     <string name="choo_picked_up">Παραλήφθηκε!</string>
     <string name="choo_addr">Διέυθυνση (Οδός, Περιοχή, Τ.Κ.)</string>
-    <string name="choo_monos_eyxaristoume"><b>Σε ευχαριστούμε!</b>\nΤο φάρμακό σου βρίσκεται σχεδόν στον προορισμό του.</string>
+    <string name="choo_monos_eyxaristoume">Σε ευχαριστούμε! Για οποιοδήποτε θέμα μην διστάσεις να επικοινωνήσεις μαζί μας!</string>
     <string name="choo_volu_call">Μπράβο σου!\nΜέσα στις επόμενες ώρες θα σε ενημερώσουμε για την ακριβή μέρα καί ώρα που θα έρθουμε για την παραλαβή!</string>
+    <string name="choo_done_volu_msg">Ευχαριστούμε πολύ! Η δωρεά σου έχει φτάσει στο κοινωνικό φαρμακείο</string>
 
     <string name="choo_date">Επέλεξε ημερομηνία!</string>
-    <string name="choo_one_date">Επέλεξε τουλάχιστον μία ημερομηνία!</string>
-    <string name="choo_empty_address">Συμπλήρωσε την διεύθυνση!</string>
+    <string name="choo_one_date">Χρειαζόμαστε τουλάχιστον μια διαθέσιμη ημερομηνία για να κανονίσουμε την μεταφορά.</string>
+    <string name="choo_empty_address">Χρειαζόμαστε τη διεύθυνσή σου για να κανονίσουμε την μεταφορά.</string>
 
     <!-- Δυο κουμπιά -->
     <string name="two_btn_first_msg">Καταχώρησε τα φαρμακά σου!</string>
-    <string name="two_btn_second_msg">Σκάναρε το barcode ή πληκτρολόγησε τον κωδικό που βρίσκεται επάνω στο κουτί!</string>
+    <string name="two_btn_second_msg">Βρες το αυτοκόλλητο πάνω στο κουτί και σκάναρε το barcode ή πληκτρολόγησε τον κάθετο κωδικό.</string>
     <string name="scan_button">Σκάναρε</string>
     <string name="input_button">Πληκτρολόγησε</string>
 
@@ -158,6 +162,7 @@
     <string name="num_are_you_ready">Είσαι έτοιμος να κάνεις την πρώτη σου δωρεά;</string>
     <string name="num_insert_phone">Πληκτρολόγησε τον αριθμό του κινητού σου για να συνεχίσουμε.</string>
     <string name="num_accept_licence">Συνεχίζοντας αποδέχεσαι τους όρους <u>Όρους Χρήσης</u></string>
+    <string name="num_alert">Για λόγους αξιοπιστίας, πρέπει να επιβεβαιώσουμε τον λογαριασμό σου με τον αριθμό του κινητού σου.</string>
 
     <!-- Επιβεβαίωση αριθμού -->
     <string name="conf_welcome">Καλώς ήρθες!</string>
@@ -175,7 +180,7 @@
     <string name="step3">Βήμα 3</string>
     <string name="tuto_layout3_msg1">Πότε θέλεις να τα δωρίσεις;</string>
     <string name="tuto_layout3_msg2">Μπλέ τικ: Αμέσως!\nΚόκκινο τικ: Λίγο πριν λήξουν.\nΌσα δεν επιλέξεις θα είναι στο προσωπικό σου φαρμακείο.</string>
-    <string name="tuto_layout4_msg1">Ήρθε η ώρα τις δωρεάς!</string>
+    <string name="tuto_layout4_msg1">Ήρθε η ώρα της δωρεάς!</string>
     <string name="tuto_layout4_msg2">Κανόνισε πως θα φθάσει το φάρμακο στον προορισμό του. Μπορείς να το πας μόνος σου ή να σε βοηθήσουμε εμείς!</string>
     <string name="skip">ΠΑΡΑΛΕΙΨΗ</string>
     <string name="learn">ΜΑΘΕ ΠΩΣ</string>
@@ -199,7 +204,7 @@
     <string name="send_with">Αποστολή με:</string>
 
     <!-- Eισαγωγή barcode -->
-    <string name="inp_type_msg">Πληκτρολόγησε τον κωδικό που βρίσκεται πάνω στο κουτι.</string>
+    <string name="inp_type_msg">Πληκτρολόγησε τον κάθετο κωδικό που βρίσκεται στο αυτοκόλλητο.</string>
     <string name="inp_error_msg">Μήπως έγραψες κάτι λάθος; Αν όχι επικοινώνησε μαζί μας!</string>
     <string name="inp_expired_msg">Το φάρμακο έχει λήξει!</string>
 

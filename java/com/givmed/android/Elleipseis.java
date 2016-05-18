@@ -38,13 +38,10 @@ import io.fabric.sdk.android.Fabric;
 public class Elleipseis extends HelperActivity
 {
     private final String TAG = "Ellepseis";
-    private String right_plu, right_sin, left_sin;
-    public static NeedAdapter mAdapter;
+    public static NeedAdapter nameAdapter, pharAdapter;
     private static TextView msgView;
     private static Button nameButton, regionButton;
     DBHandler db;
-
-
 
     //!!!!!!!!!!!PUSH!!!!!!!!!!
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -52,8 +49,6 @@ public class Elleipseis extends HelperActivity
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private TextView mInformationTextView;
     private boolean isReceiverRegistered;
-    private PrefManager pref;
-
 
     //!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!1
 
@@ -67,8 +62,6 @@ public class Elleipseis extends HelperActivity
 
         db = new DBHandler(getApplicationContext());
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        pref = new PrefManager(getApplicationContext());
-
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -100,23 +93,29 @@ public class Elleipseis extends HelperActivity
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        left_sin = getResources().getString(R.string.need_left_half_msg);
-        right_plu = getResources().getString(R.string.need_right_half_msg_plural);
-        right_sin = getResources().getString(R.string.need_right_half_msg_single);
+        String left_sin = getResources().getString(R.string.need_left_half_msg);
+        String right_plu = getResources().getString(R.string.need_right_half_msg_plural);
+        String right_sin = getResources().getString(R.string.need_right_half_msg_single);
 
         msgView = (TextView) findViewById(R.id.secondMes);
         nameButton = (Button) findViewById(R.id.nameButton);
         regionButton = (Button) findViewById(R.id.regionButton);
         msgView.setText(left_sin + " (0) " + right_plu);
 
+        nameAdapter = new NeedAdapter(getApplicationContext());
+        pharAdapter = new NeedAdapter(getApplicationContext());
+
+        final ListView list = (ListView)findViewById(R.id.list);
+        list.setFooterDividersEnabled(true);
+        //registerForContextMenu(getListView());
+        list.setAdapter(nameAdapter);
+
         nameButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 changeButtonsLayout(nameButton, regionButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right);
-                mAdapter.clear();
-                db.getAllNeeds(mAdapter, "needName");
-                //pref.setNotificationPermission(false);
+                list.setAdapter(nameAdapter);
             }
         });
 
@@ -125,22 +124,14 @@ public class Elleipseis extends HelperActivity
             @Override
             public void onClick(View v) {
                 changeButtonsLayout(regionButton, nameButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left);
-                mAdapter.clear();
-                db.getAllNeeds(mAdapter, "pharName");
-                //pref.setNotificationPermission(true);
-
+                list.setAdapter(pharAdapter);
             }
         });
 
-        mAdapter = new NeedAdapter(getApplicationContext());
-        ListView list = (ListView)findViewById(R.id.list);
-        list.setFooterDividersEnabled(true);
-        //registerForContextMenu(getListView());
-        list.setAdapter(mAdapter);
-
-        int count = db.getAllNeeds(mAdapter, "pharName");
-        String right_msg = (count == 1) ? right_sin: right_plu;
-        msgView.setText(left_sin + " " + count + " " + right_msg);
+        int count = db.getAllNeeds(nameAdapter, "needName");
+        db.getAllNeeds(pharAdapter, "pharName");
+        String need_msg = (count == 1) ? left_sin + " " + count + " " + right_sin : left_sin + " " + count + " " + right_plu;
+        msgView.setText(need_msg);
     }
 
     @Override

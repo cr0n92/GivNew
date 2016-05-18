@@ -29,25 +29,22 @@ public class SplashActivity extends AppCompatActivity {
     private String needDate, pharDate;
     private PrefManager pref;
     private DBHandler db;
-    public static DonationAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
 
-
-
-
         db = new DBHandler(getApplicationContext());
-        db.printAllMeds();
+        //db.printAllMeds();
 
         pref = new PrefManager(this);
-        pref.setMobileNumber("6975766571");
-
+        //pref.setMobileNumber("12345");
         pharDate = pref.getPharDate();
         needDate = pref.getNeedDate();
+
         new HttpPharmacies().execute();
+
         Intent intent;
         startService(new Intent(this, AlarmService.class));
         switch (pref.getNextSplash()) {

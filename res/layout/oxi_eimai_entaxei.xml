@@ -95,6 +95,11 @@
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/button_simple">
                 </Button>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/button2" />
             </RelativeLayout>
         </ScrollView>
     </RelativeLayout>

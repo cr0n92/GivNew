@@ -51,12 +51,8 @@ public class Register extends HelperActivity {
         super.setMenu(R.menu.menu_main);
         super.helperOnCreate(R.layout.register, R.string.profile, false);
 
-
-
         dialog = new ProgressDialog(this);
         pref = new PrefManager(this);
-
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.prof_age_warning))
@@ -138,6 +134,8 @@ public class Register extends HelperActivity {
 
                     Intent intent = new Intent(getApplicationContext(), TwoButtons.class);
                     startActivity(intent);
+                    finish();
+                    return true;
                 }
 
                 if (submitForm()) {
@@ -275,8 +273,6 @@ public class Register extends HelperActivity {
     private boolean allIsEmpty() {
         if (mUsername.getText().toString().trim().isEmpty() && mEmail.getText().toString().trim().isEmpty() &&
                 mDate.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Parakampsh", Toast.LENGTH_SHORT).show();
-
             return true;
         } else
            return false;

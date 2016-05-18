@@ -1,9 +1,15 @@
 package com.givmed.android;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -12,13 +18,34 @@ import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
 
 public class OroiXrhshs extends HelperActivity {
+    private boolean fromNumber = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("number")) {
+            super.onCreate(savedInstanceState);
+            super.setMenu(R.menu.menu_main_simple);
+
+            fromNumber = true;
+            setContentView(R.layout.faq);
+            Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
+            mToolBar.setTitle(R.string.oroi_xrhshs);
+            mToolBar.setNavigationIcon(R.drawable.ic_arrows);
+            setSupportActionBar(mToolBar);
+            mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
+        else {
+            super.onCreate(savedInstanceState);
+            super.setMenu(R.menu.menu_main_simple);
+            super.helperOnCreate(R.layout.faq, R.string.oroi_xrhshs, false);
+        }
         Fabric.with(this, new Crashlytics());
-        super.setMenu(R.menu.menu_main_simple);
-        super.helperOnCreate(R.layout.faq, R.string.oroi_xrhshs, true);
 
         int num_match = 10;
 
@@ -55,5 +82,11 @@ public class OroiXrhshs extends HelperActivity {
             texts[i].setText(text_strings[i]);
             myLayout.addView(texts[i]);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (fromNumber) finish();
+        else super.onBackPressed();
     }
 }

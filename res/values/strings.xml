@@ -102,6 +102,9 @@
     <string name="choo_date">Επέλεξε ημερομηνία!</string>
     <string name="choo_one_date">Επέλεξε τουλάχιστον μία ημερομηνία!</string>
     <string name="choo_empty_address">Συμπλήρωσε την διεύθυνση!</string>
+    <string name="choo_after20_date">H ημερομηνία που διάλεξες είναι μετά από 20 μέρες!</string>
+    <string name="choo_before_date">Η ημερομηνία που διάλεξες είναι παλία!</string>
+
 
     <!-- Δυο κουμπιά -->
     <string name="two_btn_first_msg">Καταχώρησε τα φαρμακά σου!</string>

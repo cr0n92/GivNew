@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -43,6 +44,8 @@ public class DwreaVolunteer extends AppCompatActivity {
     private static String sdate1 = "", sdate2 = "", sdate3 = "", todayDate;
     private static String date1 = "", date2 = "", date3 = "";
     private static int datesCnt = 1;
+    private static Context mContext;
+
     public ProgressDialog dialog;
     public AlertDialog alert;
     public PrefManager pref;
@@ -55,6 +58,8 @@ public class DwreaVolunteer extends AppCompatActivity {
 
         boolean showDoneButton = false;
         Intent intent = getIntent();
+
+        mContext = getApplicationContext();
 
         if (intent != null) {
             pharName = intent.getStringExtra("pharName");
@@ -271,6 +276,7 @@ public class DwreaVolunteer extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "pickDate");
     }
 
+
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
         @Override
@@ -289,9 +295,30 @@ public class DwreaVolunteer extends AppCompatActivity {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            setDateString(year, monthOfYear, dayOfMonth);
+            int datecheck = dateCheck(year, monthOfYear, dayOfMonth);
+            if (datecheck == 0)
+                setDateString(year, monthOfYear, dayOfMonth);
+            else if (datecheck == 2)
+                Toast.makeText(mContext, getString(R.string.choo_before_date), Toast.LENGTH_LONG).show();
+
         }
+
+        public int dateCheck(int year, int monthOfYear, int dayOfMonth) {
+
+            Calendar calendar1 = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.set(Calendar.YEAR, year);
+            calendar2.set(Calendar.MONTH, monthOfYear);
+            calendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            if (calendar1.after(calendar2)) {
+                return 2;
+            }
+            return 0;
+        }
+
     }
+
+
 
     public String transformDate(String date) {
         if (date.isEmpty())

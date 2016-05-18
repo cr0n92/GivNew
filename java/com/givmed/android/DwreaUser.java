@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -42,6 +43,8 @@ public class DwreaUser extends AppCompatActivity {
     private static EditText dateChoose;
     public static String serverDate, pharPhone;
     public ProgressDialog dialog;
+    public static Context mContext;
+
     AlertDialog alert;
     DBHandler db;
     private PrefManager pref;
@@ -56,6 +59,8 @@ public class DwreaUser extends AppCompatActivity {
 
         boolean showVoluButton = false;
         Intent intent = getIntent();
+
+        mContext = getApplicationContext();
 
         if (intent != null) {
             barcode = intent.getStringExtra("barcode");
@@ -236,7 +241,35 @@ public class DwreaUser extends AppCompatActivity {
 
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            setDateString(year, monthOfYear, dayOfMonth);
+            int datecheck = dateCheck(year,monthOfYear,dayOfMonth);
+            if (datecheck == 0)
+                setDateString(year, monthOfYear, dayOfMonth);
+            else if (datecheck == 1)
+                Toast.makeText(mContext, getString(R.string.choo_after20_date), Toast.LENGTH_LONG).show();
+            else if (datecheck == 2)
+                Toast.makeText(mContext, getString(R.string.choo_before_date), Toast.LENGTH_LONG).show();
+
+        }
+
+        public int dateCheck(int year, int monthOfYear, int dayOfMonth) {
+            Calendar calendar1 = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
+            calendar1.add(Calendar.DATE, 20);
+            calendar2.set(Calendar.YEAR, year);
+            calendar2.set(Calendar.MONTH, monthOfYear);
+            calendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            if (calendar2.after(calendar1)) {
+                return 1;
+            }
+            calendar1 = Calendar.getInstance();
+            calendar2 = Calendar.getInstance();
+            calendar2.set(Calendar.YEAR, year);
+            calendar2.set(Calendar.MONTH, monthOfYear);
+            calendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            if (calendar1.after(calendar2)) {
+                return 2;
+            }
+            return 0;
         }
     }
 

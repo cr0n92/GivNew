@@ -44,7 +44,8 @@
     <string name="out_before">ΠΡΙΝ ΛΗΞΕΙ</string>
     <string name="out_category">Kατηγορία</string>
     <string name="out_is_sirup">Δυστυχώς τα κοινωνικά φαρμακεία δεν δέχονται φάρμακα που χρειάζονται ψυγείο ή ανοιχτά σιρόπια.</string>
-    <string name="out_matched">υπάρχει σε έλλειψη! Κανόνισε τη δωρεά σου!</string>
+    <string name="out_matched_left">Υπάρχει έλλειψη σε</string>
+    <string name="out_matched_right">. Κανόνισε τη δωρεά σου!</string>
     <string name="out_unmatched">Υπάρχει προγραμματισμένη δωρεά γι’αυτό το φάρμακο! Θέλεις να ακυρωθεί;</string>
 
     <!-- Προσωπικό Φαρμακείο -->
@@ -55,7 +56,7 @@
     <string name="naming_caps">ΟΝΟΜΑΣΙΑ</string>
     <string name="expire_caps">ΗΜ. ΛΗΞΗΣ</string>
     <string name="delete_med">Διαγραφή φαρμάκου</string>
-    <string name="delete_sure">Είστε σίγουρος οτι θέλετε να το διαγράψετε;</string>
+    <string name="delete_sure">Είστε σίγουρος οτι θέλετε να διαγραφεί;</string>
 
     <!-- Δωρεές -->
     <string name="donation_med_left">Μπράβο! Μέχρι τώρα έχεις κάνει</string>

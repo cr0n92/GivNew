@@ -332,17 +332,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_STATUS, "Y");
-
-
-
         db.update(TABLE_MEDS, values, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?", new String[]{"B", three_months_later});
+
         ContentValues values1 = new ContentValues();
-
         values1.put(KEY_STATUS, "SY");
-
         db.update(TABLE_MEDS, values1, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?", new String[]{"SB", three_months_later});
-        db.close();
 
+        db.close();
     }
 
     // Deleting single med
@@ -555,6 +551,35 @@ public class DBHandler extends SQLiteOpenHelper {
         return ret;
     }
 
+    // Updating and matching
+    public Object[] matchExists(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int ret = 0;
+        String phone = ";";
+
+        String selectQuery = "SELECT " + KEY_PHAR_PHONE + " FROM " + TABLE_NEEDS
+                + " WHERE " + KEY_NEED_NAME + " = '" + name + "'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.getCount() > 0)
+            if (cursor.getCount() == 1) {
+                ret = 1;
+                cursor.moveToFirst();
+                phone = cursor.getString(0);
+            }
+            else {
+                ret = 2;
+                phone = ";";
+            }
+        else ret = -1;
+
+        cursor.close();
+        db.close();
+
+        Object[] info = {ret, phone};
+        return info;
+    }
+
     /*---------------- eofcodes functions ----------------------------*/
     // Adding new eofcode
     public void addEofcode(Medicine med) {
@@ -656,6 +681,14 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // Deleting single programmed donation
     public void deleteProgDonation(String barcode) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_DONATIONS, KEY_BARCODE + " = ?", new String[]{barcode});
+        db.close();
+    }
+
+    // Deleting single programmed donation and updating med status
+    public void deleteProgAndUpdateMed(String barcode) {
         Medicine medo = this.getMed(barcode);
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -670,7 +703,8 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // Getting a programmed donation
-    public void getProgDonation(String barcode, String[] arr) {
+    public String[] getProgDonation(String barcode) {
+        String[] arr = null;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_DONATIONS, new String[]{KEY_BARCODE, KEY_PHAR_PHONE, KEY_DATE1,
@@ -679,6 +713,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
+            arr = new String[7];
             arr[0] = cursor.getString(0);
             arr[1] = cursor.getString(1);
             arr[2] = cursor.getString(2);
@@ -689,6 +724,8 @@ public class DBHandler extends SQLiteOpenHelper {
             cursor.close();
         }
         db.close();
+
+        return arr;
     }
 
     // Updating a programmed donation

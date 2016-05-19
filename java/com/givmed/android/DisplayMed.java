@@ -21,8 +21,10 @@ import android.widget.RadioGroup;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -34,11 +36,13 @@ import io.fabric.sdk.android.Fabric;
 public class DisplayMed extends AppCompatActivity {
     private EditText mNotes;
     private Button mBefore, mNow, mOpen, mClose;
-    private String phone, notes, state, forDonation;
+    private String phone, notes, state, forDonation, pharPhone;
+    private String[] progDonation = null;
     private static Medicine med;
-    public boolean isOpen, isDonated;
-    AlertDialog sirupAlert, deleteAlert;
+    private int needsCnt = -1;
+    public boolean isOpen;
     ProgressDialog dialog;
+    AlertDialog.Builder builder;
     DBHandler db;
 
     @Override
@@ -61,6 +65,8 @@ public class DisplayMed extends AppCompatActivity {
 
         db = new DBHandler(getApplicationContext());
         dialog = new ProgressDialog(this);
+        builder = new AlertDialog.Builder(this);
+
         PrefManager pref = new PrefManager(this);
         phone = pref.getMobileNumber();
 
@@ -69,34 +75,6 @@ public class DisplayMed extends AppCompatActivity {
             med = db.getMed(intent.getStringExtra("barcode"));
         else
             finish();
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.out_is_sirup))
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                });
-        sirupAlert = builder.create();
-
-        builder.setMessage(getString(R.string.delete_sure))
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog2, int id) {
-                        if (HelperActivity.isOnline(getApplicationContext())) {
-                            HelperActivity.showDialogBox(getApplicationContext(), dialog);
-                            new HttpDeleteMedTask().execute(med.getBarcode());
-                        } else
-                            HelperActivity.httpErrorToast(getApplicationContext(), 1);
-                    }
-                })
-                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog2, int id) {
-
-                    }
-                });
-        deleteAlert = builder.create();
 
         EditText mName = (EditText) findViewById(R.id.name);
         EditText mExp = (EditText) findViewById(R.id.expiration);
@@ -121,6 +99,10 @@ public class DisplayMed extends AppCompatActivity {
         mExp.setText(med.getDate());
         mBarcode.setText(med.getBarcode());
         mNotes.setText(med.getNotes());
+
+        // koitame an yparxei programmatismenh dwrea gia auto to farmako
+        // an gyrisei null den yparxei alliws yparxei
+        progDonation = db.getProgDonation(med.getBarcode());
     }
 
     @Override
@@ -228,9 +210,9 @@ public class DisplayMed extends AppCompatActivity {
     }
 
     private void isDonatedNow() {
-        if (mBefore.getCurrentTextColor() == Color.GRAY)
+        if (mBefore.getCurrentTextColor() == Color.WHITE)
             forDonation = "B";
-        else if (mNow.getCurrentTextColor() == Color.GRAY)
+        else if (mNow.getCurrentTextColor() == Color.WHITE)
             forDonation = "Y";
         else
             forDonation = "N";
@@ -244,6 +226,23 @@ public class DisplayMed extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_delete) {
+            builder.setMessage(getString(R.string.delete_sure))
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog2, int id) {
+                            if (HelperActivity.isOnline(getApplicationContext())) {
+                                HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                                new HttpDeleteMedTask().execute(med.getBarcode());
+                            } else
+                                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog2, int id) {
+
+                        }
+                    });
+            AlertDialog deleteAlert = builder.create();
             deleteAlert.show();
             return true;
         }
@@ -260,11 +259,71 @@ public class DisplayMed extends AppCompatActivity {
 
                     if (med.getStatus().charAt(0) == 'S') {
                         if ((forDonation.equals("Y") || forDonation.equals("B")) && isOpen()) {
+                            builder.setMessage(getString(R.string.out_is_sirup))
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog2, int id) {
+
+                                        }
+                                    });
+                            AlertDialog sirupAlert = builder.create();
+
                             dialog.dismiss();
                             sirupAlert.show();
                             return true;
                         }
                         forDonation = "S" + forDonation;
+                    }
+
+                    if ((med.getStatus().equals("SY") || med.getStatus().equals("Y"))
+                        && (forDonation.equals("SN") || forDonation.equals("N")) && (progDonation != null)) {
+                        builder.setMessage(getString(R.string.out_unmatched))
+                                .setCancelable(false)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog2, int id) {
+                                        if (HelperActivity.isOnline(getApplicationContext())) {
+                                            HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                                            new HttpDonationDelete().execute();
+                                        } else
+                                            HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                                    }
+                                })
+                                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog2, int id) {
+
+                                    }
+                                });
+                        AlertDialog progExistsAlert = builder.create();
+
+                        dialog.dismiss();
+                        progExistsAlert.show();
+                        return true;
+                    }
+
+                    if ((forDonation.equals("SY") || forDonation.equals("Y")) && (progDonation == null)) {
+                        String firstName = HelperActivity.firstWord(med.getName());
+                        Object[] info = db.matchExists(firstName);
+                        needsCnt = (int) info[0];
+                        pharPhone = (String) info[1];
+
+                        if (needsCnt > 0) {
+                            builder.setMessage(getString(R.string.out_matched_left) + " " + firstName + " " + getString(R.string.out_matched_right))
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog2, int id) {
+                                            if (HelperActivity.isOnline(getApplicationContext())) {
+                                                HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                                                new HttpAddDonation().execute();
+                                            } else
+                                                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                                        }
+                                    });
+                            AlertDialog matched = builder.create();
+
+                            dialog.dismiss();
+                            matched.show();
+                            return true;
+                        }
                     }
                 }
 
@@ -274,6 +333,137 @@ public class DisplayMed extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class HttpAddDonation extends AsyncTask<Object, Void, Integer> {
+
+        private static final String TAG = "HttpGetTask_Volunteer";
+        private int error = -1;
+        private int result;
+
+        @Override
+        protected Integer doInBackground(Object... input) {
+            String data = "";
+            java.net.URL url = null;
+            HttpURLConnection conn = null;
+            String URL = HelperActivity.server + "/donations/";
+
+            try {
+                url = new URL(URL);
+                String urlParameters =
+                        "donationBarcode=" + med.getBarcode() +
+                        "&donatedPhone=" + ((needsCnt == 2) ? "1000000000" : pharPhone) +
+                        "&donationType=A";
+
+                byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
+                conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
+                conn.setDoOutput(true);
+                conn.setRequestMethod("PUT");
+                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
+                wr.write(postData);
+                InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
+                data = HelperActivity.readStream(in);
+
+                Log.e(TAG, "Komple? " + data);
+                result = conn.getResponseCode();
+
+                Log.e(TAG, "Received HTTP response: " + result);
+
+            } catch (ProtocolException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "ProtocolException");
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "MalformedURLException");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Crashlytics.logException(e);
+                error = 2;
+                Log.e(TAG, "IOException");
+                e.printStackTrace();
+            } finally {
+                if (null != conn)
+                    conn.disconnect();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (error > 0)
+                HelperActivity.httpErrorToast(getApplicationContext(), error);
+            else {
+                if (result == 201) {
+                    new HttpUpdateMedTask().execute();
+                    return;
+                } else
+                    HelperActivity.httpErrorToast(getApplicationContext(), 2);
+            }
+            dialog.dismiss();
+        }
+    }
+
+    private class HttpDonationDelete extends AsyncTask<String, Void, Integer> {
+
+        private static final String TAG = "HttpDelete";
+        private int error = -1;
+        private int result;
+
+        @Override
+        protected Integer doInBackground(String... input) {
+            java.net.URL url = null;
+            HttpURLConnection conn = null;
+
+            String URL = HelperActivity.server + "/donation_delete/" + med.getBarcode() + "/";
+
+            try {
+                url = new URL(URL);
+
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("DELETE");
+                result = conn.getResponseCode();
+                Log.e(TAG, "Received HTTP response: " + result);
+
+            } catch (ProtocolException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "ProtocolException");
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "MalformedURLException");
+            } catch (IOException e) {
+                Crashlytics.logException(e);
+                error = 2;
+                Log.e(TAG, "IOException");
+            } finally {
+                if (null != conn)
+                    conn.disconnect();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (error > 0)
+                HelperActivity.httpErrorToast(getApplicationContext(), error);
+            else {
+                if (result == 200 || result == 204) {
+                    db.deleteProgDonation(med.getBarcode());
+                    progDonation = null;
+                    new HttpUpdateMedTask().execute();
+                    return ;
+                } else
+                    HelperActivity.httpErrorToast(getApplicationContext(), 2);
+            }
+            dialog.dismiss();
+        }
     }
 
     private class HttpDeleteMedTask extends AsyncTask<String, Void, Integer> {
@@ -404,13 +594,23 @@ public class DisplayMed extends AppCompatActivity {
 
                     db.updateMed(med);
 
+                    if (needsCnt > 0) {
+                        db.addDonation(med.getBarcode(), pharPhone, ";", ";", ";", "A", ";");
+
+                        dialog.dismiss();
+                        Intent afterdel = new Intent(getApplicationContext(), Dwrees.class);
+                        afterdel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        afterdel.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(afterdel);
+                        finish();
+                        return;
+                    }
+
                     Intent afterdel = new Intent(getApplicationContext(), Farmakeio.class);
                     afterdel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     afterdel.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(afterdel);
                     finish();
-                    //TODO: an kanei to med pros dwrea na kanoume match
-
                 }
                 else
                     HelperActivity.httpErrorToast(getApplicationContext(), 2);

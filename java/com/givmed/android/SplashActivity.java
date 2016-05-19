@@ -39,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
         //db.printAllMeds();
 
         pref = new PrefManager(this);
-        //pref.setMobileNumber("12345");
+        pref.setMobileNumber("12345");
         pharDate = pref.getPharDate();
         needDate = pref.getNeedDate();
 

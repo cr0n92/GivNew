@@ -1,202 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    tools:context="com.givmed.android.Outputer">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true"
-        tools:context="com.givmed.android.Outputer">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tool_bar"
+        android:orientation="vertical">
 
-        <include
-            android:id="@+id/tool_bar"
-            layout="@layout/tool_bar" />
-
-        <ScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tool_bar"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/nameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:theme="@style/MyEditTextTheme">
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/nameLayout"
+                <EditText
+                    android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:theme="@style/MyEditTextTheme">
-
-                    <EditText
-                        android:id="@+id/name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/out_med_name"
-                        android:textSize="24sp"
-                        android:drawableStart="@drawable/ic_med_name"
-                        android:drawableLeft="@drawable/ic_med_name"
-                        android:theme="@style/MyEditTextTheme">
-                    </EditText>
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/expirationLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/nameLayout"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:theme="@style/MyEditTextTheme">
-
-                    <EditText
-                        android:id="@+id/expiration"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/out_expiration"
-                        android:textSize="24sp"
-                        android:drawableStart="@drawable/ic_calendar"
-                        android:drawableLeft="@drawable/ic_calendar"
-                        android:theme="@style/MyEditTextTheme">
-                    </EditText>
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/barcodeLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/expirationLayout"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:theme="@style/MyEditTextTheme" >
-
-                    <EditText
-                        android:id="@+id/barcode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/out_barcode"
-                        android:textSize="24sp"
-                        android:drawableStart="@drawable/ic_barcode"
-                        android:drawableLeft="@drawable/ic_barcode" >
-                    </EditText>
-
-                </android.support.design.widget.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/conditionMsg"
-                    android:layout_below="@id/barcodeLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="@string/out_condition"
+                    android:hint="@string/out_med_name"
                     android:textSize="24sp"
-                    android:drawableStart="@drawable/ic_elleipseis"
-                    android:drawableLeft="@drawable/ic_elleipseis"
+                    android:drawableStart="@drawable/ic_med_name"
+                    android:drawableLeft="@drawable/ic_med_name"
                     android:theme="@style/MyEditTextTheme">
-                </TextView>
+                </EditText>
 
-                <RadioGroup
-                    android:id="@+id/conditionGroup"
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/expirationLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nameLayout"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:theme="@style/MyEditTextTheme">
+
+                <EditText
+                    android:id="@+id/expiration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_below="@id/conditionMsg"
-                    android:orientation="horizontal"
-                    android:text="@string/out_condition"
-                    android:theme="@style/MyEditTextTheme" >
+                    android:hint="@string/out_expiration"
+                    android:textSize="24sp"
+                    android:drawableStart="@drawable/ic_calendar"
+                    android:drawableLeft="@drawable/ic_calendar"
+                    android:theme="@style/MyEditTextTheme">
+                </EditText>
 
-                    <RadioButton
-                        android:id="@+id/closed"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="@string/out_closed" />
+            </android.support.design.widget.TextInputLayout>
 
-                    <RadioButton
-                        android:id="@+id/opend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/out_open" />
-                </RadioGroup>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/barcodeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/expirationLayout"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:theme="@style/MyEditTextTheme" >
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/notesLayout"
+                <EditText
+                    android:id="@+id/barcode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/conditionGroup"
-                    android:layout_marginStart="10dp"
+                    android:hint="@string/out_barcode"
+                    android:textSize="24sp"
+                    android:drawableStart="@drawable/ic_barcode"
+                    android:drawableLeft="@drawable/ic_barcode" >
+                </EditText>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/conditionMsg"
+                android:layout_below="@id/barcodeLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/out_condition"
+                android:textSize="24sp"
+                android:drawableStart="@drawable/ic_elleipseis"
+                android:drawableLeft="@drawable/ic_elleipseis"
+                android:theme="@style/MyEditTextTheme">
+            </TextView>
+
+            <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/conditionGroup"
+                android:layout_below="@id/conditionMsg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:padding="@dimen/padding"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/closed"
+                    android:text="@string/out_closed"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:layout_width="120dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/button_gray_pressed" />
+
+                <Button
+                    android:id="@+id/opend"
+                    android:text="@string/out_open"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="18sp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:theme="@style/MyEditTextTheme" >
+                    android:layout_marginStart="10dp"
+                    android:layout_width="120dp"
+                    android:layout_height="70dp"
+                    android:background="@drawable/button_gray_unpressed" />
+            </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/notes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/out_notes"
-                        android:textSize="24sp"
-                        android:maxLength="130"
-                        android:drawableStart="@drawable/ic_notes"
-                        android:drawableLeft="@drawable/ic_notes"
-                        android:theme="@style/MyEditTextTheme" >
-                    </EditText>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/notesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/conditionGroup"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:theme="@style/MyEditTextTheme" >
 
-                </android.support.design.widget.TextInputLayout>
-
-                <View
+                <EditText
+                    android:id="@+id/notes"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_below="@id/notesLayout" />
-            </RelativeLayout>
-        </ScrollView>
-    </RelativeLayout>
+                    android:layout_height="wrap_content"
+                    android:hint="@string/out_notes"
+                    android:textSize="24sp"
+                    android:maxLength="130"
+                    android:drawableStart="@drawable/ic_notes"
+                    android:drawableLeft="@drawable/ic_notes"
+                    android:theme="@style/MyEditTextTheme" >
+                </EditText>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/navigation_header"
-        app:menu="@menu/main_drawer" />
+            </android.support.design.widget.TextInputLayout>
 
-</android.support.v4.widget.DrawerLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/notesLayout" />
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

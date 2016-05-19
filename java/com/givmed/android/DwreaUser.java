@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -39,10 +40,11 @@ import java.util.Date;
 
 public class DwreaUser extends AppCompatActivity {
 
-    private static String barcode="", medname="", pharmname="", todayDate="", date1 = "";
+    private static String barcode="", medname="", pharmname="", todayDate="", todayDateAndroid="", date1 = "";
     private static EditText dateChoose;
     public static String serverDate, pharPhone;
     public ProgressDialog dialog;
+    AlertDialog deliveredAlert, deleteAlert;
     public static Context mContext;
 
     AlertDialog alert;
@@ -53,6 +55,8 @@ public class DwreaUser extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dwrea_user);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
 
         db = new DBHandler(getApplicationContext());
         dialog = new ProgressDialog(this);
@@ -70,12 +74,14 @@ public class DwreaUser extends AppCompatActivity {
             if (intent.hasExtra("secondTime")) showVoluButton = true;
         }
 
-        String[] donationInfo = new String[7];
-        db.getProgDonation(barcode, donationInfo);
+        String[] donationInfo = db.getProgDonation(barcode);
 
         String[] pharInfo = new String[5];
         db.getPharmacy(pharmname, pharInfo);
         pharPhone = pharInfo[0];
+        String pharAddress = pharInfo[1];
+        String pharHours = pharInfo[2];
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.choo_monos_eyxaristoume))
@@ -90,6 +96,27 @@ public class DwreaUser extends AppCompatActivity {
                     }
                 });
         alert = builder.create();
+
+        builder.setMessage(getString(R.string.choo_user_delivery));
+        deliveredAlert = builder.create();
+
+        builder.setMessage(getString(R.string.delete_sure))
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog2, int id) {
+                        if (HelperActivity.isOnline(getApplicationContext())) {
+                            HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                            new HttpDelete().execute();
+                        } else
+                            HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog2, int id) {
+
+                    }
+                });
+        deleteAlert = builder.create();
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.user);
@@ -127,7 +154,7 @@ public class DwreaUser extends AppCompatActivity {
         EditText mPhone = (EditText) findViewById(R.id.phone);
 
         mName.setText(medname);
-        String foreas = pharmname + ", " + pharInfo[1] + ", " + pharInfo[2];
+        String foreas = pharmname + ", " + pharAddress + ", " + pharHours;
         mForeas.setText(foreas); // + wres leitourgias kai pws pame ekei
         mPhone.setText(pharPhone);
 
@@ -136,7 +163,8 @@ public class DwreaUser extends AppCompatActivity {
         mPhone.setKeyListener(null);
 
         final Button doneButton = (Button) findViewById(R.id.button1);
-        
+
+
         TextView voluMsg = (TextView) findViewById(R.id.voluMsg);
         final Button voluButton = (Button) findViewById(R.id.button2);
 
@@ -287,7 +315,7 @@ public class DwreaUser extends AppCompatActivity {
         }
     }
 
- private class HttpDelete extends AsyncTask<String, Void, Integer> {
+    private class HttpDelete extends AsyncTask<String, Void, Integer> {
 
         private static final String TAG = "HttpDelete";
         private int error = -1;
@@ -335,7 +363,7 @@ public class DwreaUser extends AppCompatActivity {
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
                 if (result == 200 || result == 204) {
-                    db.deleteProgDonation(barcode);
+                    db.deleteProgAndUpdateMed(barcode);
                     dialog.dismiss();
 
                     Intent afterdel = new Intent(getApplicationContext(), Dwrees.class);

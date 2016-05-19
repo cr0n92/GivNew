@@ -9,11 +9,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,7 +26,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class BlueRedList extends HelperActivity implements AdapterView.OnItemClickListener {
+public class BlueRedList extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private final String TAG = "BlueRedList";
     ProgressDialog dialog;
     public static BlueRedAdapter mAdapter;
@@ -36,9 +39,19 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        super.setMenu(R.menu.menu_main);
-        super.helperOnCreate(R.layout.blue_red_list, R.string.two_buttons, true);
+        setContentView(R.layout.blue_red_list);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
+        mToolBar.setTitle(R.string.two_buttons);
+        mToolBar.setNavigationIcon(R.drawable.ic_arrows);
+        setSupportActionBar(mToolBar);
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         db = new DBHandler(getApplicationContext());
 
@@ -86,6 +99,12 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
         BlueRedItem item = (BlueRedItem) mAdapter.getItem(position);
         final ImageView statusView = (ImageView) v.findViewById(R.id.statusView);
@@ -110,18 +129,12 @@ public class BlueRedList extends HelperActivity implements AdapterView.OnItemCli
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (inRed) {
-                inRed = false;
-                firstMes.setText(blueBuilder, TextView.BufferType.SPANNABLE);
-                mAdapter.notifyDataSetChanged();
-            } else {
-                super.onBackPressed();
-            }
-        }
+        if (inRed) {
+            inRed = false;
+            firstMes.setText(blueBuilder, TextView.BufferType.SPANNABLE);
+            mAdapter.notifyDataSetChanged();
+        } else
+            super.onBackPressed();
     }
 
     @Override

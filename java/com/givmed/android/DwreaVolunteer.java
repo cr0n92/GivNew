@@ -41,14 +41,14 @@ import java.util.Date;
 public class DwreaVolunteer extends AppCompatActivity {
 
     private static EditText dateChoose1, dateChoose2, dateChoose3, dateChoosed, mAddress;
-    public static String medName =  "", barcode = "", pharPhone = "", pharName = "", address = "", pharNameGen = "";
-    private static String sdate1 = "", sdate2 = "", sdate3 = "", todayDate = "", todayDateAndroid = "";
-    private static String date1 = "", date2 = "", date3 = "";
+    public String medName =  "", barcode = "", pharPhone = "", pharName = "", address = "", pharNameGen = "";
+    private String sdate1 = "", sdate2 = "", sdate3 = "", todayDate = "", todayDateAndroid = "";
+    private String date1 = "", date2 = "", date3 = "";
     private static int datesCnt = 1;
     private static Context mContext;
 
     public ProgressDialog dialog;
-    public AlertDialog alert, doneAlert;
+    public AlertDialog alert, doneAlert, deleteAlert;
     public PrefManager pref;
     public DBHandler db;
 
@@ -81,8 +81,7 @@ public class DwreaVolunteer extends AppCompatActivity {
         pharName = pharInfo[3];
         pharNameGen = pharInfo[4];
 
-        String[] donationInfo = new String[7];
-        db.getProgDonation(barcode, donationInfo);
+        String[] donationInfo = db.getProgDonation(barcode);
         date1 = donationInfo[2];
         date2 = donationInfo[3];
         date3 = donationInfo[4];
@@ -104,6 +103,24 @@ public class DwreaVolunteer extends AppCompatActivity {
 
         builder.setMessage(getString(R.string.choo_done_volu_msg) + " " + pharNameGen + "!");
         doneAlert = builder.create();
+
+        builder.setMessage(getString(R.string.delete_sure))
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog2, int id) {
+                        if (HelperActivity.isOnline(getApplicationContext())) {
+                            HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                            new HttpDelete().execute();
+                        } else
+                            HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog2, int id) {
+
+                    }
+                });
+        deleteAlert = builder.create();
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.volunteer);
@@ -224,7 +241,7 @@ public class DwreaVolunteer extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main_delete, menu);
         return true;
     }
 
@@ -261,6 +278,15 @@ public class DwreaVolunteer extends AppCompatActivity {
             } else
                 HelperActivity.httpErrorToast(getApplicationContext(), 1);
         }
+        else if (id == R.id.action_delete) {
+
+            if (HelperActivity.isOnline(getApplicationContext())) {
+                HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                deleteAlert.show();
+            } else
+                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -334,6 +360,69 @@ public class DwreaVolunteer extends AppCompatActivity {
 
         String[] splitted = date.split("/");
         return "20" + splitted[2] + "-" + splitted[1] + "-" + splitted[0];
+    }
+
+    private class HttpDelete extends AsyncTask<String, Void, Integer> {
+
+        private static final String TAG = "HttpDelete";
+        private int error = -1;
+        private int result;
+
+        @Override
+        protected Integer doInBackground(String... input) {
+            java.net.URL url = null;
+            HttpURLConnection conn = null;
+
+            String URL = HelperActivity.server + "/donation_delete/" + barcode + "/";
+
+            try {
+                url = new URL(URL);
+
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("DELETE");
+                result = conn.getResponseCode();
+                Log.e(TAG, "Received HTTP response: " + result);
+
+            } catch (ProtocolException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "ProtocolException");
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "MalformedURLException");
+            } catch (IOException e) {
+                Crashlytics.logException(e);
+                error = 2;
+                Log.e(TAG, "IOException");
+            } finally {
+                if (null != conn)
+                    conn.disconnect();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (error > 0)
+                HelperActivity.httpErrorToast(getApplicationContext(), error);
+            else {
+                if (result == 200 || result == 204) {
+                    db.deleteProgAndUpdateMed(barcode);
+                    dialog.dismiss();
+
+                    Intent afterdel = new Intent(getApplicationContext(), Dwrees.class);
+                    afterdel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    afterdel.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(afterdel);
+                    finish();
+                } else
+                    HelperActivity.httpErrorToast(getApplicationContext(), 2);
+            }
+            dialog.dismiss();
+        }
     }
 
     private class HttpDone extends AsyncTask<Void, Void, Integer> {

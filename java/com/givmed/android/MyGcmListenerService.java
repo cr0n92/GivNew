@@ -31,6 +31,8 @@ public class MyGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         String message = data.getString("message");
+        String pharmacy = data.getString("pharmacy");
+
         Log.e(TAG, "From: " + from);
         Log.e(TAG, "Message: " + message);
 

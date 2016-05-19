@@ -135,6 +135,13 @@ public class HelperActivity extends AppCompatActivity
         String class_name = this.getClass().getSimpleName();
         boolean started = false;
 
+        // If set, and the activity being launched is already running in the current task, then instead of
+        // launching a new instance of that activity, all of the other activities on top of it will be closed and
+        // this Intent will be delivered to the (now on top) old activity as a new Intent.
+        //showItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        // If set, the activity will not be launched if it is already running at the top of the history stack.
+        //showItemIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
         if (id == R.id.nav_personal_pharmacy && !class_name.equals("Farmakeio")) {
             Intent FIntent = new Intent(getApplicationContext(), Farmakeio.class);
             startActivity(FIntent);

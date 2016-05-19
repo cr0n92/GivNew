@@ -39,7 +39,7 @@ import java.util.Date;
 
 public class DwreaUser extends AppCompatActivity {
 
-    private static String barcode="", medname="", pharmname="", todayDate="", todayDateAndroid="", date1 = "";
+    private String barcode="", medname="", pharmname="", todayDate="", todayDateAndroid="", date1 = "";
     private static EditText dateChoose;
     public static String serverDate, pharPhone;
     public ProgressDialog dialog;
@@ -68,12 +68,14 @@ public class DwreaUser extends AppCompatActivity {
             if (intent.hasExtra("secondTime")) showVoluButton = true;
         }
 
-        String[] donationInfo = new String[7];
-        db.getProgDonation(barcode, donationInfo);
+        String[] donationInfo = db.getProgDonation(barcode);
 
         String[] pharInfo = new String[5];
         db.getPharmacy(pharmname, pharInfo);
         pharPhone = pharInfo[0];
+        String pharAddress = pharInfo[1];
+        String pharHours = pharInfo[2];
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.choo_monos_eyxaristoume))
@@ -146,7 +148,7 @@ public class DwreaUser extends AppCompatActivity {
         EditText mPhone = (EditText) findViewById(R.id.phone);
 
         mName.setText(medname);
-        String foreas = pharmname + ", " + pharInfo[1] + ", " + pharInfo[2];
+        String foreas = pharmname + ", " + pharAddress + ", " + pharHours;
         mForeas.setText(foreas); // + wres leitourgias kai pws pame ekei
         mPhone.setText(pharPhone);
 
@@ -327,7 +329,7 @@ public class DwreaUser extends AppCompatActivity {
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
                 if (result == 200 || result == 204) {
-                    db.deleteProgDonation(barcode);
+                    db.deleteProgAndUpdateMed(barcode);
                     dialog.dismiss();
 
                     Intent afterdel = new Intent(getApplicationContext(), Dwrees.class);

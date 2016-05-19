@@ -7,8 +7,12 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 import com.crashlytics.android.Crashlytics;
@@ -29,7 +33,7 @@ import java.util.regex.Pattern;
 
 import io.fabric.sdk.android.Fabric;
 
-public class Inputter extends HelperActivity {
+public class Inputter extends AppCompatActivity {
     private EditText mEditText;
     private String date, eof, name, code;
     ProgressDialog dialog;
@@ -40,9 +44,19 @@ public class Inputter extends HelperActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        super.setMenu(R.menu.menu_main);
-        super.helperOnCreate(R.layout.input_byhand, R.string.inputter, true);
+        setContentView(R.layout.input_byhand);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
+        mToolBar.setTitle(R.string.inputter);
+        mToolBar.setNavigationIcon(R.drawable.ic_arrows);
+        setSupportActionBar(mToolBar);
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         dialog = new ProgressDialog(this);
         mEditText = (EditText) findViewById(R.id.edit1);
@@ -74,6 +88,12 @@ public class Inputter extends HelperActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
         GivmedApplication.getInstance().trackScreenView("Inputter");
@@ -89,12 +109,12 @@ public class Inputter extends HelperActivity {
             if (code.length() != 12)
                 wrongBarcodeAlert.show();
             else {
-                if (isOnline(getApplicationContext())) {
-                    showDialogBox(getApplicationContext(), dialog);
+                if (HelperActivity.isOnline(getApplicationContext())) {
+                    HelperActivity.showDialogBox(getApplicationContext(), dialog);
 
                     new HttpGetTask().execute(code);
                 } else
-                    httpErrorToast(getApplicationContext(), 1);
+                    HelperActivity.httpErrorToast(getApplicationContext(), 1);
             }
         }
 
@@ -136,14 +156,14 @@ public class Inputter extends HelperActivity {
                 conn.setUseCaches(false);
 
                 InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
-                data = readStream(in);
+                data = HelperActivity.readStream(in);
 
                 jsessid = jsess_pattern.matcher(data);
-                if (!jsessid.find()) throw new Exception("wrong barcode");
+                if (!jsessid.find()) throw new ArithmeticException("wrong barcode");
                 cookie = jsessid.group(1);
 
                 viewState = state_pattern.matcher(data);
-                if (!viewState.find()) throw new Exception("wrong barcode");
+                if (!viewState.find()) throw new ArithmeticException("wrong barcode");
                 state = viewState.group(1).replaceAll(":", "%3A");
 
                 String urlParameters =
@@ -176,7 +196,7 @@ public class Inputter extends HelperActivity {
                 DataOutputStream wr = new DataOutputStream(conn1.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
                 wr.write(postData);
                 InputStream in2 = new BufferedInputStream(conn1.getInputStream());
-                data2 = readStream(in2);
+                data2 = HelperActivity.readStream(in2);
 
                 Pattern brand_pattern = Pattern.compile("<span title=\"Περιγραφή συσκ.\">Περιγραφή συσκ.</span></td><td role=\"gridcell\"><span title=\"Περιγραφή συσκ.\">([^<]*)");
                 Pattern date_pattern = Pattern.compile("<span title=\"Ημ/νία λήξης\">Ημ/νία λήξης</span></td><td role=\"gridcell\"><span title=\"Ημ/νία λήξης\">([^<]*)");
@@ -184,15 +204,15 @@ public class Inputter extends HelperActivity {
                 Matcher brand, date, eof;
 
                 date = date_pattern.matcher(data2);
-                if (!date.find()) throw new Exception("wrong barcode");
+                if (!date.find()) throw new ArithmeticException("wrong barcode");
                 results[0] = date.group(1);
 
                 brand = brand_pattern.matcher(data2);
-                if (!brand.find()) throw new Exception("wrong barcode");
+                if (!brand.find()) throw new ArithmeticException("wrong barcode");
                 results[1] = brand.group(1);
 
                 eof = eof_pattern.matcher(data2);
-                if (!eof.find()) throw new Exception("wrong barcode");
+                if (!eof.find()) throw new ArithmeticException("wrong barcode");
                 results[2] = eof.group(1);
 
             } catch (ProtocolException e) {
@@ -207,7 +227,7 @@ public class Inputter extends HelperActivity {
                 Crashlytics.logException(e);
                 error = 1;
                 Log.e(TAG, "IOException");
-            } catch (Exception e) {
+            } catch (ArithmeticException e) {
                 Crashlytics.logException(e);
                 error = 2;
                 Log.e(TAG, "Wrong barcode");
@@ -226,7 +246,7 @@ public class Inputter extends HelperActivity {
         protected void onPostExecute(String[] result) {
             if (error > 0) {
                 if (error == 1)
-                    httpErrorToast(getApplicationContext(), 1);
+                    HelperActivity.httpErrorToast(getApplicationContext(), 1);
                 else {
                     dialog.dismiss();
                     wrongBarcodeAlert.show();

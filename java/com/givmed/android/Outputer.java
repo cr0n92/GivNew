@@ -5,10 +5,16 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
@@ -29,11 +35,12 @@ import java.nio.charset.Charset;
 
 import io.fabric.sdk.android.Fabric;
 
-public class Outputer extends HelperActivity {
-    private EditText mName, mExp, mBarcode, mNotes;
-    private RadioGroup mConditionGroup;
+public class Outputer extends AppCompatActivity {
+    private EditText mNotes;
+    private boolean isOpen;
+    private Button mOpen, mClose;
     JSONObject obj = null;
-    private String server_date = "", name = "", date = "", barcode = "", eofcode = "", state = "", price = "", notes = "";
+    private String server_date = "", name = "", date = "", barcode = "", eofcode = "", state = "", notes = "";
     ProgressDialog dialog;
     AlertDialog alert;
     PrefManager pref;
@@ -43,9 +50,19 @@ public class Outputer extends HelperActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
-        super.setMenu(R.menu.menu_main);
-        super.helperOnCreate(R.layout.outputs, R.string.outputer, true);
+        setContentView(R.layout.outputs);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
+        mToolBar.setTitle(R.string.outputer);
+        mToolBar.setNavigationIcon(R.drawable.ic_arrows);
+        setSupportActionBar(mToolBar);
+        mToolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         db = new DBHandler(getApplicationContext());
         pref = new PrefManager(this);
@@ -64,21 +81,36 @@ public class Outputer extends HelperActivity {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         onBackPressed();
-//                        Intent TedxIntent = new Intent(getApplicationContext(), ImFine.class);
-////                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-////                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                        TedxIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//                        startActivity(TedxIntent);
-//                        finish();
                     }
                 });
         alert = builder.create();
 
-        mName = (EditText) findViewById(R.id.name);
-        mExp = (EditText) findViewById(R.id.expiration);
-        mBarcode = (EditText) findViewById(R.id.barcode);
-        mConditionGroup = (RadioGroup) findViewById(R.id.conditionGroup);
+        EditText mName = (EditText) findViewById(R.id.name);
+        EditText mExp = (EditText) findViewById(R.id.expiration);
+        EditText mBarcode = (EditText) findViewById(R.id.barcode);
+        mOpen = (Button) findViewById(R.id.opend);
+        mClose = (Button) findViewById(R.id.closed);
         mNotes = (EditText) findViewById(R.id.notes);
+
+        mClose.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                isOpen = false;
+                HelperActivity.changeButtonsLayout(mClose, mOpen, R.drawable.button_gray_pressed,
+                        R.drawable.button_gray_unpressed, Color.WHITE, Color.GRAY);
+            }
+        });
+
+        mOpen.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                isOpen = true;
+                HelperActivity.changeButtonsLayout(mOpen, mClose, R.drawable.button_gray_pressed,
+                        R.drawable.button_gray_unpressed, Color.WHITE, Color.GRAY);
+            }
+        });
 
         mName.setText(name);
         mExp.setText(date);
@@ -93,9 +125,12 @@ public class Outputer extends HelperActivity {
     public void onResume() {
         super.onResume();  // Always call the superclass method first
         GivmedApplication.getInstance().trackScreenView("Outputer");
+    }
 
-
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override
@@ -104,22 +139,13 @@ public class Outputer extends HelperActivity {
         //do whatever you want the 'Back' button to do
         //as an example the 'Back' button is set to start a new Activity named 'NewActivity'
         Intent newIntent = new Intent(Outputer.this, Inputter.class);
-        newIntent.putExtra("barcode",barcode);
+        newIntent.putExtra("barcode", barcode);
         this.startActivity(newIntent);
         finish();
-        return;
     }
 
     private boolean isOpen() {
-
-        switch (mConditionGroup.getCheckedRadioButtonId()) {
-            case R.id.closed: {
-                return false;
-            }
-            default: {
-                return true;
-            }
-        }
+        return isOpen;
     }
 
     @Override
@@ -129,10 +155,9 @@ public class Outputer extends HelperActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_tick) {
-            if (isOnline(getApplicationContext())) {
-                showDialogBox(getApplicationContext(), dialog);
+            if (HelperActivity.isOnline(getApplicationContext())) {
+                HelperActivity.showDialogBox(getApplicationContext(), dialog);
 
                 state = (isOpen()) ? "O" : "C";
                 notes = mNotes.getText().toString().trim();
@@ -155,7 +180,7 @@ public class Outputer extends HelperActivity {
             String data = "";
             java.net.URL url = null;
             HttpURLConnection conn2 = null;
-            String URL = server + "/med_check/" + pref.getMobileNumber() + "/";
+            String URL = HelperActivity.server + "/med_check/" + pref.getMobileNumber() + "/";
 
             try {
                 url = new URL(URL);
@@ -174,7 +199,7 @@ public class Outputer extends HelperActivity {
                 DataOutputStream wr = new DataOutputStream(conn2.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
                 wr.write(postData);
                 InputStream in = new BufferedInputStream(conn2.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
-                data = readStream(in);
+                data = HelperActivity.readStream(in);
 
                 Log.e(TAG, "Komple? " + data);
 
@@ -215,7 +240,7 @@ public class Outputer extends HelperActivity {
         @Override
         protected void onPostExecute(Integer result) {
             if (error > 0) {
-                httpErrorToast(getApplicationContext(), error);
+                HelperActivity.httpErrorToast(getApplicationContext(), error);
             } else {
                 if (result == 204) {
                     dialog.dismiss();
@@ -230,27 +255,21 @@ public class Outputer extends HelperActivity {
                             status = "D";
                         else if (state.equals("O") && !obj.getBoolean("medIsDonatableIfOpen"))
                             status = "SN";
-                        else if (obj.getBoolean("medIsDonatableIfOpen"))
+                        else if (!obj.getBoolean("medIsDonatableIfOpen"))
                             status = "SU";
 
                         db.addMed(new Medicine(barcode, eofcode, name, date, obj.getString("medPrice"), notes, state,
-                            obj.getString("medSubstance"), obj.getString("medCategory"), status), firstWord(name));
+                            obj.getString("medSubstance"), obj.getString("medCategory"), status), HelperActivity.firstWord(name));
 
                     } catch (JSONException e) {
                         Crashlytics.logException(e);
                         e.printStackTrace();
                         dialog.dismiss();
-                        httpErrorToast(getApplicationContext(), 2);
+                        HelperActivity.httpErrorToast(getApplicationContext(), 2);
                         return;
                     }
 
                     Intent showItemIntent = new Intent(getApplicationContext(), ImFine.class);
-                    // If set, and the activity being launched is already running in the current task, then instead of
-                    // launching a new instance of that activity, all of the other activities on top of it will be closed and
-                    // this Intent will be delivered to the (now on top) old activity as a new Intent.
-                    //showItemIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    // If set, the activity will not be launched if it is already running at the top of the history stack.
-                    //showItemIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     showItemIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(showItemIntent);
                     finish();

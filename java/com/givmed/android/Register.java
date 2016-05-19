@@ -128,7 +128,7 @@ public class Register extends HelperActivity {
         });
 
         //an einai palios xrhsths kai mpainoume prwth fora sto profil
-        if (pref.getOldUser() && pref.getNextSplash().equals("Register")) {
+        //if (pref.getOldUser() && pref.getNextSplash().equals("Register")) {
             if (isOnline(getApplicationContext()))
                 alert1.show();
             else {
@@ -137,7 +137,7 @@ public class Register extends HelperActivity {
                 System.exit(0);
             }
 
-        }
+       // }
 
         phone = pref.getMobileNumber();
         username = pref.getUsername();
@@ -169,14 +169,21 @@ public class Register extends HelperActivity {
         mUsername.addTextChangedListener(new MyTextWatcher(mUsername));
     }
 
-    private String dateWithSlash(String date) {
-        Log.e("Old date",date+"");
+    private String dateWithSlash(String date,boolean isMed) {
+        if (date.equals("null"))
+            return ";";
+
         String[] help = date.split("-");
-        Log.e("New date",help[1]+"/"+help[0]);
 
-
-        return help[1]+"/"+help[0];
+        if (isMed) {
+            return help[1] + "/" + help[0];
+        }
+        else {
+            return help[2] + "/" + help[1] + "/" + help[0].charAt(2) + "" + help[0].charAt(3);
+        }
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -385,7 +392,7 @@ public class Register extends HelperActivity {
 
 
                         db.addMed(new Medicine(object.getString("barcode"), object.getString("eofcode"), object.getString("medName"),
-                               dateWithSlash(object.getString("expirationDate")), object.getString("medPrice"), object.getString("notes"),
+                               dateWithSlash(object.getString("expirationDate"), true), object.getString("medPrice"), object.getString("notes"),
                                 object.getString("state"),what1,what2,
                                 object.getString("forDonation")),firstWord(object.getString("medName")));
 
@@ -397,7 +404,7 @@ public class Register extends HelperActivity {
 
                         JSONObject object = done_donations.getJSONObject(i);
                         db.addDoneDonation(object.getString("donePrice"), firstWord(object.getString("doneName")),
-                                object.getString("pharmacyName"), object.getString("doneDate"));
+                                object.getString("pharmacyName"), dateWithSlash(object.getString("doneDate"),false));
                     }
 
                     for(int i = 0; i < donations.length(); i++)
@@ -405,8 +412,8 @@ public class Register extends HelperActivity {
 
                         JSONObject object = donations.getJSONObject(i);
                         db.addDonation(object.getString("donationBarcode"), object.getString("donatedPhone"),
-                                object.getString("deliveryDate1"),object.getString("deliveryDate2"),
-                                object.getString("deliveryDate3"), object.getString("deliveryType"),
+                                dateWithSlash(object.getString("deliveryDate1"),false),dateWithSlash(object.getString("deliveryDate2"),false),
+                                dateWithSlash(object.getString("deliveryDate3"),false), object.getString("deliveryType"),
                                 object.getString("donationAddress"));
                     }
 

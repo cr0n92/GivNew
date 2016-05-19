@@ -107,7 +107,8 @@
     <string name="choo_date">Επέλεξε ημερομηνία!</string>
     <string name="choo_one_date">Χρειαζόμαστε τουλάχιστον μια διαθέσιμη ημερομηνία για να κανονίσουμε την μεταφορά.</string>
     <string name="choo_empty_address">Χρειαζόμαστε τη διεύθυνσή σου για να κανονίσουμε την μεταφορά.</string>
-
+<string name="choo_after20_date">H ημερομηνία που διάλεξες είναι μετά από 20 μέρες!</string>
+    <string name="choo_before_date">Η ημερομηνία που διάλεξες είναι παλία!</string>
     <!-- Δυο κουμπιά -->
     <string name="two_btn_first_msg">Καταχώρησε τα φαρμακά σου!</string>
     <string name="two_btn_second_msg">Βρες το αυτοκόλλητο πάνω στο κουτί και σκάναρε το barcode ή πληκτρολόγησε τον κάθετο κωδικό.</string>

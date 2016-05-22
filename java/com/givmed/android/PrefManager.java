@@ -49,6 +49,13 @@ public class PrefManager {
     private static final String KEY_OLD_USER = "old_user";
     private static final String KEY_NEXT_SPLASH = "next_splash";
 
+    public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public static final String SMS_ORIGIN = "givmed";
+
+    // special character to prefix the otp. Make sure this character appears only once in the sms
+    public static final String OTP_DELIMITER = ":";
+
 
 
 

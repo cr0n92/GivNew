@@ -35,7 +35,7 @@ public class SMSReceiver extends BroadcastReceiver {
         Log.e(TAG, "Received SMS: " + message + ", Sender: " + senderAddress);
 
         // if the SMS is not from our gateway, ignore the message
-        if (!senderAddress.toLowerCase().contains(Config.SMS_ORIGIN.toLowerCase())) {
+        if (!senderAddress.toLowerCase().contains(PrefManager.SMS_ORIGIN.toLowerCase())) {
             return;
         }
 
@@ -63,7 +63,7 @@ public class SMSReceiver extends BroadcastReceiver {
      */
     private String getVerificationCode(String message) {
         String code = null;
-        int index = message.indexOf(Config.OTP_DELIMITER);
+        int index = message.indexOf(PrefManager.OTP_DELIMITER);
 
         String arr[] = message.split(" ", 2);
 

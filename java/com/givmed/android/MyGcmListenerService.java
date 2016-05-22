@@ -19,6 +19,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
     private PrefManager pref;
+    private String medName,pharPhone;
 
     /**
      * Called when message is received.
@@ -30,8 +31,10 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
+        medName = data.getString("medName");
+        pharPhone = data.getString("pharPhone");
         String message = data.getString("message");
-        String pharmacy = data.getString("pharmacy");
+
 
         Log.e(TAG, "From: " + from);
         Log.e(TAG, "Message: " + message);
@@ -71,6 +74,11 @@ public class MyGcmListenerService extends GcmListenerService {
      */
     private void sendNotification(String message) {
         Intent intent = new Intent(this, Dwrees.class);
+        intent.putExtra("medName",medName);
+        intent.putExtra("pharPhone",pharPhone);
+        intent.putExtra("fromPush",true);
+
+
         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);

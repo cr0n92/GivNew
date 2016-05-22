@@ -7,11 +7,8 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -152,8 +149,7 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
         //Kanoume subscribe mono gia ayta pou den exoune ginei match
         ArrayList<String> topics = new ArrayList<String>();
 
-        Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
-        serviceIntent.putExtra("subscribe", true);
+
 
         dialog = new ProgressDialog(this);
         dialog.setMessage(getString(R.string.matching));
@@ -162,16 +158,24 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
         dialog.show();
 
         for (BlueRedItem item : mAdapter.mItems) {
-            Log.e("Med name",item.getName());
+            Log.e("Med name", item.getName());
             ret = db.updateMedAndMatch(item);
 
-            if (ret == -1)
-                topics.add(item.getName());
-            else if (ret == 1)
+            if (ret == -1) {
+                if (db.checkMedSubscribe( item.getName(),true))
+                    topics.add(item.getName());
+            }
+            else if (ret == 1) {
                 matchedMeds++;
+            }
         }
-        serviceIntent.putStringArrayListExtra("topic", topics);
-        startService(serviceIntent);
+
+        if (!topics.isEmpty()) {
+            Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
+            serviceIntent.putExtra("subscribe", true);
+            serviceIntent.putStringArrayListExtra("topic", topics);
+            startService(serviceIntent);
+        }
 
         dialog.dismiss();
         dialog = null;

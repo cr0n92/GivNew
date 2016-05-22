@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.util.ArrayList;
+
 import io.fabric.sdk.android.Fabric;
 
 public class Dwrees extends HelperActivity implements AdapterView.OnItemClickListener {
@@ -33,6 +35,17 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         super.helperOnCreate(R.layout.dwrees, R.string.dwrees, false);
 
         db = new DBHandler(getApplicationContext());
+
+        Intent pushIntent = getIntent();
+        if (pushIntent.hasExtra("fromPush")) {
+            ArrayList<String> topics = new ArrayList<String>();
+            topics.add(pushIntent.getStringExtra("medName"));
+            Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
+            serviceIntent.putExtra("subscribe", false);
+            serviceIntent.putStringArrayListExtra("topic", topics);
+            startService(serviceIntent);
+            db.addDonationFromPush(pushIntent.getStringExtra("medName"),pushIntent.getStringExtra("pharPhone"));
+        }
 
         left = getResources().getString(R.string.donation_med_left);
         right = getResources().getString(R.string.donation_euros);

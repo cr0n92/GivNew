@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -33,7 +33,7 @@ public class AlarmService extends Service {
         Calendar calendar = Calendar.getInstance();
         int cur_month= calendar.get(Calendar.MONTH);
         pref = new PrefManager(this);
-        //ta updates ginontai eite an o trexwn mhnas einaimegaluteros apo ton apo8hkeumeno eite an o palios mhnas einai 11 kai
+        //ta updates ginontai eite an o trexwn mhnas einai megaluteros apo ton apo8hkeumeno eite an o palios mhnas einai 11 kai
         //o trexwn 0
         if (cur_month > pref.getOldMonth() || pref.getOldMonth() - cur_month ==11) {
             int exp_month = (cur_month + 3) % 12 + 1;
@@ -41,8 +41,21 @@ public class AlarmService extends Service {
             String three_months_later =  "" +exp_month+ "/"+exp_year;
             Log.e("Three Months Later",""+three_months_later);
             db = new DBHandler(getApplicationContext());
-            db.updateMedStatus(three_months_later);
+            ArrayList<String> topics = db.updateMedStatus(three_months_later);
+            ArrayList<String> topics1 = new ArrayList<String>();
+            //tsekaroume an einai ta prwta me Y/SY.isws einai xeirotero apo to na kanoume apla subscribe peritta.tha deiksei
+            //apo thn ektenh data flow analush pou tha pragmatopoih8ei
+            for (String x: topics) {
+                if (db.checkMedSubscribe(x,true))
+                    topics1.add(x);
+            }
 
+            if (!topics1.isEmpty()) {
+                Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
+                serviceIntent.putExtra("subscribe", true);
+                serviceIntent.putStringArrayListExtra("topic", topics1);
+                startService(serviceIntent);
+            }
             //enhmerwnoume ton Pref oti o eginan ta updates stis dwrees
             pref.setOldMonth(cur_month);
 

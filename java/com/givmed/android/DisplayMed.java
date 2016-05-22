@@ -16,8 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -30,13 +28,14 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 
 public class DisplayMed extends AppCompatActivity {
     private EditText mNotes;
     private Button mBefore, mNow, mOpen, mClose;
-    private String phone, notes, state, forDonation, pharPhone;
+    private String phone, notes, state, forDonation, pharPhone,firstName;
     private String[] progDonation = null;
     private static Medicine med;
     private int needsCnt = -1;
@@ -69,6 +68,9 @@ public class DisplayMed extends AppCompatActivity {
 
         PrefManager pref = new PrefManager(this);
         phone = pref.getMobileNumber();
+
+        firstName = HelperActivity.firstWord(med.getName());
+
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("barcode"))
@@ -239,7 +241,14 @@ public class DisplayMed extends AppCompatActivity {
                     })
                     .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog2, int id) {
-
+                            if( db.checkMedSubscribe(firstName, false)) {
+                                ArrayList<String> topics = new ArrayList<String>();
+                                topics.add(firstName);
+                                Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
+                                serviceIntent.putExtra("subscribe", false);
+                                serviceIntent.putStringArrayListExtra("topic", topics);
+                                startService(serviceIntent);
+                            }
                         }
                     });
             AlertDialog deleteAlert = builder.create();
@@ -275,33 +284,45 @@ public class DisplayMed extends AppCompatActivity {
                         forDonation = "S" + forDonation;
                     }
 
-                    if ((med.getStatus().equals("SY") || med.getStatus().equals("Y"))
-                        && (forDonation.equals("SN") || forDonation.equals("N")) && (progDonation != null)) {
-                        builder.setMessage(getString(R.string.out_unmatched))
-                                .setCancelable(false)
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog2, int id) {
-                                        if (HelperActivity.isOnline(getApplicationContext())) {
-                                            HelperActivity.showDialogBox(getApplicationContext(), dialog);
-                                            new HttpDonationDelete().execute();
-                                        } else
-                                            HelperActivity.httpErrorToast(getApplicationContext(), 1);
-                                    }
-                                })
-                                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog2, int id) {
+                    if (!(forDonation.equals("SY") || forDonation.equals("Y"))) {
+                        if (progDonation != null) {
+                            builder.setMessage(getString(R.string.out_unmatched))
+                                    .setCancelable(false)
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog2, int id) {
+                                            if (HelperActivity.isOnline(getApplicationContext())) {
+                                                HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                                                new HttpDonationDelete().execute();
+                                            } else
+                                                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                                        }
+                                    })
+                                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog2, int id) {
 
-                                    }
-                                });
-                        AlertDialog progExistsAlert = builder.create();
+                                        }
+                                    });
+                            AlertDialog progExistsAlert = builder.create();
 
-                        dialog.dismiss();
-                        progExistsAlert.show();
-                        return true;
+                            dialog.dismiss();
+                            progExistsAlert.show();
+                            return true;
+                        }
+                        //edw mpainoume an htan Y/SY kai twra egine otidhpote allo
+                        else if (med.getStatus().equals("Y") || med.getStatus().equals("SY")){
+                            if( db.checkMedSubscribe(firstName, false)) {
+                                ArrayList<String> topics = new ArrayList<String>();
+                                topics.add(firstName);
+                                Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
+                                serviceIntent.putExtra("subscribe", false);
+                                serviceIntent.putStringArrayListExtra("topic", topics);
+                                startService(serviceIntent);
+                            }
+
+                        }
                     }
 
                     if ((forDonation.equals("SY") || forDonation.equals("Y")) && (progDonation == null)) {
-                        String firstName = HelperActivity.firstWord(med.getName());
                         Object[] info = db.matchExists(firstName);
                         needsCnt = (int) info[0];
                         pharPhone = (String) info[1];
@@ -323,6 +344,17 @@ public class DisplayMed extends AppCompatActivity {
                             dialog.dismiss();
                             matched.show();
                             return true;
+                        }
+                        //an to farmako ginei h htan (cook alert) Y/SY kai dn uparxei match tote kanoume subscribe
+                        else {
+                            if( db.checkMedSubscribe(firstName,true)) {
+                                ArrayList<String> topics = new ArrayList<String>();
+                                topics.add(firstName);
+                                Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
+                                serviceIntent.putExtra("subscribe", true);
+                                serviceIntent.putStringArrayListExtra("topic", topics);
+                                startService(serviceIntent);
+                            }
                         }
                     }
                 }

@@ -86,10 +86,11 @@ public class ConfirmNumber extends AppCompatActivity {
 
 
                             }
-                            else
+                            else {
                                 pref.setCountdown("End");
                                 sendAgain.setText("Δεν έχεις δικάιωμα για άλλα μηνύματα");
                                 sendAgain.setPaintFlags(sendAgain.getPaintFlags() & (~Paint.UNDERLINE_TEXT_FLAG));
+                            }
 
 
 

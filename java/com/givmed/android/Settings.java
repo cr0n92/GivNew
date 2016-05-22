@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -21,6 +22,11 @@ public class Settings extends HelperActivity
 
         final Button yesButton1 = (Button) findViewById(R.id.yesButton1);
         final Button noButton1 = (Button) findViewById(R.id.noButton1);
+
+        final TextView version = (TextView) findViewById(R.id.version);
+        String versione = getString(R.string.version) + " " + BuildConfig.VERSION_NAME;
+        version.setText(versione);
+
         final PrefManager pref = new PrefManager(getApplicationContext());
 
         if (pref.getNotificiationPermission())

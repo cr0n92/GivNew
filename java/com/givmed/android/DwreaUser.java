@@ -239,12 +239,7 @@ public class DwreaUser extends AppCompatActivity {
                 HelperActivity.httpErrorToast(getApplicationContext(), 1);
         }
         else if (id == R.id.action_delete) {
-
-            if (HelperActivity.isOnline(getApplicationContext())) {
-                HelperActivity.showDialogBox(getApplicationContext(), dialog);
-                deleteAlert.show();
-            } else
-                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+             deleteAlert.show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -332,6 +327,8 @@ public class DwreaUser extends AppCompatActivity {
                 url = new URL(URL);
 
                 conn = (HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setRequestMethod("DELETE");
                 result = conn.getResponseCode();
                 Log.e(TAG, "Received HTTP response: " + result);
@@ -405,6 +402,8 @@ public class DwreaUser extends AppCompatActivity {
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
 
                 conn = (HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setDoOutput(true);
 
                 DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
@@ -476,10 +475,12 @@ public class DwreaUser extends AppCompatActivity {
                         "donationBarcode=" + barcode +
                         "&donatedPhone=" + pharPhone +
                         "&deliveryDate1=" + serverDate +
-                        "&donationType=U";
+                        "&deliveryType=U";
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setDoOutput(true);
                 conn.setRequestMethod("PUT");
                 DataOutputStream wr = new DataOutputStream(conn.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().

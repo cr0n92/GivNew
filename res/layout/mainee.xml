@@ -6,8 +6,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    android:fitsSystemWindows="true" >
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -48,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding"
-                    android:layout_marginBottom="30dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_below="@id/firstMes"
                     android:gravity="center_vertical|center_horizontal"
                     android:textColor="@color/black"
@@ -56,6 +55,27 @@
                     android:text="@string/two_btn_second_msg"
                     android:layout_centerHorizontal="true">
                 </TextView>
+
+                <LinearLayout
+                    android:id="@+id/icons2"
+                    android:layout_below="@id/secondMes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/scani2"
+                        android:layout_width="182dp"
+                        android:layout_height="192dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/svg_scanaro" />
+
+                    <ImageView
+                        android:id="@+id/typarw2"
+                        android:layout_width="192dp"
+                        android:layout_height="196dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/svg_grafo" />
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/button1"
@@ -66,7 +86,7 @@
                     android:textSize="20sp"
                     android:textColor="@color/white"
                     android:layout_marginBottom="10dp"
-                    android:layout_below="@id/secondMes"
+                    android:layout_below="@id/icons2"
                     android:layout_alignLeft="@+id/button2"
                     android:layout_alignStart="@+id/button2"
                     android:layout_alignRight="@+id/button2"
@@ -86,6 +106,11 @@
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/button_simple">
                 </Button>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/button2" />
             </RelativeLayout>
         </ScrollView>
     </RelativeLayout>

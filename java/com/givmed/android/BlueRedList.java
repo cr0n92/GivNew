@@ -31,7 +31,9 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
     ProgressDialog dialog;
     public static BlueRedAdapter mAdapter;
     public static boolean inRed = false;
-    private TextView firstMes;
+    private TextView firstMes, secondMes;
+    private ImageView image;
+    private String amesa, prin;
     private SpannableStringBuilder redBuilder, blueBuilder;
     AlertDialog matchAlert;
     DBHandler db;
@@ -56,6 +58,12 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
         db = new DBHandler(getApplicationContext());
 
         firstMes = (TextView) findViewById(R.id.firstMes);
+        secondMes = (TextView) findViewById(R.id.texto);
+        image = (ImageView) findViewById(R.id.imago);
+
+        amesa = getString(R.string.br_now);
+        prin = getString(R.string.br_exp);
+
         mAdapter = new BlueRedAdapter(getApplicationContext());
         ListView list = (ListView) findViewById(R.id.list);
         list.setOnItemClickListener(this);
@@ -79,6 +87,8 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
         if(savedInstanceState == null || !savedInstanceState.containsKey("blueRedList")) {
             inRed = false;
             firstMes.setText(blueBuilder, TextView.BufferType.SPANNABLE);
+            secondMes.setText(amesa);
+            image.setImageResource(R.drawable.ic_tick_in_circle_blue);
 
             mAdapter.clear();
             boolean hasUnknown = db.getUnknownMedsToAdapter(mAdapter);
@@ -90,10 +100,16 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
         }
         else {
             inRed = savedInstanceState.getBoolean("inRed");
-            if (inRed)
+            if (inRed) {
                 firstMes.setText(redBuilder, TextView.BufferType.SPANNABLE);
-            else
+                secondMes.setText(prin);
+                image.setImageResource(R.drawable.ic_tick_in_circle_red);
+            }
+            else {
                 firstMes.setText(blueBuilder, TextView.BufferType.SPANNABLE);
+                secondMes.setText(amesa);
+                image.setImageResource(R.drawable.ic_tick_in_circle_red);
+            }
 
             mAdapter.mItems = savedInstanceState.getParcelableArrayList("blueRedList");
         }
@@ -121,6 +137,8 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
             } else {
                 inRed = true;
                 firstMes.setText(redBuilder, TextView.BufferType.SPANNABLE);
+                secondMes.setText(prin);
+                image.setImageResource(R.drawable.ic_tick_in_circle_red);
             }
         }
 
@@ -132,6 +150,8 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
         if (inRed) {
             inRed = false;
             firstMes.setText(blueBuilder, TextView.BufferType.SPANNABLE);
+            secondMes.setText(amesa);
+            image.setImageResource(R.drawable.ic_tick_in_circle_blue);
             mAdapter.notifyDataSetChanged();
         } else
             super.onBackPressed();

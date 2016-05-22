@@ -14,14 +14,14 @@ import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
 
-public class Dwrees extends HelperActivity implements AdapterView.OnItemClickListener {
+public class Dwrees extends HelperActivity {
     private final String TAG = "Dwrees";
-    private static boolean inDone = false;
     private String progDonationMsg, doneDonationMsg;
     private String left, right, mid_plu, mid_sin, progRight_sin, progRight_plu;
     public static DonationAdapter progAdapter,doneAdapter;
     private TextView msgView, msgView2;
     private static Button progButton, doneButton;
+    AdapterView.OnItemClickListener listener;
     DBHandler db;
 
     @Override
@@ -50,19 +50,43 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
         progAdapter = new DonationAdapter(getApplicationContext(),true);
         doneAdapter = new DonationAdapter(getApplicationContext(),false);
 
+        listener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Donation progDonation = (Donation) progAdapter.getItem(position);
+                Intent intent;
+
+                if (progDonation.getVolunteer().equals("V")) {
+                    intent = new Intent(getApplicationContext(), DwreaVolunteer.class);
+                    intent.putExtra("secondTime", "true");
+                }
+                else if (progDonation.getVolunteer().equals("U")) {
+                    intent = new Intent(getApplicationContext(), DwreaUser.class);
+                    intent.putExtra("secondTime", "true");
+                }
+                else
+                    intent = new Intent(getApplicationContext(), AfterDwrees.class);
+
+                intent.putExtra("pharName", progDonation.getPharNameGen());
+                intent.putExtra("barcode", progDonation.getBarcode());
+                intent.putExtra("medName", progDonation.getName());
+                startActivity(intent);
+            }
+        };
+
         final ListView list = (ListView) findViewById(R.id.list);
         list.setFooterDividersEnabled(true);
-        list.setOnItemClickListener(this);
+        list.setOnItemClickListener(listener);
         list.setAdapter(progAdapter);
 
         progButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                inDone = false;
                 changeButtonsLayout(progButton, doneButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right, Color.WHITE, Color.BLACK);
                 msgView.setText(progDonationMsg);
                 msgView2.setVisibility(View.VISIBLE);
+                list.setOnItemClickListener(listener);
                 list.setAdapter(progAdapter);
             }
         });
@@ -71,10 +95,10 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
 
             @Override
             public void onClick(View v) {
-                inDone = true;
                 changeButtonsLayout(doneButton, progButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left, Color.WHITE, Color.BLACK);
                 msgView.setText(doneDonationMsg);
                 msgView2.setVisibility(View.GONE);
+                list.setOnItemClickListener(null);
                 list.setAdapter(doneAdapter);
             }
         });
@@ -110,29 +134,5 @@ public class Dwrees extends HelperActivity implements AdapterView.OnItemClickLis
 
         getDone();
         getProgrammed();
-    }
-
-
-    public void onItemClick(AdapterView<?> l, View v, int position, long id) {
-        if (inDone) return;
-
-        Donation progDonation = (Donation) progAdapter.getItem(position);
-        Intent intent;
-
-        if (progDonation.getVolunteer().equals("V")) {
-            intent = new Intent(getApplicationContext(), DwreaVolunteer.class);
-            intent.putExtra("secondTime", "true");
-        }
-        else if (progDonation.getVolunteer().equals("U")) {
-            intent = new Intent(getApplicationContext(), DwreaUser.class);
-            intent.putExtra("secondTime", "true");
-        }
-        else
-            intent = new Intent(getApplicationContext(), AfterDwrees.class);
-
-        intent.putExtra("pharName", progDonation.getPharNameGen());
-        intent.putExtra("barcode", progDonation.getBarcode());
-        intent.putExtra("medName", progDonation.getName());
-        startActivity(intent);
     }
 }

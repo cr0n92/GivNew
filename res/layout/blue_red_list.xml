@@ -21,13 +21,31 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:padding="@dimen/padding"
         android:layout_below="@id/tool_bar"
         android:gravity="center_vertical|center_horizontal"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="17sp"
+        android:layout_centerHorizontal="true">
+    </TextView>
+
+    <TextView
+        android:id="@+id/secondMes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:padding="@dimen/padding"
+        android:layout_below="@id/firstMes"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="@color/black"
+        android:text="@string/br_change_later"
+        android:textSize="14sp"
         android:layout_centerHorizontal="true">
     </TextView>
 
@@ -40,7 +58,7 @@
         android:layout_alignLeft="@+id/buttons"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_below="@id/firstMes"
+        android:layout_below="@id/secondMes"
         android:id="@+id/upLine"
         android:background="@android:color/darker_gray"/>
 
@@ -63,35 +81,19 @@
             android:text="@string/br_donation" />
 
         <ImageView
+            android:id="@+id/imago"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="@dimen/padding"
-            android:paddingStart="@dimen/padding"
-            android:background="@drawable/ic_tick_in_circle_blue" />
+            android:paddingStart="@dimen/padding" />
 
         <TextView
+            android:id="@+id/texto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding"
             android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"
-            android:text="@string/br_now" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/padding"
-            android:paddingStart="@dimen/padding"
-            android:background="@drawable/ic_tick_in_circle_red" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="14sp"
-            android:text="@string/br_exp" />
-
+            android:textSize="14sp" />
     </LinearLayout>
 
     <View

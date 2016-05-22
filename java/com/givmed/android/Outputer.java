@@ -179,7 +179,7 @@ public class Outputer extends AppCompatActivity {
         protected Integer doInBackground(Object... input) {
             String data = "";
             java.net.URL url = null;
-            HttpURLConnection conn2 = null;
+            HttpURLConnection conn = null;
             String URL = HelperActivity.server + "/med_check/" + pref.getMobileNumber() + "/";
 
             try {
@@ -193,17 +193,19 @@ public class Outputer extends AppCompatActivity {
                         "&barcode=" + barcode;
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
-                conn2 = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
-                conn2.setRequestMethod("POST");
-                conn2.setDoOutput(true);
-                DataOutputStream wr = new DataOutputStream(conn2.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
+                conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
                 wr.write(postData);
-                InputStream in = new BufferedInputStream(conn2.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
+                InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
                 data = HelperActivity.readStream(in);
 
                 Log.e(TAG, "Komple? " + data);
 
-                result = conn2.getResponseCode();
+                result = conn.getResponseCode();
 
                 if (result == 201)
                     obj = new JSONObject(data);
@@ -230,8 +232,8 @@ public class Outputer extends AppCompatActivity {
                 error = 2;
                 e.printStackTrace();
             } finally {
-                if (null != conn2)
-                    conn2.disconnect();
+                if (null != conn)
+                    conn.disconnect();
             }
 
             return result;

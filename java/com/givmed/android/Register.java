@@ -57,13 +57,8 @@ public class Register extends HelperActivity {
         super.helperOnCreate(R.layout.register, R.string.profile, false);
 
         db = new DBHandler(getApplicationContext());
-
-
-
-
         dialog = new ProgressDialog(this);
         pref = new PrefManager(this);
-
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -128,7 +123,7 @@ public class Register extends HelperActivity {
         });
 
         //an einai palios xrhsths kai mpainoume prwth fora sto profil
-        //if (pref.getOldUser() && pref.getNextSplash().equals("Register")) {
+        if (pref.getOldUser() && pref.getNextSplash().equals("Register")) {
             if (isOnline(getApplicationContext()))
                 alert1.show();
             else {
@@ -137,7 +132,7 @@ public class Register extends HelperActivity {
                 System.exit(0);
             }
 
-       // }
+        }
 
         phone = pref.getMobileNumber();
         username = pref.getUsername();
@@ -267,6 +262,8 @@ public class Register extends HelperActivity {
                 conn.setRequestMethod("PUT");
                 conn.setRequestProperty("Connection", "keep-alive");
                 conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
 
                 DataOutputStream wr = new DataOutputStream(conn.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
                 wr.write(postData);
@@ -340,6 +337,8 @@ public class Register extends HelperActivity {
                 url = new URL(URL);
 
                 conn = (HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setDoInput(true);
                 conn.setRequestProperty("Connection", "keep-alive");
 
@@ -379,58 +378,46 @@ public class Register extends HelperActivity {
                     JSONArray done_donations = obj.getJSONArray("done_donations");
                     JSONArray donations = obj.getJSONArray("donations");
 
-                    for(int i = 0; i < meds.length(); i++)
-                    {
+                    for (int i = 0; i < meds.length(); i++) {
 
                         JSONObject object = meds.getJSONObject(i);
-                        String what1,what2;
-
-                        what1 = object.getString("medSubstance");
-
-                        what2 = object.getString("medCategory");
-
-
+                        String what1 = object.getString("medSubstance");
+                        String what2 = object.getString("medCategory");
 
                         db.addMed(new Medicine(object.getString("barcode"), object.getString("eofcode"), object.getString("medName"),
-                               dateWithSlash(object.getString("expirationDate"), true), object.getString("medPrice"), object.getString("notes"),
-                                object.getString("state"),what1,what2,
+                               dateWithSlash(object.getString("expirationDate"), true), object.getString("medPrice"),
+                                object.getString("notes"), object.getString("state"), what1, what2,
                                 object.getString("forDonation")),firstWord(object.getString("medName")));
-
-
                     }
 
-                    for(int i = 0; i < done_donations.length(); i++)
-                    {
+                    for (int i = 0; i < done_donations.length(); i++) {
 
                         JSONObject object = done_donations.getJSONObject(i);
+
                         db.addDoneDonation(object.getString("donePrice"), firstWord(object.getString("doneName")),
-                                object.getString("pharmacyName"), dateWithSlash(object.getString("doneDate"),false));
+                                object.getString("pharmacyName"), dateWithSlash(object.getString("doneDate"), false));
                     }
 
-                    for(int i = 0; i < donations.length(); i++)
-                    {
+                    for (int i = 0; i < donations.length(); i++) {
 
                         JSONObject object = donations.getJSONObject(i);
-                        db.addDonation(object.getString("donationBarcode"), object.getString("donatedPhone"),
-                                dateWithSlash(object.getString("deliveryDate1"),false),dateWithSlash(object.getString("deliveryDate2"),false),
-                                dateWithSlash(object.getString("deliveryDate3"),false), object.getString("deliveryType"),
+                        String donatedPhone = object.getString("donatedPhone");
+                        String pharphone = (donatedPhone.equals("null")) ? ";" : donatedPhone;
+
+                        db.addDonation(object.getString("donationBarcode"), pharphone,
+                                dateWithSlash(object.getString("deliveryDate1"), false),
+                                dateWithSlash(object.getString("deliveryDate2"), false),
+                                dateWithSlash(object.getString("deliveryDate3"), false), object.getString("deliveryType"),
                                 object.getString("donationAddress"));
                     }
 
-
-
-
                 } catch (JSONException e) {
-
                     Crashlytics.logException(e);
                     e.printStackTrace();
                     dialog.dismiss();
                     httpErrorToast(getApplicationContext(), 2);
                     return;
                 }
-
-
-
             }
             dialog.dismiss();
         }
@@ -446,21 +433,22 @@ public class Register extends HelperActivity {
         return true;
     }
 
-
-
     private boolean allIsEmpty() {
         if (mUsername.getText().toString().trim().isEmpty() && mEmail.getText().toString().trim().isEmpty() &&
                 mDate.getText().toString().trim().isEmpty())
 			return true;
         else
            return false;
-
-
     }
 
     private boolean validateName() {
         if (mUsername.getText().toString().trim().isEmpty()) {
             nameLayout.setError(getString(R.string.prof_name_warning));
+            requestFocus(mUsername);
+            return false;
+        }
+        else if (!mUsername.getText().toString().trim().matches("[A-Za-z0-9@_+.-]+")) {
+            nameLayout.setError(getString(R.string.prof_allowed_chars));
             requestFocus(mUsername);
             return false;
         } else {

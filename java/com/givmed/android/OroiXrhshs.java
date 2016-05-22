@@ -28,7 +28,7 @@ public class OroiXrhshs extends HelperActivity {
             super.setMenu(R.menu.menu_main_simple);
 
             fromNumber = true;
-            setContentView(R.layout.faq);
+            setContentView(R.layout.faq_no_drawer);
             Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
             mToolBar.setTitle(R.string.oroi_xrhshs);
             mToolBar.setNavigationIcon(R.drawable.ic_arrows);

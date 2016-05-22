@@ -64,6 +64,8 @@ public class VerifyService extends IntentService {
 
             byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
             conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(HelperActivity.timeoutTime);
+            conn.setReadTimeout(HelperActivity.timeoutTime);
             conn.setDoOutput(true);
             DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
             wr.write(postData);

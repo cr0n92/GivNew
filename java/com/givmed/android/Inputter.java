@@ -37,8 +37,8 @@ public class Inputter extends AppCompatActivity {
     private EditText mEditText;
     private String date, eof, name, code;
     ProgressDialog dialog;
-    AlertDialog wrongBarcodeAlert, elhkseAlert;
-
+    AlertDialog wrongBarcodeAlert;
+    AlertDialog.Builder builder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,18 +60,8 @@ public class Inputter extends AppCompatActivity {
 
         dialog = new ProgressDialog(this);
         mEditText = (EditText) findViewById(R.id.edit1);
+        builder = new AlertDialog.Builder(this);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.inp_expired_msg))
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog2, int id) {
-
-                    }
-                });
-        elhkseAlert = builder.create();
-
-        //AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.inp_error_msg))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -272,6 +262,14 @@ public class Inputter extends AppCompatActivity {
 
                 if (year2 * 12 + month2 < year * 12 + month) {
                     dialog.dismiss();
+                    builder.setMessage(getString(R.string.inp_expired_msg))
+                            .setCancelable(false)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog2, int id) {
+
+                                }
+                            });
+                    AlertDialog elhkseAlert = builder.create();
                     elhkseAlert.show();
                     return;
                 }

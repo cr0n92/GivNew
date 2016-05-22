@@ -46,9 +46,9 @@ public class DwreaVolunteer extends AppCompatActivity {
     private String date1 = "", date2 = "", date3 = "";
     private static int datesCnt = 1;
     private static Context mContext;
-
+    AlertDialog.Builder builder;
     public ProgressDialog dialog;
-    public AlertDialog alert, doneAlert, deleteAlert;
+    public AlertDialog alert, doneAlert;
     public PrefManager pref;
     public DBHandler db;
 
@@ -87,7 +87,7 @@ public class DwreaVolunteer extends AppCompatActivity {
         date3 = donationInfo[4];
         address = donationInfo[6];
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.choo_volu_call))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -103,24 +103,6 @@ public class DwreaVolunteer extends AppCompatActivity {
 
         builder.setMessage(getString(R.string.choo_done_volu_msg) + " " + pharNameGen + "!");
         doneAlert = builder.create();
-
-        builder.setMessage(getString(R.string.delete_sure))
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog2, int id) {
-                        if (HelperActivity.isOnline(getApplicationContext())) {
-                            HelperActivity.showDialogBox(getApplicationContext(), dialog);
-                            new HttpDelete().execute();
-                        } else
-                            HelperActivity.httpErrorToast(getApplicationContext(), 1);
-                    }
-                })
-                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog2, int id) {
-
-                    }
-                });
-        deleteAlert = builder.create();
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.volunteer);
@@ -279,12 +261,24 @@ public class DwreaVolunteer extends AppCompatActivity {
                 HelperActivity.httpErrorToast(getApplicationContext(), 1);
         }
         else if (id == R.id.action_delete) {
+            builder.setMessage(getString(R.string.delete_sure))
+                    .setCancelable(false)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog2, int id) {
+                            if (HelperActivity.isOnline(getApplicationContext())) {
+                                HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                                new HttpDelete().execute();
+                            } else
+                                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog2, int id) {
 
-            if (HelperActivity.isOnline(getApplicationContext())) {
-                HelperActivity.showDialogBox(getApplicationContext(), dialog);
-                deleteAlert.show();
-            } else
-                HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                        }
+                    });
+            AlertDialog deleteAlert = builder.create();
+            deleteAlert.show();
         }
 
 
@@ -379,6 +373,8 @@ public class DwreaVolunteer extends AppCompatActivity {
                 url = new URL(URL);
 
                 conn = (HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setRequestMethod("DELETE");
                 result = conn.getResponseCode();
                 Log.e(TAG, "Received HTTP response: " + result);
@@ -451,6 +447,8 @@ public class DwreaVolunteer extends AppCompatActivity {
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 conn = (HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setDoOutput(true);
                 DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
                 wr.write(postData);
@@ -519,7 +517,7 @@ public class DwreaVolunteer extends AppCompatActivity {
                         "donationBarcode=" + barcode +
                         "&donatedPhone=" + pharPhone +
                         "&donationAddress=" + address +
-                        "&donationType=V";
+                        "&deliveryType=V";
 
                 if (!sdate1.equals(";")) urlParameters += "&donationDate1=" + sdate1;
                 else date1 = ";";
@@ -532,6 +530,8 @@ public class DwreaVolunteer extends AppCompatActivity {
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setDoOutput(true);
                 conn.setRequestMethod("PUT");
                 DataOutputStream wr = new DataOutputStream(conn.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().

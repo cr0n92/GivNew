@@ -77,10 +77,8 @@ public class SplashActivity extends AppCompatActivity {
             try {
                 url = new URL(URL);
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
-
-                //conn.setConnectTimeout(10* 1000);          // 10 s.
-                //conn.connect();
-
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setDoInput(true);
                 InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
                 pharms = HelperActivity.readStream(in);
@@ -150,10 +148,8 @@ public class SplashActivity extends AppCompatActivity {
             try {
                 url = new URL(URL);
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
-
-                //conn.setConnectTimeout(10* 1000);          // 10 s.
-                //conn.connect();
-
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setDoInput(true);
                 InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
                 needs = HelperActivity.readStream(in);

@@ -19,8 +19,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        >
+        android:layout_weight="1" >
 
         <ImageView
             android:id="@+id/logotypo"
@@ -72,21 +71,20 @@
         <LinearLayout
             android:id="@+id/icons2"
             android:layout_below="@id/step2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
 
             <ImageView
                 android:id="@+id/scani2"
-                android:layout_width="182dp"
-                android:layout_height="192dp"
-                android:layout_weight="1"
+                android:layout_width="150dp"
+                android:layout_height="200dp"
                 android:src="@drawable/svg_scanaro" />
 
             <ImageView
                 android:id="@+id/typarw2"
-                android:layout_width="192dp"
-                android:layout_height="196dp"
-                android:layout_weight="1"
+                android:layout_width="160dp"
+                android:layout_height="200dp"
                 android:src="@drawable/svg_grafo" />
         </LinearLayout>
 
@@ -156,21 +154,20 @@
         <LinearLayout
             android:id="@+id/icons3"
             android:layout_below="@id/step3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
 
             <ImageView
                 android:id="@+id/scani3"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="200dp"
-                android:layout_weight="1"
                 android:src="@drawable/svg_mple" />
 
             <ImageView
                 android:id="@+id/typarw3"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="200dp"
-                android:layout_weight="1"
                 android:src="@drawable/svg_kokkino" />
         </LinearLayout>
 
@@ -240,21 +237,20 @@
         <LinearLayout
             android:id="@+id/icons4"
             android:layout_below="@id/step4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
 
             <ImageView
                 android:id="@+id/scani4"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="200dp"
-                android:layout_weight="1"
                 android:src="@drawable/svg_monos" />
 
             <ImageView
                 android:id="@+id/typarw4"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="200dp"
-                android:layout_weight="1"
                 android:src="@drawable/svg_ethelodis" />
         </LinearLayout>
 

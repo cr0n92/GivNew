@@ -47,6 +47,7 @@
     <string name="out_matched_left">Υπάρχει έλλειψη σε</string>
     <string name="out_matched_right">. Κανόνισε τη δωρεά σου!</string>
     <string name="out_unmatched">Υπάρχει προγραμματισμένη δωρεά γι’αυτό το φάρμακο! Θέλεις να ακυρωθεί;</string>
+    <string name="out_unmatched_sirup">Η προγραμματισμένη δωρεά πρέπει να ακυρωθεί, γιατί το κοινωνικό φαρμακείο δε δέχεται ανοιχτά</string>
 
     <!-- Προσωπικό Φαρμακείο -->
     <string name="home_message">Δες πόσα φάρμακα έχεις στο σπίτι σου, παρακάτω!</string>
@@ -107,10 +108,11 @@
     <string name="choo_date">Επέλεξε ημερομηνία!</string>
     <string name="choo_one_date">Χρειαζόμαστε τουλάχιστον μια διαθέσιμη ημερομηνία για να κανονίσουμε την μεταφορά.</string>
     <string name="choo_empty_address">Χρειαζόμαστε τη διεύθυνσή σου για να κανονίσουμε την μεταφορά.</string>
-<string name="choo_after20_date">H ημερομηνία που διάλεξες είναι μετά από 20 μέρες!</string>
+    <string name="choo_after20_date">H ημερομηνία που διάλεξες είναι μετά από 20 μέρες!</string>
     <string name="choo_before_date">Η ημερομηνία που διάλεξες είναι παλία!</string>
+
     <!-- Δυο κουμπιά -->
-    <string name="two_btn_first_msg">Καταχώρησε τα φαρμακά σου!</string>
+    <string name="two_btn_first_msg">Καταχώρησε τα φάρμακά σου!</string>
     <string name="two_btn_second_msg">Βρες το αυτοκόλλητο πάνω στο κουτί και σκάναρε το barcode ή πληκτρολόγησε τον κάθετο κωδικό.</string>
     <string name="scan_button">Σκάναρε</string>
     <string name="input_button">Πληκτρολόγησε</string>
@@ -122,11 +124,12 @@
     <string name="no_im_good">Όχι, είμαι εντάξει!</string>
 
     <!-- Μπλέ - Κόκκινη λίστα -->
-    <string name="br_first_msg_blue">Επέλεξε τα φάρμακα που θέλεις να δωρίσεις άμεσα με μπλέ!</string>
-    <string name="br_first_msg_red">Επέλεξε τα φάρμακα που θέλεις να δωρίσεις πρίν λήξουν με κόκκινο!</string>
+    <string name="br_first_msg_blue">Επίλεξε τα φάρμακα που θέλεις να δωρίσεις άμεσα με μπλε!</string>
+    <string name="br_first_msg_red">Επίλεξε τα φάρμακα που θέλεις να δωρίσεις 3 μήνες πρίν λήξουν με κόκκινο!</string>
+    <string name="br_change_later">Μπορείς να αλλάξεις την επιλογή σου οποιαδήποτε στιγμή από το προσωπικό σου φαρμακείο.</string>
     <string name="br_donation">ΔΩΡΕΑ:</string>
     <string name="br_now">ΑΜΕΣΗ</string>
-    <string name="br_exp">ΠΡΙΝ ΛΗΞΟΥΝ</string>
+    <string name="br_exp">3 ΜΗΝΕΣ ΠΡΙΝ ΛΗΞΟΥΝ</string>
     <string name="matching">Γίνεται αντιστοίχηση των φαρμάκων σας με τις υπάρχουσες ελλείψεις...</string>
     <string name="after_matching_left">Σε ευχαριστούμε!</string>
     <string name="after_matching_right">από τα φάρμακα που καταχώρησες χρειάζονται κάπου! Κανόνισε πως θα φτάσουν στον προορισμό τους!</string>
@@ -150,6 +153,7 @@
     <string name="prof_email">Email</string>
     <string name="prof_email_warning">Λάθος email</string>
     <string name="prof_age_warning">Λόγω των όρων χρήσης μας, μόνο άτομα άνω των 18 μπορούν να χρησιμοποιήσουν το GIVMED!</string>
+    <string name="prof_allowed_chars">Επιτρεπτοί χαρακτήρες A-Z a-z 0-9 @ + . -</string>
 
     <!-- Εγγραφή -->
     <string name="your_phone">Συμπλήρωσε τον αριθμό σου</string>
@@ -158,7 +162,7 @@
     <!-- Ρυθμίσεις -->
     <string name="set_msg1">Ειδοποιήσεις</string>
     <string name="set_msg2">Να επιτρέπεται η εφαρμογή να σου στέλνει ειδοποιήσεις για τα φάρμακα</string>
-    <string name="version">Έκδοση 1.0</string>
+    <string name="version">Έκδοση</string>
 
     <string name="set_yes">ΝΑΙ</string>
     <string name="set_no">ΟΧΙ</string>
@@ -168,6 +172,8 @@
     <string name="num_insert_phone">Πληκτρολόγησε τον αριθμό του κινητού σου για να συνεχίσουμε.</string>
     <string name="num_accept_licence">Συνεχίζοντας αποδέχεσαι τους όρους <u>Όρους Χρήσης</u></string>
     <string name="num_alert">Για λόγους αξιοπιστίας, πρέπει να επιβεβαιώσουμε τον λογαριασμό σου με τον αριθμό του κινητού σου.</string>
+    <string name="num_sure_left">Έχετε εισάγει σωστά τον αριθμό σας;</string>
+    <string name="num_sure_right">Ένα μήνυμα με τον 4ψήφιο κωδικό επιβεβαίωσης θα σταλεί σε αυτόν τον αριθμό.</string>
 
     <!-- Επιβεβαίωση αριθμού -->
     <string name="conf_welcome">Καλώς ήρθες!</string>
@@ -175,7 +181,9 @@
     <string name="conf_send_again"><u>Αποστολή ξανά</u></string>
     <string name="conf_error"><b>Μη έγκυρος αριθμός!</b></string>
     <string name="conf_wrong_pin"><b>Λάθος PIN!</b></string>
-
+    <string name="fill_all_boxes">Πρέπει να συμπληρώσετε όλα τα κουτιά!</string>
+    <string name="conf_second_msg">Αν ο αριθμός</string>
+    <string name="conf_second_msg2">αντιστοιχεί σε αυτή τη συσκευή, η διαδικασία θα ολοκληρωθεί αυτόματα. Διαφορετικά, παρακαλούμε πληκτρολογίστε τον κωδικό που λάβατε.</string>
 
     <!-- Αναζήτηση -->
     <string name="med_name_drastikh">Όνομα Φαρμάκου/Δραστική Ουσία</string>
@@ -186,9 +194,9 @@
     <string name="step2">Βήμα 2</string>
     <string name="step3">Βήμα 3</string>
     <string name="tuto_layout3_msg1">Πότε θέλεις να τα δωρίσεις;</string>
-    <string name="tuto_layout3_msg2">Μπλέ τικ: Αμέσως!\nΚόκκινο τικ: Λίγο πριν λήξουν.\nΌσα δεν επιλέξεις θα είναι στο προσωπικό σου φαρμακείο.</string>
+    <string name="tuto_layout3_msg2">Μπλε τικ: Αμέσως!\nΚόκκινο τικ: 3 μήνες πριν λήξουν.\nΌσα δεν επιλέξεις θα είναι στο προσωπικό σου φαρμακείο.</string>
     <string name="tuto_layout4_msg1">Ήρθε η ώρα της δωρεάς!</string>
-    <string name="tuto_layout4_msg2">Κανόνισε πως θα φθάσει το φάρμακο στον προορισμό του. Μπορείς να το πας μόνος σου ή να σε βοηθήσουμε εμείς!</string>
+    <string name="tuto_layout4_msg2">Κανόνισε πώς θα φθάσει το φάρμακο στον προορισμό του. Μπορείς να το πας μόνος σου ή να σε βοηθήσουμε εμείς!</string>
     <string name="skip">ΠΑΡΑΛΕΙΨΗ</string>
     <string name="learn">ΜΑΘΕ ΠΩΣ</string>
     <string name="next">ΕΠΟΜΕΝΟ</string>
@@ -228,11 +236,6 @@
     <string name="action_back">Back</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <!-- Confirm Number -->
-    <string name="fill_all_boxes">Πρέπει να συμπληρώσετε όλα τα κουτιά!</string>
-
-
 
     <!-- F.A.Q. -->
     <string-array name="headers">

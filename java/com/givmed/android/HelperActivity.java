@@ -39,7 +39,7 @@ public class HelperActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
     public static String server = "http://www.givmed.com:81";
-
+    public static int timeoutTime = 10000;
     public int myMenu;
 
     public void setMenu(int myMenu) {
@@ -193,23 +193,23 @@ public class HelperActivity extends AppCompatActivity
     //Isws timeout sto http connection
     //http://stackoverflow.com/questions/1443166/android-how-to-check-if-the-server-is-available
     public static boolean isOnline(Context context) {
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+//        ConnectivityManager cm =
+//                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+//        return netInfo != null && netInfo.isConnectedOrConnecting();
 
         // TODO: na tsekaroume thn apo katw synarthsh mipws einai kalyterh
-//        ConnectivityManager connectivityManager = (ConnectivityManager) context
-//                .getSystemService(Context.CONNECTIVITY_SERVICE);
-//        if (connectivityManager != null) {
-//            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-//            if (netInfo != null && netInfo.isConnected()
-//                    && netInfo.isConnectedOrConnecting()
-//                    && netInfo.isAvailable()) {
-//                return true;
-//            }
-//        }
-//        return false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+            if (netInfo != null && netInfo.isConnected()
+                    && netInfo.isConnectedOrConnecting()
+                    && netInfo.isAvailable()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // synarthsh pou allazei ta xrwmata sta koumpia otan ta patame

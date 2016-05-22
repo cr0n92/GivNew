@@ -13,13 +13,10 @@ import android.os.CountDownTimer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,12 +64,10 @@ public class ConfirmNumber extends AppCompatActivity {
                 public void onFinish() {
                     TimerIntent = new Intent(getApplicationContext(), TimerService.class);
                     stopService(TimerIntent);
-
                     if (pref.getCountdown().equals("firstRunning"))
                         pref.setCountdown("second");
                     else if (pref.getCountdown().equals("secondRunning"))
                         pref.setCountdown("Last");
-
                     Log.e("TZA","TZA");
                     sendAgain.setText(getString(R.string.conf_send_again));
                     sendAgain.setPaintFlags(sendAgain.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -108,6 +103,7 @@ public class ConfirmNumber extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra("error")) {
                 Toast.makeText(getApplicationContext(), getString(R.string.conf_wrong_pin), Toast.LENGTH_LONG).show();
+
             }
             else {
                 token = intent.getStringExtra("token");
@@ -126,6 +122,9 @@ public class ConfirmNumber extends AppCompatActivity {
                         //apenergopoioume to SMSReceiver
                         HelperActivity.disableBroadcastReceiver(getApplicationContext());
                         pref.setNextSplash("Register");
+                        //if (pref.getOldUser()) {
+
+                        //}
                         Intent intent = new Intent(ConfirmNumber.this, Register.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
@@ -167,29 +166,26 @@ public class ConfirmNumber extends AppCompatActivity {
 
         //registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
 
-        //LocalBroadcastManager.getInstance(this).registerReceiver(mTokenBroadcastReceiver,
-        //        new IntentFilter("token"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mTokenBroadcastReceiver,
+                new IntentFilter("token"));
 
         pin0 = (EditText) findViewById(R.id.pin0);
-        pin0.addTextChangedListener(new MyTextWatcher(pin0));
         pin1 = (EditText) findViewById(R.id.pin1);
-        pin1.addTextChangedListener(new MyTextWatcher(pin1));
         pin2 = (EditText) findViewById(R.id.pin2);
-        pin2.addTextChangedListener(new MyTextWatcher(pin2));
         pin3 = (EditText) findViewById(R.id.pin3);
-        pin3.addTextChangedListener(new MyTextWatcher(pin3));
 
-        TextView number = (TextView) findViewById(R.id.secondMes);
+        TextView number = (TextView) findViewById(R.id.thirdMes);
         Intent intent = getIntent();
         phone = intent.getStringExtra("phone");
-        String stringious = getString(R.string.conf_second_msg) + " " + phone + " " + getString(R.string.conf_second_msg2);
-        number.setText(stringious);
-        //HelperActivity.enableBroadcastReceiver(getApplicationContext());
+        number.setText("+30 " + phone);
+        HelperActivity.enableBroadcastReceiver(getApplicationContext());
 
-//        if (!pref.getRegDone()) {
-//            HelperActivity.showDialogBox(getApplicationContext(), dialog);
-//            new HttpGetTask().execute();
-//        }
+        Log.e("kakakika", "" + pref.getRegDone());
+
+        if (!pref.getRegDone()) {
+            HelperActivity.showDialogBox(getApplicationContext(), dialog);
+            new HttpGetTask().execute();
+        }
     }
 
     @Override
@@ -317,6 +313,8 @@ public class ConfirmNumber extends AppCompatActivity {
                 String p3 = pin2.getText().toString().trim();
                 String p4 = pin3.getText().toString().trim();
 
+
+
                 if (p1.equals("") || p2.equals("") || p3.equals("") || p4.equals("")) {
                     dialog.dismiss();
                     Toast.makeText(getApplicationContext(), getString(R.string.fill_all_boxes), Toast.LENGTH_LONG).show();
@@ -363,8 +361,6 @@ public class ConfirmNumber extends AppCompatActivity {
                 int postDataLength = postData.length;
 
                 conn = (HttpURLConnection) url.openConnection();
-                conn.setConnectTimeout(HelperActivity.timeoutTime);
-                conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setDoOutput(true);
                 conn.setRequestProperty("Connection", "keep-alive");
                 conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
@@ -376,6 +372,11 @@ public class ConfirmNumber extends AppCompatActivity {
                 returnCode = conn.getResponseCode();
                 if (!second && returnCode==202)
                     pref.setOldUser(true);
+                Log.e("data", data);
+
+                //JSONObject obj = new JSONObject(data);
+                //Log.e("thlefwno", obj.getString("userPhone"));
+
 
             } catch (ProtocolException e) {
                 Crashlytics.logException(e);
@@ -422,43 +423,6 @@ public class ConfirmNumber extends AppCompatActivity {
             }
 
             dialog.dismiss();
-        }
-    }
-
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
-    }
-
-    private class MyTextWatcher implements TextWatcher {
-
-        private View view;
-
-        private MyTextWatcher(View view) {
-            this.view = view;
-        }
-
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            switch (view.getId()) {
-                case R.id.pin0:
-                    requestFocus(pin1);
-                    break;
-                case R.id.pin1:
-                    requestFocus(pin2);
-                    break;
-                case R.id.pin2:
-                    requestFocus(pin3);
-                    break;
-                case R.id.pin3:
-                    break;
-            }
         }
     }
 }

@@ -327,18 +327,98 @@ public class DBHandler extends SQLiteOpenHelper {
                 new String[]{med.getBarcode()});
     }
 
-    public void updateMedStatus(String three_months_later) {
+    // check an den uparxei elleipsh gia ayto to farmako ki an einai to teleytaio farmako me idio onoma kai 'Y' h 'SY'
+    // an nai tote kanoume unsubscribe
+
+    public boolean checkMedSubscribe(String Halfname,boolean subscribe) {
+
+        Object [] ret;
+
+        ret = this.matchExists(Halfname);
+        if (ret[0] != -1) return false;
+
         SQLiteDatabase db = this.getWritableDatabase();
 
+
+
+
+
+        String selectQuery = "SELECT " + KEY_BARCODE + " FROM " + TABLE_MEDS + " WHERE " + KEY_HALF_NAME
+                + " == '" + Halfname + "' AND ( " + KEY_STATUS + " == 'Y' OR " + KEY_STATUS + " == 'SY')";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (subscribe)
+            if (cursor.getCount() > 0) return false;
+        else
+            if (cursor.getCount() > 1) return false;
+
+
+        return true;
+
+    }
+
+
+
+    public ArrayList<String> updateMedStatus(String three_months_later) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<String> topics = new ArrayList<String>();
         ContentValues values = new ContentValues();
-        values.put(KEY_STATUS, "Y");
-        db.update(TABLE_MEDS, values, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?", new String[]{"B", three_months_later});
 
-        ContentValues values1 = new ContentValues();
-        values1.put(KEY_STATUS, "SY");
-        db.update(TABLE_MEDS, values1, KEY_STATUS + " = ? and " + KEY_EXP_DATE + "= ?", new String[]{"SB", three_months_later});
 
+        //query pou pairnoume ta kleista siropia me SY kai ta alla me Y pou lhgoun se 3 mhnes
+        String selectQuery = "SELECT " + KEY_BARCODE + "," + KEY_HALF_NAME + "," + KEY_STATUS + " FROM " + TABLE_MEDS
+                + " WHERE (" + KEY_STATUS + " = B OR ("+ KEY_STATUS + " = SB AND" + KEY_STATE + " = C)) AND "
+                + KEY_EXP_DATE + "= '" + three_months_later + "'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) do {
+
+            String selectQuery1 = "SELECT " + KEY_PHAR_PHONE + " FROM " + TABLE_NEEDS
+                    + " WHERE " + KEY_NEED_NAME + " = '" + cursor.getString(1) + "'";
+            Cursor cursor1 = db.rawQuery(selectQuery1, null);
+            if (cursor1.getCount() > 0) {
+                if (cursor1.getCount() == 1) {
+                    cursor.moveToFirst();
+                    ContentValues values1 = new ContentValues();
+                    values1.put(KEY_BARCODE,cursor.getString(0));
+                    values1.put(KEY_PHAR_PHONE, cursor1.getString(0));
+                    values1.put(KEY_DATE1, ";");
+                    values1.put(KEY_DATE2, ";");
+                    values1.put(KEY_DATE3, ";");
+                    values1.put(KEY_VOLUNTEER, "A");
+                    values1.put(KEY_PICK_ADDR, ";");
+
+                    db.insert(TABLE_DONATIONS, null, values1);
+                } else {
+                    ContentValues values1 = new ContentValues();
+                    values1.put(KEY_BARCODE, cursor.getString(0));
+                    values1.put(KEY_PHAR_PHONE, ";");
+                    values1.put(KEY_DATE1, ";");
+                    values1.put(KEY_DATE2, ";");
+                    values1.put(KEY_DATE3, ";");
+                    values1.put(KEY_VOLUNTEER, "Α");
+                    values1.put(KEY_PICK_ADDR, ";");
+
+                    db.insert(TABLE_DONATIONS, null, values1);
+                }
+            }
+
+            else {
+               topics.add(cursor.getString(1));
+            }
+            if (cursor.getString(2).equals("SB"))
+                values.put(KEY_STATUS, "SY");
+            else
+                values.put(KEY_STATUS, "Y");
+            db.update(TABLE_MEDS, values, KEY_BARCODE + " = ? ", new String[]{cursor.getString(0)});
+            cursor1.close();
+
+        } while (cursor.moveToNext());
+
+
+        cursor.close();
         db.close();
+        return topics;
     }
 
     // Deleting single med
@@ -520,8 +600,17 @@ public class DBHandler extends SQLiteOpenHelper {
                         db.insert(TABLE_DONATIONS, null, values1);
                     }
                 }
-                else
-                    ret = -1;
+                else {
+                    String selectQuery1 = "SELECT " + KEY_BARCODE + " FROM " + TABLE_MEDS + " WHERE " + KEY_HALF_NAME
+                            + " == '" + name + "' OR " + KEY_STATUS + " == 'Y' OR " + KEY_STATUS + " == 'SY'";
+                    Cursor cursor1 = db.rawQuery(selectQuery1, null);
+
+                    if (cursor.getCount() == 0)
+                        ret = -1;
+                    else
+                        ret = 0;
+                    cursor1.close();
+                }
 
                 cursor.close();
 
@@ -652,6 +741,35 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    //pairnoume ta barcodes pou exoun halfName ayto pou hr8e sto push kai einai Y/SY
+    //me ayta ta barcodes dhmiourgoume tis antistoixes dwrees
+    public void addDonationFromPush(String halfName, String phar_phone) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+
+        String selectQuery = "SELECT " + KEY_BARCODE + " FROM " + TABLE_MEDS
+                + " WHERE " + KEY_HALF_NAME + " = '" + halfName + "' AND ("
+                + KEY_STATUS + " == 'Y' OR " + KEY_STATUS + " == 'SY')";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                values.put(KEY_BARCODE, cursor.getString(0));
+                values.put(KEY_PHAR_PHONE, phar_phone);
+                values.put(KEY_DATE1, ";");
+                values.put(KEY_DATE2, ";");
+                values.put(KEY_DATE3, ";");
+                values.put(KEY_VOLUNTEER, "A");
+                values.put(KEY_PICK_ADDR, ";");
+                db.insert(TABLE_DONATIONS, null, values);
+            } while (cursor.moveToNext());
+            cursor.close();
+            db.close();
+        }
+
+    }
+
     public int getAllDonations(DonationAdapter donationAdapter) {
         SQLiteDatabase db = this.getWritableDatabase();
         int cnt = 0;
@@ -693,8 +811,8 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        if (medo.getStatus().charAt(0) == 'S') values.put(KEY_STATUS, "SB");
-        else values.put(KEY_STATUS, "B");
+        if (medo.getStatus().charAt(0) == 'S') values.put(KEY_STATUS, "SN");
+        else values.put(KEY_STATUS, "N");
 
         db.delete(TABLE_DONATIONS, KEY_BARCODE + " = ?", new String[]{barcode});
         db.update(TABLE_MEDS, values, KEY_BARCODE + " = ?", new String[]{barcode});

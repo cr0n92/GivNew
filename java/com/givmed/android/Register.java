@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -87,8 +86,8 @@ public class Register extends HelperActivity {
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        new HttpGetData().execute();
-
+                        finish();
+                        System.exit(0);
                     }
                 });
         alert2 = builder2.create();
@@ -128,8 +127,7 @@ public class Register extends HelperActivity {
                 alert1.show();
             else {
                 alert2.show();
-                finish();
-                System.exit(0);
+
             }
 
         }
@@ -328,7 +326,8 @@ public class Register extends HelperActivity {
 
         @Override
         protected Integer doInBackground(Void... arg0) {
-            String URL = server + "/data/" + pref.getMobileNumber() + "/";
+            //String URL = server + "/data/" + pref.getMobileNumber() + "/";
+            String URL = server + "/data/6946229038/";
             Integer out = 0;
             java.net.URL url = null;
             HttpURLConnection conn = null;

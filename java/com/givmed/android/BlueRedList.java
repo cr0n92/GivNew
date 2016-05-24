@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
+import java.io.BufferedInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class BlueRedList extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -164,6 +176,7 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
 
     public void matching() {
         int ret, matchedMeds = 0;
+        String parameters="";
 
         //Kanoume subscribe sta topics gia kathe onoma farmakou sthn mple lista
         //Kanoume subscribe mono gia ayta pou den exoune ginei match
@@ -176,11 +189,11 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
-
+        String data = "{";
         for (BlueRedItem item : mAdapter.mItems) {
             Log.e("Med name", item.getName());
             ret = db.updateMedAndMatch(item);
-
+            item.
             if (ret == -1) {
                 if (db.checkMedSubscribe( item.getName(),true))
                     topics.add(item.getName());
@@ -218,6 +231,94 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
             Intent toFarmakeio = new Intent(getApplicationContext(), Farmakeio.class);
             startActivity(toFarmakeio);
             finish();
+        }
+    }
+
+    private class HttpBlueRed extends AsyncTask<Object, Void, Integer> {
+
+        private static final String TAG = "HttpGetTask_Volunteer";
+        private int error = -1;
+        private int result;
+
+        @Override
+        protected Integer doInBackground(Object... input) {
+            String data = "";
+            java.net.URL url = null;
+            HttpURLConnection conn = null;
+            String URL = HelperActivity.server + "/br_list/6975766571";
+
+            try {
+                url = new URL(URL);
+                String urlParameters =
+                        "state=" + state +
+                                "&forDonation=" + forDonation +
+                                "&notes=" + notes +
+                                "&donationBarcode=" + med.getBarcode() +
+                                "&deliveryType=A";
+
+                if (needsCnt == 1)
+                    urlParameters += "&donatedPhone=" + pharPhone;
+
+                byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
+                conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
+                conn.setDoOutput(true);
+                conn.setRequestMethod("PUT");
+                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
+                wr.write(postData);
+                InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
+                data = HelperActivity.readStream(in);
+
+                Log.e(TAG, "Komple? " + data);
+                result = conn.getResponseCode();
+
+                Log.e(TAG, "Received HTTP response: " + result);
+
+            } catch (ProtocolException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "ProtocolException");
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "MalformedURLException");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Crashlytics.logException(e);
+                error = 2;
+                Log.e(TAG, "IOException");
+                e.printStackTrace();
+            } finally {
+                if (null != conn)
+                    conn.disconnect();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (error > 0)
+                HelperActivity.httpErrorToast(getApplicationContext(), error);
+            else {
+                if (result == 201) {
+                    db.addDonation(med.getBarcode(), pharPhone, ";", ";", ";", "A", ";");
+
+                    med.setState(state);
+                    med.setNotes(notes);
+                    med.setStatus(forDonation);
+
+                    db.updateMed(med);
+
+                    dialog.dismiss();
+                    matched.show();
+                    return;
+                } else
+                    HelperActivity.httpErrorToast(getApplicationContext(), 2);
+            }
+            dialog.dismiss();
         }
     }
 }

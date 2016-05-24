@@ -268,6 +268,19 @@ public class DisplayMed extends AppCompatActivity {
                     isDonatedNow();
 
                     if (med.getStatus().charAt(0) == 'S') {
+                        if (med.getState().equals("C") && isOpen()) {
+                           if( db.checkMedSubscribe(firstName, false)) {
+                               ArrayList<String> topics = new ArrayList<String>();
+                               topics.add(firstName);
+                               Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
+                               serviceIntent.putExtra("subscribe", false);
+                               serviceIntent.putStringArrayListExtra("topic", topics);
+                               startService(serviceIntent);
+                           }
+
+                        }
+
+
                         if (isOpen() && progDonation != null) {
                             builder.setMessage(getString(R.string.out_unmatched_sirup) + " " + firstName + ".")
                                     .setCancelable(false)
@@ -325,14 +338,16 @@ public class DisplayMed extends AppCompatActivity {
                                     })
                                     .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog2, int id) {
+                                        }
+                                    });
 
-                        
                         	AlertDialog progExistsAlert = builder.create();
 
                             dialog.dismiss();
                             progExistsAlert.show();
                             return true;
                         }
+
                         //edw mpainoume an htan Y/SY kai twra egine otidhpote allo
                         else if (med.getStatus().equals("Y") || med.getStatus().equals("SY")){
                             if( db.checkMedSubscribe(firstName, false)) {

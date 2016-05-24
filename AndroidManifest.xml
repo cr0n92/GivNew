@@ -45,8 +45,19 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http"
+                    android:host="givmed.com"
+                    android:pathPrefix="/android_app" />
+
+                <data android:scheme="givmed"
+                    android:host="android_app" />
             </intent-filter>
         </activity>
 
@@ -104,11 +115,6 @@
             android:name="com.givmed.android.TwoButtons"
             android:label="two_buttons"
             android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.givmed.android.ImFine"
@@ -119,7 +125,6 @@
             android:name="com.givmed.android.BlueRedList"
             android:label="blue_red_list"
             android:theme="@style/AppTheme.NoActionBar" >
-
         </activity>
         <activity
             android:name="com.givmed.android.Settings"
@@ -255,9 +260,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="18f2cddd629d49e015fad7e1bf7c5427e38fc35c"
-            />
-
+            android:value="18f2cddd629d49e015fad7e1bf7c5427e38fc35c" />
 
         <!--
           Optionally, register AnalyticsReceiver and AnalyticsService to support background

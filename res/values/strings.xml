@@ -230,6 +230,7 @@
     <!-- Άλλα στρινγκς -->
     <string name="loading_msg">Παρακαλώ περιμένετε...</string>
     <string name="no_internet">Δεν υπάρχει σύνδεση στο διαδίκτυο!</string>
+    <string name="no_connection">Η σύνδεση στο GIVMED δεν είναι δυνατή. Έλεγξε τη σύνδεση δικτύου ή δοκίμασε ξανά αργότερα!</string>
     <string name="cancel">Άκυρο</string>
     <string name="action_settings">Settings</string>
     <string name="action_tick">Send</string>

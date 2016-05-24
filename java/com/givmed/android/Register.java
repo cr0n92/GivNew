@@ -42,8 +42,9 @@ public class Register extends HelperActivity {
     private TextInputLayout nameLayout, emailLayout;
     private PrefManager pref;
     ProgressDialog dialog;
+    AlertDialog.Builder builder;
     DBHandler db;
-    AlertDialog alert,alert1,alert2;
+    AlertDialog alert1, alert2;
     String username = "", email = "", date = "", sex = "", phone = "", mDate1="";
     Boolean is_male = false;
 
@@ -58,31 +59,19 @@ public class Register extends HelperActivity {
         db = new DBHandler(getApplicationContext());
         dialog = new ProgressDialog(this);
         pref = new PrefManager(this);
+        builder = new AlertDialog.Builder(this);
 
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.prof_age_warning))
+        builder.setMessage(getString(R.string.prof_get_old_data))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                });
-        alert = builder.create();
-
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setMessage(getString(R.string.prof_get_old_data))
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                    public void onClick(DialogInterface dialog2, int id) {
+                        showDialogBox(getApplicationContext(), dialog);
                         new HttpGetData().execute();
-
                     }
                 });
-        alert1 = builder1.create();
+        alert1 = builder.create();
 
-        AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
-        builder2.setMessage(getString(R.string.prof_get_old_data_no_internet))
+        builder.setMessage(getString(R.string.prof_get_old_data_no_internet))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -90,7 +79,15 @@ public class Register extends HelperActivity {
                         System.exit(0);
                     }
                 });
-        alert2 = builder2.create();
+        alert2 = builder.create();
+
+        //an einai palios xrhsths kai mpainoume prwth fora sto profil
+        if (pref.getOldUser() && !pref.getHasLoadedData()) {
+            if (isOnline(getApplicationContext()))
+                alert1.show();
+            else
+                alert2.show();
+        }
 
         mUsername = (EditText) findViewById(R.id.username_text);
         mEmail = (EditText) findViewById(R.id.email_text);
@@ -120,17 +117,6 @@ public class Register extends HelperActivity {
                 female.setImageResource(R.drawable.ic_female);
             }
         });
-
-        //an einai palios xrhsths kai mpainoume prwth fora sto profil
-        if (pref.getOldUser() && pref.getNextSplash().equals("Register")) {
-            if (isOnline(getApplicationContext()))
-                alert1.show();
-            else {
-                alert2.show();
-
-            }
-
-        }
 
         phone = pref.getMobileNumber();
         username = pref.getUsername();
@@ -206,7 +192,17 @@ public class Register extends HelperActivity {
                         if (!(mDate1.equals(""))) {
                             if (year - Integer.parseInt(mDate1) < 18) {
                                 dialog.dismiss();
+
+                                builder.setMessage(getString(R.string.prof_age_warning))
+                                        .setCancelable(false)
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+
+                                            }
+                                        });
+                                AlertDialog alert = builder.create();
                                 alert.show();
+
                                 return super.onOptionsItemSelected(item);
                             }
 
@@ -326,8 +322,7 @@ public class Register extends HelperActivity {
 
         @Override
         protected Integer doInBackground(Void... arg0) {
-            //String URL = server + "/data/" + pref.getMobileNumber() + "/";
-            String URL = server + "/data/6946229038/";
+            String URL = server + "/data/" + pref.getMobileNumber() + "/";
             Integer out = 0;
             java.net.URL url = null;
             HttpURLConnection conn = null;
@@ -368,53 +363,65 @@ public class Register extends HelperActivity {
         @Override
         protected void onPostExecute(Integer result) {
             if (error > 0) {
-                httpErrorToast(getApplicationContext(), error);
+                dialog.dismiss();
+                alert2.show();
+                return;
             } else {
-                try {
+                if (result == 202) {
+                    try {
 
-                    JSONObject obj = new JSONObject(data);
-                    JSONArray meds = obj.getJSONArray("meds");
-                    JSONArray done_donations = obj.getJSONArray("done_donations");
-                    JSONArray donations = obj.getJSONArray("donations");
+                        JSONObject obj = new JSONObject(data);
+                        JSONArray meds = obj.getJSONArray("meds");
+                        JSONArray done_donations = obj.getJSONArray("done_donations");
+                        JSONArray donations = obj.getJSONArray("donations");
 
-                    for (int i = 0; i < meds.length(); i++) {
+                        for (int i = 0; i < meds.length(); i++) {
 
-                        JSONObject object = meds.getJSONObject(i);
-                        String what1 = object.getString("medSubstance");
-                        String what2 = object.getString("medCategory");
+                            JSONObject object = meds.getJSONObject(i);
+                            String what1 = object.getString("medSubstance");
+                            String what2 = object.getString("medCategory");
 
-                        db.addMed(new Medicine(object.getString("barcode"), object.getString("eofcode"), object.getString("medName"),
-                               dateWithSlash(object.getString("expirationDate"), true), object.getString("medPrice"),
-                                object.getString("notes"), object.getString("state"), what1, what2,
-                                object.getString("forDonation")),firstWord(object.getString("medName")));
+                            db.addMed(new Medicine(object.getString("barcode"), object.getString("eofcode"), object.getString("medName"),
+                                    dateWithSlash(object.getString("expirationDate"), true), object.getString("medPrice"),
+                                    object.getString("notes"), object.getString("state"), what1, what2,
+                                    object.getString("forDonation")), firstWord(object.getString("medName")));
+                        }
+
+                        for (int i = 0; i < done_donations.length(); i++) {
+
+                            JSONObject object = done_donations.getJSONObject(i);
+
+                            db.addDoneDonation(object.getString("donePrice"), firstWord(object.getString("doneName")),
+                                    object.getString("pharmacyName"), dateWithSlash(object.getString("doneDate"), false));
+                        }
+
+                        for (int i = 0; i < donations.length(); i++) {
+
+                            JSONObject object = donations.getJSONObject(i);
+                            String donatedPhone = object.getString("donatedPhone");
+                            String pharphone = (donatedPhone.equals("null")) ? ";" : donatedPhone;
+
+                            db.addDonation(object.getString("donationBarcode"), pharphone,
+                                    dateWithSlash(object.getString("deliveryDate1"), false),
+                                    dateWithSlash(object.getString("deliveryDate2"), false),
+                                    dateWithSlash(object.getString("deliveryDate3"), false), object.getString("deliveryType"),
+                                    object.getString("donationAddress"));
+                        }
+
+                        pref.setHasLoadedData(true);
+
+                    } catch (JSONException e) {
+                        Crashlytics.logException(e);
+                        e.printStackTrace();
+                        dialog.dismiss();
+                        alert2.show();
+                        httpErrorToast(getApplicationContext(), 2);
+                        return;
                     }
-
-                    for (int i = 0; i < done_donations.length(); i++) {
-
-                        JSONObject object = done_donations.getJSONObject(i);
-
-                        db.addDoneDonation(object.getString("donePrice"), firstWord(object.getString("doneName")),
-                                object.getString("pharmacyName"), dateWithSlash(object.getString("doneDate"), false));
-                    }
-
-                    for (int i = 0; i < donations.length(); i++) {
-
-                        JSONObject object = donations.getJSONObject(i);
-                        String donatedPhone = object.getString("donatedPhone");
-                        String pharphone = (donatedPhone.equals("null")) ? ";" : donatedPhone;
-
-                        db.addDonation(object.getString("donationBarcode"), pharphone,
-                                dateWithSlash(object.getString("deliveryDate1"), false),
-                                dateWithSlash(object.getString("deliveryDate2"), false),
-                                dateWithSlash(object.getString("deliveryDate3"), false), object.getString("deliveryType"),
-                                object.getString("donationAddress"));
-                    }
-
-                } catch (JSONException e) {
-                    Crashlytics.logException(e);
-                    e.printStackTrace();
+                }
+                else {
                     dialog.dismiss();
-                    httpErrorToast(getApplicationContext(), 2);
+                    alert2.show();
                     return;
                 }
             }

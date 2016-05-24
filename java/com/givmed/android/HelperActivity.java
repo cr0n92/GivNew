@@ -240,7 +240,7 @@ public class HelperActivity extends AppCompatActivity
     }
 
     public static void httpErrorToast(Context context, int error) {
-        Toast.makeText(context, (error == 1) ? context.getString(R.string.no_internet) : "Server error", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, (error == 1) ? context.getString(R.string.no_internet) : context.getString(R.string.no_connection), Toast.LENGTH_LONG).show();
     }
 
     public static void enableBroadcastReceiver(Context context){

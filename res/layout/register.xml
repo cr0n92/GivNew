@@ -45,7 +45,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
-                    android:theme="@style/MyEditTextTheme">
+                    android:theme="@style/MyEditTextTheme2">
 
                     <EditText
                         android:id="@+id/username_text"
@@ -59,7 +59,7 @@
                         android:textSize="24sp"
                         android:drawableStart="@drawable/ic_profile"
                         android:drawableLeft="@drawable/ic_profile"
-                        android:theme="@style/MyEditTextTheme" />
+                        android:theme="@style/MyEditTextTheme2" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -74,7 +74,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_below="@id/username"
-                    android:theme="@style/MyEditTextTheme">
+                    android:theme="@style/MyEditTextTheme2">
 
                     <EditText
                         android:id="@+id/birth_text"
@@ -88,7 +88,7 @@
                         android:textSize="24sp"
                         android:drawableStart="@drawable/ic_calendar"
                         android:drawableLeft="@drawable/ic_calendar"
-                        android:theme="@style/MyEditTextTheme"/>
+                        android:theme="@style/MyEditTextTheme2"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -114,7 +114,7 @@
                         android:textSize="24sp"
                         android:drawableStart="@drawable/ic_sex"
                         android:drawableLeft="@drawable/ic_sex"
-                        android:theme="@style/MyEditTextTheme"/>
+                        android:theme="@style/MyEditTextTheme2"/>
 
                     <ImageView
                         android:id="@+id/femaleButton"
@@ -140,7 +140,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:layout_below="@id/buttons"
-                    android:theme="@style/MyEditTextTheme">
+                    android:theme="@style/MyEditTextTheme2">
 
                     <EditText
                         android:id="@+id/email_text"
@@ -154,7 +154,7 @@
                         android:textSize="24sp"
                         android:drawableStart="@drawable/ic_mail"
                         android:drawableLeft="@drawable/ic_mail"
-                        android:theme="@style/MyEditTextTheme"/>
+                        android:theme="@style/MyEditTextTheme2"/>
 
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>

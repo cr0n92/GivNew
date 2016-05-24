@@ -13,10 +13,13 @@ import android.os.CountDownTimer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,7 +61,7 @@ public class ConfirmNumber extends AppCompatActivity {
             new CountDownTimer(countdown, 1000) {
 
                 public void onTick(long millisUntilFinished) {
-                    sendAgain.setText("seconds remaining: " + millisUntilFinished / 1000);
+                    sendAgain.setText("Χρόνος αναμονής: " + millisUntilFinished / 1000);
                 }
 
                 public void onFinish() {
@@ -103,7 +106,6 @@ public class ConfirmNumber extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra("error")) {
                 Toast.makeText(getApplicationContext(), getString(R.string.conf_wrong_pin), Toast.LENGTH_LONG).show();
-
             }
             else {
                 token = intent.getStringExtra("token");
@@ -112,7 +114,7 @@ public class ConfirmNumber extends AppCompatActivity {
                 pin2.setText("" + token.charAt(2));
                 pin3.setText("" + token.charAt(3));
 
-                new CountDownTimer(4000, 5000) {
+                new CountDownTimer(5000, 5000) {
 
                     public void onTick(long millisUntilFinished) {
                     }
@@ -132,7 +134,6 @@ public class ConfirmNumber extends AppCompatActivity {
                     }
                 }.start();
             }
-
         }
     };
 
@@ -143,7 +144,6 @@ public class ConfirmNumber extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.confirm_number);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.confirm);
@@ -165,22 +165,23 @@ public class ConfirmNumber extends AppCompatActivity {
         sendAgain = (TextView) findViewById(R.id.fourthMes);
 
         //registerReceiver(mTimerBroadcastReceiver, new IntentFilter(TimerService.BROADCAST_ACTION));
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(mTokenBroadcastReceiver,
-                new IntentFilter("token"));
-
-        pin0 = (EditText) findViewById(R.id.pin0);
-        pin1 = (EditText) findViewById(R.id.pin1);
-        pin2 = (EditText) findViewById(R.id.pin2);
-        pin3 = (EditText) findViewById(R.id.pin3);
-
-        TextView number = (TextView) findViewById(R.id.thirdMes);
-        Intent intent = getIntent();
-        phone = intent.getStringExtra("phone");
-        number.setText("+30 " + phone);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mTokenBroadcastReceiver, new IntentFilter("token"));
         HelperActivity.enableBroadcastReceiver(getApplicationContext());
 
-        Log.e("kakakika", "" + pref.getRegDone());
+        pin0 = (EditText) findViewById(R.id.pin0);
+        pin0.addTextChangedListener(new MyTextWatcher(pin0));
+        pin1 = (EditText) findViewById(R.id.pin1);
+        pin1.addTextChangedListener(new MyTextWatcher(pin1));
+        pin2 = (EditText) findViewById(R.id.pin2);
+        pin2.addTextChangedListener(new MyTextWatcher(pin2));
+        pin3 = (EditText) findViewById(R.id.pin3);
+        pin3.addTextChangedListener(new MyTextWatcher(pin3));
+
+        TextView number = (TextView) findViewById(R.id.secondMes);
+        Intent intent = getIntent();
+        phone = intent.getStringExtra("phone");
+        String stringious = getString(R.string.conf_second_msg) + " " + phone + " " + getString(R.string.conf_second_msg2);
+        number.setText(stringious);
 
         if (!pref.getRegDone()) {
             HelperActivity.showDialogBox(getApplicationContext(), dialog);
@@ -271,16 +272,12 @@ public class ConfirmNumber extends AppCompatActivity {
         super.onPause();  // Always call the superclass method first
         if(pref.getCountdown().equals("firstRunning")||pref.getCountdown().equals("secondRunning"))
             LocalBroadcastManager.getInstance(this).unregisterReceiver(mTimerBroadcastReceiver);
-
-
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();  // Always call the superclass method first
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mTokenBroadcastReceiver);
-
-
     }
 
 
@@ -359,8 +356,9 @@ public class ConfirmNumber extends AppCompatActivity {
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 int postDataLength = postData.length;
-
                 conn = (HttpURLConnection) url.openConnection();
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setDoOutput(true);
                 conn.setRequestProperty("Connection", "keep-alive");
                 conn.setRequestProperty("Content-Length", Integer.toString(postDataLength));
@@ -389,7 +387,7 @@ public class ConfirmNumber extends AppCompatActivity {
             } catch (IOException e) {
                 Crashlytics.logException(e);
                 error = 1;
-                Log.e(TAG, "IOException"+e);
+                Log.e(TAG, "IOException" + e);
             } finally {
                 if (null != conn)
                     conn.disconnect();
@@ -406,8 +404,12 @@ public class ConfirmNumber extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            if (error > 0)
+            if (error > 0) {
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
+                dialog.dismiss();
+                onBackPressed();
+                return ;
+            }
             else {
                 //mporei na ksanakalesei thn reg mexri na mhn exei error
                 pref.setRegDone(true);
@@ -423,6 +425,43 @@ public class ConfirmNumber extends AppCompatActivity {
             }
 
             dialog.dismiss();
+        }
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    private class MyTextWatcher implements TextWatcher {
+
+        private View view;
+
+        private MyTextWatcher(View view) {
+            this.view = view;
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            switch (view.getId()) {
+                case R.id.pin0:
+                    requestFocus(pin1);
+                    break;
+                case R.id.pin1:
+                    requestFocus(pin2);
+                    break;
+                case R.id.pin2:
+                    requestFocus(pin3);
+                    break;
+                case R.id.pin3:
+                    break;
+            }
         }
     }
 }

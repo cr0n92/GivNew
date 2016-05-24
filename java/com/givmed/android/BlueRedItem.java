@@ -12,18 +12,21 @@ public class BlueRedItem implements Parcelable {
 
     private String mBarcode;
     private String mName;
+    private boolean mSirup;
     private int mBlueStatus = gray;
     private int mRedStatus = gray;
 
-    BlueRedItem(String barcode, String name, int blueS) {
+    BlueRedItem(String barcode, String name, boolean sirup, int blueS) {
         mBarcode = barcode;
         mName = name;
+        mSirup = sirup;
         mBlueStatus = mRedStatus = blueS;
     }
 
     private BlueRedItem(Parcel in) {
         mBarcode = in.readString();
         mName = in.readString();
+        mSirup = in.readByte() != 0;
         mBlueStatus = in.readInt();
         mRedStatus = in.readInt();
     }
@@ -35,6 +38,7 @@ public class BlueRedItem implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         out.writeString(mBarcode);
         out.writeString(mName);
+        out.writeByte((byte) (mSirup ? 1 : 0));
         out.writeInt(mBlueStatus);
         out.writeInt(mRedStatus);
     }
@@ -48,6 +52,10 @@ public class BlueRedItem implements Parcelable {
             return new BlueRedItem[size];
         }
     };
+
+    public boolean getSirup() {
+        return mSirup;
+    }
 
     public String getBarcode() {
         return mBarcode;

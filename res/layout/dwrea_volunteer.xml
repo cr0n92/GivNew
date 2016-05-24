@@ -48,67 +48,65 @@
                 android:layout_centerHorizontal="true" >
             </TextView>
 
-            <LinearLayout
-                android:id="@+id/layout"
-                android:layout_below="@id/secondMes"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/nameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/secondMes"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:orientation="horizontal">
+                android:theme="@style/MyEditTextTheme">
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/nameLayout"
+                <EditText
+                    android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:hint="@string/farmako"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textSize="24sp"
+                    android:drawableStart="@drawable/ic_med_name"
+                    android:drawableLeft="@drawable/ic_med_name"
                     android:theme="@style/MyEditTextTheme">
+                </EditText>
 
-                    <EditText
-                        android:id="@+id/name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/farmako"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:textSize="24sp"
-                        android:drawableStart="@drawable/ic_med_name"
-                        android:drawableLeft="@drawable/ic_med_name"
-                        android:theme="@style/MyEditTextTheme">
-                    </EditText>
+            </android.support.design.widget.TextInputLayout>
 
-                </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/foreasLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/nameLayout"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:theme="@style/MyEditTextTheme">
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/foreasLayout"
+                <EditText
+                    android:id="@+id/foreas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:hint="@string/choo_foreas"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:textSize="24sp"
+                    android:drawableStart="@drawable/ic_foreas"
+                    android:drawableLeft="@drawable/ic_foreas"
                     android:theme="@style/MyEditTextTheme">
+                </EditText>
 
-                    <EditText
-                        android:id="@+id/foreas"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/choo_foreas"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:textSize="24sp"
-                        android:drawableStart="@drawable/ic_foreas"
-                        android:drawableLeft="@drawable/ic_foreas"
-                        android:theme="@style/MyEditTextTheme">
-                    </EditText>
-
-                </android.support.design.widget.TextInputLayout>
-            </LinearLayout>
+            </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:id="@+id/dateMsg"
-                android:layout_below="@id/layout"
+                android:layout_below="@id/foreasLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -205,7 +203,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:theme="@style/MyEditTextTheme">
+                android:theme="@style/MyEditTextTheme2">
 
                 <EditText
                     android:id="@+id/address"
@@ -216,7 +214,7 @@
                     android:textSize="20sp"
                     android:drawableStart="@drawable/ic_foreas"
                     android:drawableLeft="@drawable/ic_foreas"
-                    android:theme="@style/MyEditTextTheme">
+                    android:theme="@style/MyEditTextTheme2">
                 </EditText>
 
             </android.support.design.widget.TextInputLayout>

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
+import java.io.BufferedInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class BlueRedList extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -28,11 +40,13 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
     ProgressDialog dialog;
     public static BlueRedAdapter mAdapter;
     public static boolean inRed = false;
+    private int matchedMeds;
     private TextView firstMes, secondMes;
     private ImageView image;
     private String amesa, prin;
+    private String[][] dataArray;
     private SpannableStringBuilder redBuilder, blueBuilder;
-    AlertDialog matchAlert;
+    AlertDialog.Builder builder;
     DBHandler db;
 
     @Override
@@ -53,6 +67,7 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
         });
 
         db = new DBHandler(getApplicationContext());
+        builder = new AlertDialog.Builder(this);
 
         firstMes = (TextView) findViewById(R.id.firstMes);
         secondMes = (TextView) findViewById(R.id.texto);
@@ -163,13 +178,7 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
     }
 
     public void matching() {
-        int ret, matchedMeds = 0;
-
-        //Kanoume subscribe sta topics gia kathe onoma farmakou sthn mple lista
-        //Kanoume subscribe mono gia ayta pou den exoune ginei match
-        ArrayList<String> topics = new ArrayList<String>();
-
-
+        matchedMeds = 0;
 
         dialog = new ProgressDialog(this);
         dialog.setMessage(getString(R.string.matching));
@@ -177,47 +186,159 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
+        String data = "", barcode, forDonation, pharPhone = "";
+        int cnt = 0;
+        dataArray = new String[mAdapter.getCount()][2];
+
         for (BlueRedItem item : mAdapter.mItems) {
-            Log.e("Med name", item.getName());
-            ret = db.updateMedAndMatch(item);
+            barcode = item.getBarcode();
+            forDonation = (item.getSirup()) ? "S" : "";
 
-            if (ret == -1) {
-                if (db.checkMedSubscribe( item.getName(),true))
-                    topics.add(item.getName());
+            if (item.getStatus() == R.drawable.ic_tick_in_circle_blue) {
+                Object[] info = db.matchExists(item.getName());
+                int ret = (int) info[0];
+                pharPhone = (String) info[1];
+
+                if (ret == -1) {
+                    pharPhone = "-";
+                } else if (ret == 1) {
+                    matchedMeds++;
+                }
+
+                forDonation += "Y";
             }
-            else if (ret == 1) {
-                matchedMeds++;
+            else {
+                forDonation += (item.getStatus() == R.drawable.ic_tick_in_circle_red) ? "B" : "N";
             }
+
+            dataArray[cnt][0] = pharPhone;
+            dataArray[cnt][1] = forDonation;
+
+            data += "med" + cnt++ + "={'barcode':'" + barcode + "', 'forDonation':'" + forDonation
+                    + "', 'donationBarcode':'" + barcode + "', 'donatedPhone':'" + pharPhone + "'}&";
         }
 
-        if (!topics.isEmpty()) {
-            Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
-            serviceIntent.putExtra("subscribe", true);
-            serviceIntent.putStringArrayListExtra("topic", topics);
-            startService(serviceIntent);
+        data = data.substring(0, data.length() - 1);
+        new HttpBlueRedTask().execute(data);
+    }
+
+    private class HttpBlueRedTask extends AsyncTask<String, Void, Integer> {
+
+        private static final String TAG = "HttpGetTask_BlueRed";
+        private int error = -1;
+        private int result;
+
+        @Override
+        protected Integer doInBackground(String... input) {
+            String data = "";
+            java.net.URL url = null;
+            HttpURLConnection conn = null;
+            String URL = HelperActivity.server + "/br_list/";
+
+            try {
+                url = new URL(URL);
+                String urlParameters = input[0];
+
+                byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
+                conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
+                conn.setDoOutput(true);
+                conn.setRequestMethod("PUT");
+                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
+                wr.write(postData);
+                InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
+                data = HelperActivity.readStream(in);
+
+                Log.e(TAG, "Komple? " + data);
+                result = conn.getResponseCode();
+
+                Log.e(TAG, "Received HTTP response: " + result);
+
+            } catch (ProtocolException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "ProtocolException");
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                Crashlytics.logException(e);
+                error = 1;
+                Log.e(TAG, "MalformedURLException");
+                e.printStackTrace();
+            } catch (IOException e) {
+                Crashlytics.logException(e);
+                error = 2;
+                Log.e(TAG, "IOException");
+                e.printStackTrace();
+            } finally {
+                if (null != conn)
+                    conn.disconnect();
+            }
+
+            return result;
         }
 
-        dialog.dismiss();
-        dialog = null;
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (error > 0)
+                HelperActivity.httpErrorToast(getApplicationContext(), error);
+            else {
+                if (result == 201) {
+                    //Kanoume subscribe sta topics gia kathe onoma farmakou sthn mple lista
+                    //Kanoume subscribe mono gia ayta pou den exoune ginei match
+                    ArrayList<String> topics = new ArrayList<String>();
+                    String barcode, name;
 
-        if (matchedMeds > 0) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(getString(R.string.after_matching_left) + " " + matchedMeds + " " + getString(R.string.after_matching_right))
-                    .setCancelable(false)
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog2, int id) {
-                            Intent toDonations = new Intent(getApplicationContext(), Dwrees.class);
-                            startActivity(toDonations);
-                            finish();
+                    for (int i = 0; i < dataArray.length; i++) {
+                        barcode = ((BlueRedItem) mAdapter.getItem(i)).getBarcode();
+                        name = ((BlueRedItem) mAdapter.getItem(i)).getName();
+
+                        switch (dataArray[i][0]) {
+                            case "":
+                                if (db.checkMedSubscribe(name, true)) topics.add(name);
+                                break;
+                            case "-":
+                                break;
+                            default:
+                                db.addDonation(barcode, dataArray[i][0], ";", ";", ";", "A", ";");
+                                break;
                         }
-                    });
-            matchAlert = builder.create();
-            matchAlert.show();
-        }
-        else {
-            Intent toFarmakeio = new Intent(getApplicationContext(), Farmakeio.class);
-            startActivity(toFarmakeio);
-            finish();
+                        db.updateMedForDonation(barcode, dataArray[i][1]);
+                    }
+
+                    if (!topics.isEmpty()) {
+                        Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
+                        serviceIntent.putExtra("subscribe", true);
+                        serviceIntent.putStringArrayListExtra("topic", topics);
+                        startService(serviceIntent);
+                    }
+
+                    dialog.dismiss();
+
+                    if (matchedMeds > 0) {
+                        builder.setMessage(getString(R.string.after_matching_left) + " " + matchedMeds + " " + getString(R.string.after_matching_right))
+                                .setCancelable(false)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog2, int id) {
+                                        Intent toDonations = new Intent(getApplicationContext(), Dwrees.class);
+                                        startActivity(toDonations);
+                                        finish();
+                                    }
+                                });
+                        AlertDialog matchAlert = builder.create();
+                        matchAlert.show();
+                    }
+                    else {
+                        Intent toFarmakeio = new Intent(getApplicationContext(), Farmakeio.class);
+                        startActivity(toFarmakeio);
+                        finish();
+                    }
+
+                    return;
+                } else
+                    HelperActivity.httpErrorToast(getApplicationContext(), 2);
+            }
+            dialog.dismiss();
         }
     }
 }

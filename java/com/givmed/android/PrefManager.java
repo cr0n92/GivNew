@@ -48,6 +48,7 @@ public class PrefManager {
     private static final String KEY_REG_DONE = "reg_done";
     private static final String KEY_OLD_USER = "old_user";
     private static final String KEY_NEXT_SPLASH = "next_splash";
+    private static final String KEY_DATA_LOADED = "data_loaded";
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
@@ -82,6 +83,7 @@ public class PrefManager {
     public String getMobileNumber() {
         return pref.getString(KEY_MOBILE_NUMBER, null);
     }
+
     public void setNextSplash(String splash) {
         editor.putString(KEY_NEXT_SPLASH, splash);
         editor.commit();
@@ -201,6 +203,15 @@ public class PrefManager {
 
     public String getAddress() {
         return pref.getString(KEY_ADDRESS, "");
+    }
+
+    public void setHasLoadedData(boolean hasHe) {
+        editor.putBoolean(KEY_DATA_LOADED, hasHe);
+        editor.commit();
+    }
+
+    public boolean getHasLoadedData() {
+        return pref.getBoolean(KEY_DATA_LOADED, false);
     }
 
     public void setOldMonth(int month) {

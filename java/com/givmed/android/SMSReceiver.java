@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -17,6 +18,7 @@ public class SMSReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         SmsMessage smsMessage;
+        final Context contexto = context;
 
         if(Build.VERSION.SDK_INT >= 19) { //KITKAT
             SmsMessage[] msgs = Telephony.Sms.Intents.getMessagesFromIntent(intent);
@@ -44,14 +46,22 @@ public class SMSReceiver extends BroadcastReceiver {
 
         Log.e(TAG, "OTP received: " + verificationCode);
 
-        Intent httpIntent = new Intent(context, VerifyService.class);
+        final Intent httpIntent = new Intent(context, VerifyService.class);
         httpIntent.putExtra("otp", verificationCode);
         if (old_user)
             httpIntent.putExtra("oldUser", "yes");
         else
             httpIntent.putExtra("oldUser", "no");
 
-        context.startService(httpIntent);
+        new CountDownTimer(6000, 5000) {
+
+            public void onTick(long millisUntilFinished) {
+            }
+
+            public void onFinish() {
+                contexto.startService(httpIntent);
+            }
+        }.start();
     }
 
     /**
@@ -65,11 +75,7 @@ public class SMSReceiver extends BroadcastReceiver {
         String code = null;
         int index = message.indexOf(PrefManager.OTP_DELIMITER);
 
-        String arr[] = message.split(" ", 2);
-
-        String firstWord = arr[0];
-
-        if (firstWord.equals("ΧΑΙΡΟΜΑΣΤΕ"))
+        if (index == 55)
             old_user = true;
 
         if (index != -1) {

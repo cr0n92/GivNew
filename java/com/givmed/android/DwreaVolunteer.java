@@ -519,13 +519,13 @@ public class DwreaVolunteer extends AppCompatActivity {
                         "&donationAddress=" + address +
                         "&deliveryType=V";
 
-                if (!sdate1.equals(";")) urlParameters += "&donationDate1=" + sdate1;
+                if (!sdate1.equals(";")) urlParameters += "&deliveryDate1=" + sdate1;
                 else date1 = ";";
 
-                if (!sdate2.equals(";")) urlParameters += "&donationDate2=" + sdate2;
+                if (!sdate2.equals(";")) urlParameters += "&deliveryDate2=" + sdate2;
                 else date2 = ";";
 
-                if (!sdate3.equals(";")) urlParameters += "&donationDate3=" + sdate3;
+                if (!sdate3.equals(";")) urlParameters += "&deliveryDate3=" + sdate3;
                 else date3 = ";";
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));

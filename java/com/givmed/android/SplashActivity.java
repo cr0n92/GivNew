@@ -34,19 +34,9 @@ import io.fabric.sdk.android.Fabric;
  * Created by agroikos on 2/5/2016.
  */
 public class SplashActivity extends AppCompatActivity {
-    private final String TAG = "Splash";
-
     private String needDate, pharDate;
     private PrefManager pref;
     private DBHandler db;
-
-    //!!!!!!!!!!!PUSH!!!!!!!!!!
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private boolean isReceiverRegistered;
-
-    //!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!1
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,44 +44,8 @@ public class SplashActivity extends AppCompatActivity {
         Fabric.with(this, new Crashlytics());
 
         db = new DBHandler(getApplicationContext());
-        //db.printAllMeds();
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.e(TAG, "Kati phra");
-
-                SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences
-                        .getBoolean(PrefManager.SENT_TOKEN_TO_SERVER, false);
-                if (sentToken) {
-                    Log.e(TAG, "Token received and sent to server");
-                } else {
-                    Log.e(TAG, "Error while fetching the InstanceID") ;
-                }
-            }
-        };
-
-        // Registering BroadcastReceiver
-        registerReceiver();
-
-
-        if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
-            Log.e("Koble","Einai");
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
-        }
-
-
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         pref = new PrefManager(this);
-        pref.setMobileNumber("12345");
         pharDate = pref.getPharDate();
         needDate = pref.getNeedDate();
 
@@ -112,40 +66,6 @@ public class SplashActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
-    private void registerReceiver(){
-
-        if(!isReceiverRegistered) {
-
-            Log.e(TAG, "Ton kanw register");
-
-            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                    new IntentFilter(PrefManager.REGISTRATION_COMPLETE));
-            isReceiverRegistered = true;
-        }
-    }
-
-    /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
-     */
-    private boolean checkPlayServices() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Log.e(TAG, "This device is not supported.");
-                finish();
-            }
-            return false;
-        }
-        return true;
-    }
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!PUSH!!!!!!!!!!!!!!!!!!!!!!!
 
     private class HttpPharmacies extends AsyncTask<Void, Void, Integer> {
 

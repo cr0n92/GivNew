@@ -159,7 +159,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:theme="@style/MyEditTextTheme" >
+                android:theme="@style/MyEditTextTheme2" >
 
                 <EditText
                     android:id="@+id/notes"
@@ -170,7 +170,7 @@
                     android:maxLength="130"
                     android:drawableStart="@drawable/ic_notes"
                     android:drawableLeft="@drawable/ic_notes"
-                    android:theme="@style/MyEditTextTheme" >
+                    android:theme="@style/MyEditTextTheme2" >
                 </EditText>
 
             </android.support.design.widget.TextInputLayout>

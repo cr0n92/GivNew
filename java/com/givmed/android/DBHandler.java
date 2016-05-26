@@ -327,6 +327,16 @@ public class DBHandler extends SQLiteOpenHelper {
                 new String[]{med.getBarcode()});
     }
 
+    // Updating single med status
+    public int updateMedForDonation(String barcode, String forDonation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_STATUS, forDonation);
+
+        return db.update(TABLE_MEDS, values, KEY_BARCODE + " = ?", new String[]{barcode});
+    }
+
     // check an den uparxei elleipsh gia ayto to farmako ki an einai to teleytaio farmako me idio onoma kai 'Y' h 'SY'
     // an nai tote kanoume unsubscribe
 
@@ -367,7 +377,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         //query pou pairnoume ta kleista siropia me SY kai ta alla me Y pou lhgoun se 3 mhnes
         String selectQuery = "SELECT " + KEY_BARCODE + "," + KEY_HALF_NAME + "," + KEY_STATUS + " FROM " + TABLE_MEDS
-                + " WHERE (" + KEY_STATUS + " = B OR ("+ KEY_STATUS + " = SB AND" + KEY_STATE + " = C)) AND "
+                + " WHERE (" + KEY_STATUS + " = 'B' OR ("+ KEY_STATUS + " = 'SB' AND " + KEY_STATE + " = 'C')) AND "
                 + KEY_EXP_DATE + "= '" + three_months_later + "'";
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -518,14 +528,14 @@ public class DBHandler extends SQLiteOpenHelper {
         boolean hasUnknown = false;
         SQLiteDatabase db = this.getWritableDatabase();
 
-        String selectQuery = "SELECT " + KEY_BARCODE + "," + KEY_HALF_NAME + " FROM " + TABLE_MEDS
+        String selectQuery = "SELECT " + KEY_BARCODE + "," + KEY_HALF_NAME + "," + KEY_STATUS + " FROM " + TABLE_MEDS
                 + " WHERE " + KEY_STATUS + " == 'U' OR " + KEY_STATUS + " == 'SU' ";
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst() && cursor.getCount() > 0) {
             hasUnknown = true;
             do {
-                brAdapter.add(new BlueRedItem(cursor.getString(0), cursor.getString(1), R.drawable.ic_tick_in_circle_gray));
+                brAdapter.add(new BlueRedItem(cursor.getString(0), cursor.getString(1), cursor.getString(2).equals("SU"), R.drawable.ic_tick_in_circle_gray));
             } while (cursor.moveToNext());
             cursor.close();
         }

@@ -75,15 +75,25 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true">
 
-            <ImageView
-                android:id="@+id/scani2"
+            <LinearLayout
                 android:layout_width="150dp"
                 android:layout_height="200dp"
-                android:src="@drawable/svg_scanaro" />
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <ImageView
+                    android:id="@+id/scani2"
+                    android:layout_width="150dp"
+                    android:layout_height="200dp"
+                    android:src="@drawable/svg_scanaro" />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/typarw2"
-                android:layout_width="160dp"
+                android:layout_width="150dp"
                 android:layout_height="200dp"
                 android:src="@drawable/svg_grafo" />
         </LinearLayout>
@@ -135,7 +145,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:visibility="gone" >
+        android:visibility="gone"  >
 
         <TextView
             android:id="@+id/step3"
@@ -160,13 +170,13 @@
 
             <ImageView
                 android:id="@+id/scani3"
-                android:layout_width="150dp"
+                android:layout_width="170dp"
                 android:layout_height="200dp"
                 android:src="@drawable/svg_mple" />
 
             <ImageView
                 android:id="@+id/typarw3"
-                android:layout_width="150dp"
+                android:layout_width="156dp"
                 android:layout_height="200dp"
                 android:src="@drawable/svg_kokkino" />
         </LinearLayout>
@@ -218,7 +228,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:visibility="gone" >
+        android:visibility="gone"  >
 
         <TextView
             android:id="@+id/step4"
@@ -243,13 +253,13 @@
 
             <ImageView
                 android:id="@+id/scani4"
-                android:layout_width="150dp"
-                android:layout_height="200dp"
+                android:layout_width="155dp"
+                android:layout_height="205dp"
                 android:src="@drawable/svg_monos" />
 
             <ImageView
                 android:id="@+id/typarw4"
-                android:layout_width="150dp"
+                android:layout_width="156dp"
                 android:layout_height="200dp"
                 android:src="@drawable/svg_ethelodis" />
         </LinearLayout>

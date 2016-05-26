@@ -73,7 +73,6 @@ public class VerifyService extends IntentService {
             data = HelperActivity.readStream(in);
             code = conn.getResponseCode();
 
-
             //stelnei sto confirmNumber mono an oi kwdikoi einai swstoi
             if (code == 202 || code == 201) {
                 PrefManager pref = new PrefManager(getApplicationContext());
@@ -95,8 +94,6 @@ public class VerifyService extends IntentService {
                 Intent TokenIntent = new Intent("token");
                 TokenIntent.putExtra("error", "error");
                 LocalBroadcastManager.getInstance(this).sendBroadcast(TokenIntent);
-
-
             }
 
             Log.e("django response", ""+code);

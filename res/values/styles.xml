@@ -15,6 +15,15 @@
 
     <style name="MyEditTextTheme">
         <!-- Used for the bottom line when not selected / focused -->
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="colorControlActivated">@android:color/darker_gray</item>
+        <item name="colorControlHighlight">@android:color/darker_gray</item>
+        <item name="colorAccent">@android:color/darker_gray</item>
+        <!-- colorControlActivated & colorControlHighlight use the colorAccent color by default -->
+    </style>
+
+    <style name="MyEditTextTheme2">
+        <!-- Used for the bottom line when not selected / focused -->
         <item name="colorControlNormal">@color/colorPrimaryDark</item>
         <item name="colorControlActivated">@color/colorPrimaryDark</item>
         <item name="colorControlHighlight">@color/colorPrimaryDark</item>

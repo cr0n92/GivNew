@@ -62,12 +62,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/scani2"
+                    <LinearLayout
+                        android:layout_weight="1"
                         android:layout_width="182dp"
                         android:layout_height="192dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/svg_scanaro" />
+                        android:orientation="vertical">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
+                        <ImageView
+                            android:id="@+id/scani2"
+                            android:layout_width="182dp"
+                            android:layout_height="192dp"
+                            android:src="@drawable/svg_scanaro" />
+                    </LinearLayout>
 
                     <ImageView
                         android:id="@+id/typarw2"
@@ -85,6 +95,7 @@
                     android:textAllCaps="false"
                     android:textSize="20sp"
                     android:textColor="@color/white"
+                    android:layout_marginTop="15dp"
                     android:layout_marginBottom="10dp"
                     android:layout_below="@id/icons2"
                     android:layout_alignLeft="@+id/button2"

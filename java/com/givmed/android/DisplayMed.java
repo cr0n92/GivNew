@@ -70,14 +70,13 @@ public class DisplayMed extends AppCompatActivity {
         PrefManager pref = new PrefManager(this);
         phone = pref.getMobileNumber();
 
-        firstName = HelperActivity.firstWord(med.getName());
-
-
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("barcode"))
             med = db.getMed(intent.getStringExtra("barcode"));
         else
             finish();
+
+        firstName = HelperActivity.firstWord(med.getName());
 
         EditText mName = (EditText) findViewById(R.id.name);
         EditText mExp = (EditText) findViewById(R.id.expiration);
@@ -229,7 +228,7 @@ public class DisplayMed extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_delete) {
-            builder.setMessage(getString(R.string.delete_sure))
+            builder.setMessage((progDonation == null) ? getString(R.string.delete_sure) : getString(R.string.out_unmatched))
                     .setCancelable(false)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog2, int id) {
@@ -242,7 +241,7 @@ public class DisplayMed extends AppCompatActivity {
                     })
                     .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog2, int id) {
-                            if( db.checkMedSubscribe(firstName, false)) {
+                            if (db.checkMedSubscribe(firstName, false)) {
                                 ArrayList<String> topics = new ArrayList<String>();
                                 topics.add(firstName);
                                 Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
@@ -338,16 +337,15 @@ public class DisplayMed extends AppCompatActivity {
                                     })
                                     .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog2, int id) {
+
                                         }
                                     });
-
-                        	AlertDialog progExistsAlert = builder.create();
+                            AlertDialog progExistsAlert = builder.create();
 
                             dialog.dismiss();
                             progExistsAlert.show();
                             return true;
                         }
-
                         //edw mpainoume an htan Y/SY kai twra egine otidhpote allo
                         else if (med.getStatus().equals("Y") || med.getStatus().equals("SY")){
                             if( db.checkMedSubscribe(firstName, false)) {

@@ -24,10 +24,10 @@ public class TimerService  extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        data=intent.getStringExtra("attempt");
+        data = intent.getStringExtra("attempt");
         Log.e("data",""+data);
         TimerIntent = new Intent(BROADCAST_ACTION);
-        long duration=(data.equals("first"))?10000:30000;
+        long duration = (data.equals("first")) ? 40000 : 60000;
 
         new CountDownTimer(duration, 1000) {
             @Override

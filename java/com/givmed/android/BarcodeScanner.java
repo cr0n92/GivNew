@@ -1,5 +1,7 @@
 package com.givmed.android;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
@@ -11,6 +13,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -44,6 +47,8 @@ public class BarcodeScanner extends AppCompatActivity {
     private float mLightQuantity;
     private boolean hasSensor = false;
     SensorEventListener mListener;
+    AlertDialog.Builder builder;
+
 
     ImageScanner scanner;
     private boolean previewing = true;
@@ -82,6 +87,32 @@ public class BarcodeScanner extends AppCompatActivity {
             setResult(RESULT_CANCELED, new Intent());
             finish();
         }
+
+        new CountDownTimer(10000, 10000) {
+
+            public void onTick(long millisUntilFinished) {
+            }
+
+            public void onFinish() {
+                builder.setMessage(getString(R.string.camera_enough))
+                        .setCancelable(false)
+                        .setPositiveButton("ΝΑΙ", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog2, int id) {
+                                Intent aIntent = new Intent(getApplicationContext(), Inputter.class);
+                                startActivity(aIntent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("ΟΧΙ", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog2, int id) {
+
+                            }
+                        });
+                AlertDialog progExistsAlert = builder.create();
+                progExistsAlert.show();
+            }
+        }.start();
+
 
         if (hasFlash()) {
             mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);

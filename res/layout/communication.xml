@@ -6,8 +6,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    android:fitsSystemWindows="true">
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -62,7 +61,7 @@
                 </TextView>
 
                 <TextView
-                    android:id="@+id/mailView"
+                    android:id="@+id/phoneView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding"
@@ -71,6 +70,31 @@
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/com_phone"
+                    android:drawableStart="@drawable/ic_phone"
+                    android:drawableLeft="@drawable/ic_phone" >
+                </TextView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="10dp"
+                    android:padding="@dimen/padding"
+                    android:layout_below="@id/phoneView"
+                    android:id="@+id/line1"
+                    android:background="@android:color/darker_gray"/>
+
+                <TextView
+                    android:id="@+id/mailView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding"
+                    android:layout_below="@id/line1"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:text="@string/com_mail"

@@ -22,6 +22,16 @@ public class Communication extends HelperActivity {
         super.setMenu(R.menu.menu_main_simple);
         super.helperOnCreate(R.layout.communication, R.string.communication, false);
 
+        TextView phoneView = (TextView) findViewById(R.id.phoneView);
+        phoneView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", getString(R.string.com_phone), null));
+                startActivity(intent);
+            }
+        });
+
         TextView mailView = (TextView) findViewById(R.id.mailView);
         mailView.setOnClickListener(new View.OnClickListener() {
 

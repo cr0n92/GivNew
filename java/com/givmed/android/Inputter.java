@@ -37,7 +37,7 @@ public class Inputter extends AppCompatActivity {
     private EditText mEditText;
     private String date, eof, name, code;
     ProgressDialog dialog;
-    AlertDialog wrongBarcodeAlert;
+    AlertDialog wrongBarcodeAlert, wrongBarcodeAlert2, whichAlert;
     AlertDialog.Builder builder;
 
     @Override
@@ -71,9 +71,30 @@ public class Inputter extends AppCompatActivity {
                 });
         wrongBarcodeAlert = builder.create();
 
+        builder.setMessage(getString(R.string.inp_error_msg2))
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog2, int id) {
+
+                    }
+                });
+        wrongBarcodeAlert2 = builder.create();
+
         Intent intent = getIntent();
         if (intent.hasExtra("barcode")) {
             mEditText.setText(intent.getStringExtra("barcode"));
+
+            if (!intent.hasExtra("fromBack")) {
+                if (HelperActivity.isOnline(getApplicationContext())) {
+                    HelperActivity.showDialogBox(getApplicationContext(), dialog);
+                    whichAlert = wrongBarcodeAlert2;
+                    code = intent.getStringExtra("barcode");
+                    new HttpGetTask().execute(code);
+                } else {
+                    HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                    finish();
+                }
+            }
         }
     }
 
@@ -101,7 +122,7 @@ public class Inputter extends AppCompatActivity {
             else {
                 if (HelperActivity.isOnline(getApplicationContext())) {
                     HelperActivity.showDialogBox(getApplicationContext(), dialog);
-
+                    whichAlert = wrongBarcodeAlert;
                     new HttpGetTask().execute(code);
                 } else
                     HelperActivity.httpErrorToast(getApplicationContext(), 1);
@@ -239,7 +260,7 @@ public class Inputter extends AppCompatActivity {
                     HelperActivity.httpErrorToast(getApplicationContext(), 1);
                 else {
                     dialog.dismiss();
-                    wrongBarcodeAlert.show();
+                    whichAlert.show();
                 }
             }
             else {

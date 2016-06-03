@@ -140,6 +140,7 @@ public class Outputer extends AppCompatActivity {
         //as an example the 'Back' button is set to start a new Activity named 'NewActivity'
         Intent newIntent = new Intent(Outputer.this, Inputter.class);
         newIntent.putExtra("barcode", barcode);
+        newIntent.putExtra("fromBack", "makaraka");
         this.startActivity(newIntent);
         finish();
     }

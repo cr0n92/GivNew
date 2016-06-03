@@ -211,7 +211,7 @@
     <!-- Επικοινωνία -->
     <string name="com_first_msg">Επικοινώνησε μαζί μας και θα σου απαντήσουμε άμεσα!</string>
     <string name="com_second_msg">Μοιράσου την γνώμη σου για το GIVMED μαζί μας!</string>
-    <string name="com_phone">+30 6940984736</string>
+    <string name="com_phone">+30 6931370163</string>
     <string name="com_site">www.givmed.com</string>
     <string name="com_site_full">https://www.givmed.com/</string>
     <string name="com_fb">/GIVMED</string>
@@ -222,6 +222,7 @@
     <!-- Eισαγωγή barcode -->
     <string name="inp_type_msg">Πληκτρολόγησε τον κάθετο κωδικό που βρίσκεται στο αυτοκόλλητο.</string>
     <string name="inp_error_msg">Μήπως έγραψες κάτι λάθος; Αν όχι επικοινώνησε μαζί μας!</string>
+    <string name="inp_error_msg2">Δυστυχώς δεν αναγνωρίστηκε το φάρμακο. Πληκτρλογήστε τον κάθετο κωδικό.</string>
     <string name="inp_expired_msg">Το φάρμακο έχει λήξει!</string>
 
     <!-- Κάμερα -->

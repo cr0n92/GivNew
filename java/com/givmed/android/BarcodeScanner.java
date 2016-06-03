@@ -158,7 +158,6 @@ public class BarcodeScanner extends AppCompatActivity {
             @Override
             public void onSensorChanged(SensorEvent event) {
                 mLightQuantity = event.values[0];
-                Log.i("Light Mesurment: ", " " + mLightQuantity);
 
                 if (mLightQuantity < 10) {
                     Camera.Parameters param = mCamera.getParameters();
@@ -216,11 +215,11 @@ public class BarcodeScanner extends AppCompatActivity {
                 for (Symbol sym : syms)
                 {
                     String answer = sym.getData();
-                    Log.i("<<<BARCODE>>>", answer);
+                    int firstTwo = Integer.parseInt(answer.substring(0, 2));
 
-                    if (!answer.startsWith("280")) {
+                    if (firstTwo >= 9 && firstTwo <= 19) {
                         Intent returnIntent = new Intent();
-                        returnIntent.putExtra("BARCODE", sym.getData());
+                        returnIntent.putExtra("BARCODE", answer);
                         setResult(RESULT_OK, returnIntent);
                         releaseCamera();
                         finish();

@@ -5,9 +5,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,11 +22,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
 /**
  * Einai h klassh pou kanei extend to AppCompatActivity kai to xrhshmopoioume
@@ -41,6 +50,10 @@ public class HelperActivity extends AppCompatActivity
     public static String server = "http://www.givmed.com:81";
     public static int timeoutTime = 10000;
     public int myMenu;
+    private PrefManager pref;
+    private DBHandler db;
+
+
 
     public void setMenu(int myMenu) {
         this.myMenu = myMenu;
@@ -283,5 +296,80 @@ public class HelperActivity extends AppCompatActivity
             }
         }
         return data.toString();
+    }
+
+    public  class HttpGetNeeds extends AsyncTask<Object, Void, Integer> {
+
+        private static final String TAG = "HttpGetTask";
+        String needs;
+        private int error = -1;
+
+
+
+        @Override
+        protected Integer doInBackground(Object... values) {
+            db = (DBHandler) values[0];
+
+            pref = (PrefManager) values[1];
+            String needDate = pref.getNeedDate().replaceAll("\\s+","");
+            String URL = HelperActivity.server + "/needs_date/" + needDate + "/";
+            Integer out = 0;
+            java.net.URL url = null;
+            HttpURLConnection conn = null;
+
+            try {
+                url = new URL(URL);
+                conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
+                conn.setConnectTimeout(HelperActivity.timeoutTime);
+                conn.setReadTimeout(HelperActivity.timeoutTime);
+                conn.setDoInput(true);
+                InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
+                needs = HelperActivity.readStream(in);
+                out = conn.getResponseCode();
+
+            } catch (ProtocolException e) {
+                error = 1;
+                Log.e(TAG, "ProtocolException");
+            } catch (MalformedURLException exception) {
+                error = 1;
+                Log.e(TAG, "MalformedURLException");
+            } catch (IOException exception) {
+                error = 1;
+                exception.printStackTrace();
+                Log.e(TAG, "IOException");
+            } finally {
+                if (null != conn)
+                    conn.disconnect();
+            }
+
+            return out;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (error > 0)
+                HelperActivity.httpErrorToast(getApplicationContext(), error);
+            else {
+                if (result == 200) {
+                    try {
+
+                        JSONObject obj = new JSONObject(needs);
+                        pref.setNeedDate(obj.getString("newDate"));
+                        JSONArray objs = new JSONArray(obj.getString("data"));
+                        db.deleteNeeds();
+
+                        for (int i = 0; i < objs.length(); i++) {
+                            JSONObject json = objs.getJSONObject(i);
+                            Need needo = new Need();
+                            needo.setNeedName(json.getString("needMedName"));
+                            needo.setPhone(json.getString("needPhone"));
+                            db.addNeed(needo);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 }

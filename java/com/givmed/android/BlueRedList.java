@@ -48,6 +48,7 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
     private SpannableStringBuilder redBuilder, blueBuilder;
     AlertDialog.Builder builder;
     DBHandler db;
+    PrefManager pref;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,16 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
         });
 
         db = new DBHandler(getApplicationContext());
+        pref  = new PrefManager(this);
+
+
+        HelperActivity help = new HelperActivity();
+        Object array[] = new Object[2];
+        array[0] = db;
+        array[1] = pref;
+        help.new HttpGetNeeds().execute(array);
+
+
         builder = new AlertDialog.Builder(this);
 
         firstMes = (TextView) findViewById(R.id.firstMes);

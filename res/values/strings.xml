@@ -133,15 +133,16 @@
     <string name="br_now">ΑΜΕΣΗ</string>
     <string name="br_exp">3 ΜΗΝΕΣ ΠΡΙΝ ΛΗΞΟΥΝ</string>
     <string name="matching">Γίνεται αντιστοίχηση των φαρμάκων σας με τις υπάρχουσες ελλείψεις...</string>
+    <string name="update">Γίνεται αναζήτηση ελλείψεων...</string>
     <string name="after_matching_left">Σε ευχαριστούμε!</string>
     <string name="after_matching_right">από τα φάρμακα που καταχώρησες χρειάζονται κάπου! Κανόνισε πως θα φτάσουν στον προορισμό τους!</string>
     
-    <!-- Ελείψεις -->
+    <!-- Ελλείψεις -->
     <string name="region">Περιοχή</string>
     <string name="need_your_help">Η βοήθειά σου είναι πολύ σημαντική!</string>
     <string name="need_left_half_msg">Αυτή τη στιγμή υπάρχουν ελλείψεις σε</string>
     <string name="need_right_half_msg_plural">φάρμακα! Έχεις κάποιο από αυτά; Δώρισέ το!</string>
-    <string name="need_right_half_msg_single">φάρμακo! Άν το έχεις, δωρισέ το.</string>
+    <string name="need_right_half_msg_single">φάρμακo! Άν το έχεις, δώρισέ το.</string>
 
     <!-- Προφίλ -->
     <string name="prof_name">Username</string>
@@ -229,6 +230,7 @@
 
     <!-- Κάμερα -->
     <string name="camera_error">Δεν μπορέσαμε να ανοίξουμε την κάμερα!</string>
+    <string name="camera_enough">Μάλλον η κάμερά σου δεν μπορεί να σκανάρει τα barcodes. Θέλεις να πληκτρολογήσεις τον κάθετο κωδικό;</string>
     <string name="scan_msg">Τοποθέτησε τα 2 barcodes μπροστά στην κάμερα</string>
 
     <!-- Άλλα στρινγκς -->

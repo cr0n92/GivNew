@@ -298,10 +298,10 @@ public class HelperActivity extends AppCompatActivity
         return data.toString();
     }
 
-    public  class HttpGetNeeds extends AsyncTask<Object, Void, Integer> {
+    public  class HttpGetNeedsPharms extends AsyncTask<Object, Void, Integer> {
 
         private static final String TAG = "HttpGetTask";
-        String needs;
+        String data;
         private int error = -1;
 
 
@@ -312,7 +312,9 @@ public class HelperActivity extends AppCompatActivity
 
             pref = (PrefManager) values[1];
             String needDate = pref.getNeedDate().replaceAll("\\s+","");
-            String URL = HelperActivity.server + "/needs_date/" + needDate + "/";
+            String pharmDate = pref.getPharDate().replaceAll("\\s+", "");
+
+            String URL = HelperActivity.server + "/needs-pharm_date/" + pharmDate + "/" + needDate + "/";
             Integer out = 0;
             java.net.URL url = null;
             HttpURLConnection conn = null;
@@ -324,7 +326,7 @@ public class HelperActivity extends AppCompatActivity
                 conn.setReadTimeout(HelperActivity.timeoutTime);
                 conn.setDoInput(true);
                 InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
-                needs = HelperActivity.readStream(in);
+                data = HelperActivity.readStream(in);
                 out = conn.getResponseCode();
 
             } catch (ProtocolException e) {
@@ -352,18 +354,28 @@ public class HelperActivity extends AppCompatActivity
             else {
                 if (result == 200) {
                     try {
+                        JSONObject obj = new JSONObject(data);
+                        JSONArray pharm = obj.getJSONArray("pharm");
+                        JSONArray need = obj.getJSONArray("need");
+                        pref.setNeedDate(obj.getString("needDate"));
+                        pref.setNeedDate(obj.getString("pharmDate"));
 
-                        JSONObject obj = new JSONObject(needs);
-                        pref.setNeedDate(obj.getString("newDate"));
-                        JSONArray objs = new JSONArray(obj.getString("data"));
                         db.deleteNeeds();
 
-                        for (int i = 0; i < objs.length(); i++) {
-                            JSONObject json = objs.getJSONObject(i);
+                        for (int i = 0; i < need.length(); i++) {
+                            JSONObject json = need.getJSONObject(i);
                             Need needo = new Need();
                             needo.setNeedName(json.getString("needMedName"));
                             needo.setPhone(json.getString("needPhone"));
                             db.addNeed(needo);
+                        }
+
+                        db.deletePharmacies();
+
+                        for (int i = 0; i < pharm.length(); i++) {
+                            JSONObject json = pharm.getJSONObject(i);
+                            db.addPharmacy(json.getString("pharmacyPhone"), json.getString("pharmacyAddress"),
+                                    json.getString("openTime"), json.getString("pharmacyName"), json.getString("pharmacyNameGen"));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

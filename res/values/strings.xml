@@ -131,6 +131,7 @@
     <string name="br_now">ΑΜΕΣΗ</string>
     <string name="br_exp">3 ΜΗΝΕΣ ΠΡΙΝ ΛΗΞΟΥΝ</string>
     <string name="matching">Γίνεται αντιστοίχηση των φαρμάκων σας με τις υπάρχουσες ελλείψεις...</string>
+    <string name="update">Γίνεται αναζήτηση ελλείψεων...</string>
     <string name="after_matching_left">Σε ευχαριστούμε!</string>
     <string name="after_matching_right">από τα φάρμακα που καταχώρησες χρειάζονται κάπου! Κανόνισε πως θα φτάσουν στον προορισμό τους!</string>
     

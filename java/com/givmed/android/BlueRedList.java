@@ -34,10 +34,11 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class BlueRedList extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private final String TAG = "BlueRedList";
-    ProgressDialog dialog;
+    ProgressDialog dialog,dialog1;
     public static BlueRedAdapter mAdapter;
     public static boolean inRed = false;
     private int matchedMeds;
@@ -70,12 +71,6 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
         db = new DBHandler(getApplicationContext());
         pref  = new PrefManager(this);
 
-
-        HelperActivity help = new HelperActivity();
-        Object array[] = new Object[2];
-        array[0] = db;
-        array[1] = pref;
-        help.new HttpGetNeeds().execute(array);
 
 
         builder = new AlertDialog.Builder(this);
@@ -136,6 +131,24 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
 
             mAdapter.mItems = savedInstanceState.getParcelableArrayList("blueRedList");
         }
+
+        dialog1 = new ProgressDialog(this);
+        dialog1.setMessage(getString(R.string.update));
+        dialog1.setCancelable(false);
+        dialog1.setCanceledOnTouchOutside(false);
+        dialog1.show();
+        HelperActivity help = new HelperActivity();
+        Object array[] = new Object[2];
+        array[0] = db;
+        array[1] = pref;
+        try {
+            help.new HttpGetNeedsPharms().execute(array).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        dialog1.dismiss();
     }
 
     @Override

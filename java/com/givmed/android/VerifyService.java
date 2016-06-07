@@ -83,7 +83,8 @@ public class VerifyService extends IntentService {
                 if (code == 201) {
                     JSONObject obj = new JSONObject(data);
                     pref.setUsername(obj.getString("username"));
-                    pref.setBirthDate(obj.getString("birthDate"));
+                    String psofos = obj.getString("birthDate");
+                    pref.setBirthDate((psofos.equals("null")) ? "" : psofos);
                     pref.setSex(obj.getString("sex"));
                     pref.setEmail(obj.getString("email"));
                 }

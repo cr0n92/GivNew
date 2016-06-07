@@ -122,6 +122,7 @@ public class Register extends HelperActivity {
         username = pref.getUsername();
         email = pref.getEmail();
         date = pref.getBirthDate();
+        date = (date.equals("null")) ? "" : date;
         sex = pref.getSex();
 
         if (!(username.isEmpty() || username.equals(phone))) mUsername.setText(username);

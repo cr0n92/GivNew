@@ -85,9 +85,16 @@ public class BarcodeScanner extends AppCompatActivity {
 
         if (hasFlash()) {
             mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
             if (mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null) {
                 hasSensor = true;
                 enableSensorAndFlash();
+            }
+            else {
+                hasSensor = false;
+                Camera.Parameters param = mCamera.getParameters();
+                param.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                mCamera.setParameters(param);
             }
         }
 

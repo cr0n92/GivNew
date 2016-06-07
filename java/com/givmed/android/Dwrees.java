@@ -24,6 +24,7 @@ public class Dwrees extends HelperActivity {
     private TextView msgView, msgView2;
     private static Button progButton, doneButton;
     AdapterView.OnItemClickListener listener;
+    private ListView list;
     DBHandler db;
 
     @Override
@@ -87,7 +88,7 @@ public class Dwrees extends HelperActivity {
             }
         };
 
-        final ListView list = (ListView) findViewById(R.id.list);
+        list = (ListView) findViewById(R.id.list);
         list.setFooterDividersEnabled(true);
         list.setOnItemClickListener(listener);
         list.setAdapter(progAdapter);
@@ -96,11 +97,7 @@ public class Dwrees extends HelperActivity {
 
             @Override
             public void onClick(View v) {
-                changeButtonsLayout(progButton, doneButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right, Color.WHITE, Color.BLACK);
-                msgView.setText(progDonationMsg);
-                msgView2.setVisibility(View.VISIBLE);
-                list.setOnItemClickListener(listener);
-                list.setAdapter(progAdapter);
+                showProg();
             }
         });
 
@@ -108,20 +105,39 @@ public class Dwrees extends HelperActivity {
 
             @Override
             public void onClick(View v) {
-                changeButtonsLayout(doneButton, progButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left, Color.WHITE, Color.BLACK);
-                msgView.setText(doneDonationMsg);
-                msgView2.setVisibility(View.GONE);
-                list.setOnItemClickListener(null);
-                list.setAdapter(doneAdapter);
+                showDone();
             }
         });
+    }
+
+    public void showProg() {
+        changeButtonsLayout(progButton, doneButton, R.drawable.button_pressed_left, R.drawable.button_unpressed_right, Color.WHITE, Color.BLACK);
+        msgView.setText(progDonationMsg);
+        msgView2.setVisibility(View.VISIBLE);
+        list.setOnItemClickListener(listener);
+        list.setAdapter(progAdapter);
     }
 
     public void getProgrammed() {
         progAdapter.clear();
         int count = db.getAllDonations(progAdapter);
-        progDonationMsg = (count == 1) ? count + " " + progRight_sin : count + " " + progRight_plu;
-        msgView.setText(progDonationMsg);
+
+        if (count == 0) {
+            progDonationMsg = getString(R.string.donation_prog_zero);
+            msgView.setText(progDonationMsg);
+        }
+        else {
+            progDonationMsg = (count == 1) ? count + " " + progRight_sin : count + " " + progRight_plu;
+            msgView.setText(progDonationMsg);
+        }
+    }
+
+    public void showDone() {
+        changeButtonsLayout(doneButton, progButton, R.drawable.button_pressed_right, R.drawable.button_unpressed_left, Color.WHITE, Color.BLACK);
+        msgView.setText(doneDonationMsg);
+        msgView2.setVisibility(View.GONE);
+        list.setOnItemClickListener(null);
+        list.setAdapter(doneAdapter);
     }
 
     public void getDone() {
@@ -142,10 +158,30 @@ public class Dwrees extends HelperActivity {
     }
 
     @Override
+    protected void onNewIntent (Intent intent){
+        if (intent.hasExtra("done")) {
+            setIntent(intent);
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
         getDone();
         getProgrammed();
+
+        //edw pairnoume to intent ka8e fora, epeidh kaleite panta h onResume
+        //alla an einai hdh anoixto to Farmakeio.class tote prepei na valoume
+        //thn onNewIntent giati den evlepe to intent mesa sthn onResume
+        Intent intent = getIntent();
+        if (intent.hasExtra("done") && !intent.hasExtra("consumed")) {
+            showDone();
+
+            //otan paroume kai xrhsimopoihsoume to intent tote vazoume ena epipleon pedio
+            //gia na 3eroume oti den to xreiazomaste
+            intent.putExtra("consumed", true);
+        }
+
     }
 }

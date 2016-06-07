@@ -707,6 +707,18 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    // Updating single eofcode
+    public void updateEofStuff(String eofcode, String price, String category) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_PRICE, price);
+        values.put(KEY_CATEG, category);
+
+        db.update(TABLE_EOFCODES, values, KEY_EOFCODE + " = ?", new String[]{eofcode});
+        db.close();
+    }
+
     // Deleting single eofcode
     public void deleteEofcode(String eofcode) {
         SQLiteDatabase db = this.getWritableDatabase();

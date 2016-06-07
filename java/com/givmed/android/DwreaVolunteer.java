@@ -48,7 +48,7 @@ public class DwreaVolunteer extends AppCompatActivity {
     private static Context mContext;
     AlertDialog.Builder builder;
     public ProgressDialog dialog;
-    public AlertDialog alert, doneAlert;
+    public AlertDialog alert, doneAlert, befDoneAlert;
     public PrefManager pref;
     public DBHandler db;
 
@@ -101,8 +101,43 @@ public class DwreaVolunteer extends AppCompatActivity {
                 });
         alert = builder.create();
 
-        builder.setMessage(getString(R.string.choo_done_volu_msg) + " " + pharNameGen + "!");
+        builder.setMessage(getString(R.string.choo_done_volu_msg) + " " + pharNameGen + "!")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(getApplicationContext(), Dwrees.class);
+                        intent.putExtra("done", "done");
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
         doneAlert = builder.create();
+
+        builder.setMessage(getString(R.string.choo_before_done))
+                .setCancelable(false)
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog2, int id) {
+                    }
+                })
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog2, int id) {
+                        if (HelperActivity.isOnline(getApplicationContext())) {
+                            HelperActivity.showDialogBox(getApplicationContext(), dialog);
+
+                            Date date1 = new Date();
+                            Calendar cal = Calendar.getInstance();
+                            cal.setTime(date1);
+                            todayDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
+                            todayDateAndroid = cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + (cal.get(Calendar.YEAR) % 100);
+
+                            new HttpDone().execute();
+                        } else
+                            HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                    }
+                });
+        befDoneAlert = builder.create();
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.volunteer);
@@ -204,18 +239,7 @@ public class DwreaVolunteer extends AppCompatActivity {
 
                 @Override
                 public void onClick(View v) {
-                    if (HelperActivity.isOnline(getApplicationContext())) {
-                        HelperActivity.showDialogBox(getApplicationContext(), dialog);
-
-                        Date date1 = new Date();
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(date1);
-                        todayDate = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.get(Calendar.DATE);
-                        todayDateAndroid = cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + (cal.get(Calendar.DATE) % 100);
-
-                        new HttpDone().execute();
-                    } else
-                        HelperActivity.httpErrorToast(getApplicationContext(), 1);
+                    befDoneAlert.show();
                 }
             });
         }

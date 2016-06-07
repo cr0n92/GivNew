@@ -1,6 +1,7 @@
 package com.givmed.android;
 
 import java.io.IOException;
+import java.util.List;
 
 import android.content.Context;
 import android.hardware.Camera;
@@ -24,19 +25,23 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         super(context);
         mCamera = camera;
         previewCallback = previewCb;
-        autoFocusCallback = autoFocusCb;
+
+        List<String> supportedFocusModes = camera.getParameters().getSupportedFocusModes();
+        boolean hasAutoFocus = supportedFocusModes != null && supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO);
+        autoFocusCallback = (hasAutoFocus) ? autoFocusCb : null;
 
         // Set camera to continuous focus if supported, otherwise use
         // software auto-focus. Only works for API level >=9.
 
-        // Camera.Parameters parameters = camera.getParameters();
-        // for (String f : parameters.getSupportedFocusModes()) {
-        //     if (f == Parameters.FOCUS_MODE_CONTINUOUS_PICTURE) {
-        //         mCamera.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-        //         autoFocusCallback = null;
-        //         break;
-        //     }
-        // }
+//        Camera.Parameters parameters = camera.getParameters();
+//        for (String f : parameters.getSupportedFocusModes()) {
+//            if (f.equals(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+//                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+//                mCamera.setParameters(parameters);
+//                autoFocusCallback = null;
+//                break;
+//            }
+//        }
 
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.

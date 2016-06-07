@@ -19,6 +19,9 @@ import android.widget.EditText;
 
 import com.crashlytics.android.Crashlytics;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -409,10 +412,10 @@ public class DisplayMed extends AppCompatActivity {
         private static final String TAG = "HttpGetTask_Volunteer";
         private int error = -1;
         private int result;
+        private String category, price;
 
         @Override
         protected Integer doInBackground(Object... input) {
-            String data = "";
             java.net.URL url = null;
             HttpURLConnection conn = null;
             String URL = HelperActivity.server + "/donation_add_and_update_med/";
@@ -438,11 +441,15 @@ public class DisplayMed extends AppCompatActivity {
                 DataOutputStream wr = new DataOutputStream(conn.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
                 wr.write(postData);
                 InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
-                data = HelperActivity.readStream(in);
+                String data = HelperActivity.readStream(in);
 
                 Log.e(TAG, "Komple? " + data);
                 result = conn.getResponseCode();
-
+                if (result == 201) {
+                    JSONObject obj = new JSONObject(data);
+                    price = obj.getString("price");
+                    category = obj.getString("category");
+                }
                 Log.e(TAG, "Received HTTP response: " + result);
 
             } catch (ProtocolException e) {
@@ -459,6 +466,10 @@ public class DisplayMed extends AppCompatActivity {
                 Crashlytics.logException(e);
                 error = 2;
                 Log.e(TAG, "IOException");
+                e.printStackTrace();
+            } catch (JSONException e) {
+                Crashlytics.logException(e);
+                error = 2;
                 e.printStackTrace();
             } finally {
                 if (null != conn)
@@ -481,6 +492,7 @@ public class DisplayMed extends AppCompatActivity {
                     med.setStatus(forDonation);
 
                     db.updateMed(med);
+                    db.updateEofStuff(med.getEofcode(), price, category);
 
                     dialog.dismiss();
                     matched.show();
@@ -497,6 +509,7 @@ public class DisplayMed extends AppCompatActivity {
         private static final String TAG = "HttpDelete";
         private int error = -1;
         private int result;
+        private String price, category;
 
         @Override
         protected Integer doInBackground(String... input) {
@@ -521,9 +534,15 @@ public class DisplayMed extends AppCompatActivity {
                 conn.setRequestMethod("PUT");
                 DataOutputStream wr = new DataOutputStream(conn.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
                 wr.write(postData);
-                conn.getInputStream();//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
+                InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
+                String data = HelperActivity.readStream(in);//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
 
                 result = conn.getResponseCode();
+                if (result == 201 || result == 200) {
+                    JSONObject obj = new JSONObject(data);
+                    price = obj.getString("price");
+                    category = obj.getString("category");
+                }
                 Log.e(TAG, "Received HTTP response: " + result);
 
             } catch (ProtocolException e) {
@@ -539,6 +558,10 @@ public class DisplayMed extends AppCompatActivity {
                 Crashlytics.logException(e);
                 error = 2;
                 Log.e(TAG, "IOException");
+            } catch (JSONException e) {
+                Crashlytics.logException(e);
+                error = 2;
+                e.printStackTrace();
             } finally {
                 if (null != conn)
                     conn.disconnect();
@@ -560,6 +583,7 @@ public class DisplayMed extends AppCompatActivity {
                     med.setStatus(forDonation);
 
                     db.updateMed(med);
+                    db.updateEofStuff(med.getEofcode(), price, category);
 
                     Intent afterdel = new Intent(getApplicationContext(), Farmakeio.class);
                     afterdel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -642,6 +666,7 @@ public class DisplayMed extends AppCompatActivity {
         private static final String TAG = "HttpUpdateMedTask";
         private int error = -1;
         private int result ;
+        private String price, category;
 
         @Override
         protected Integer doInBackground(Object... input) {
@@ -665,9 +690,15 @@ public class DisplayMed extends AppCompatActivity {
                 conn.setRequestMethod("PUT");
                 DataOutputStream wr = new DataOutputStream(conn.getOutputStream());//Transmit data by writing to the stream returned by getOutputStream().
                 wr.write(postData);
-                conn.getInputStream();//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
+                InputStream in = new BufferedInputStream(conn.getInputStream());//The response body may be read from the stream returned by getInputStream(). If the response has no body, that method returns an empty stream.
+                String data = HelperActivity.readStream(in);
 
                 result = conn.getResponseCode();
+                if (result == 201) {
+                    JSONObject obj = new JSONObject(data);
+                    price = obj.getString("price");
+                    category = obj.getString("category");
+                }
                 Log.e(TAG, "Received HTTP response: " + result);
 
             } catch (ProtocolException e) {
@@ -684,6 +715,10 @@ public class DisplayMed extends AppCompatActivity {
                 Crashlytics.logException(e);
                 error = 2;
                 Log.e(TAG, "IOException");
+                e.printStackTrace();
+            } catch (JSONException e) {
+                Crashlytics.logException(e);
+                error = 2;
                 e.printStackTrace();
             } finally {
                 if (null != conn)
@@ -704,6 +739,7 @@ public class DisplayMed extends AppCompatActivity {
                     med.setStatus(forDonation);
 
                     db.updateMed(med);
+                    db.updateEofStuff(med.getEofcode(), price, category);
 
                     Intent afterdel = new Intent(getApplicationContext(), Farmakeio.class);
                     afterdel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

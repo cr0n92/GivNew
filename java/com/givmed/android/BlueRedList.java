@@ -70,9 +70,6 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
 
         db = new DBHandler(getApplicationContext());
         pref  = new PrefManager(this);
-
-
-
         builder = new AlertDialog.Builder(this);
 
         firstMes = (TextView) findViewById(R.id.firstMes);
@@ -131,24 +128,6 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
 
             mAdapter.mItems = savedInstanceState.getParcelableArrayList("blueRedList");
         }
-
-        dialog1 = new ProgressDialog(this);
-        dialog1.setMessage(getString(R.string.update));
-        dialog1.setCancelable(false);
-        dialog1.setCanceledOnTouchOutside(false);
-        dialog1.show();
-        HelperActivity help = new HelperActivity();
-        Object array[] = new Object[2];
-        array[0] = db;
-        array[1] = pref;
-        try {
-            help.new HttpGetNeedsPharms().execute(array).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        dialog1.dismiss();
     }
 
     @Override
@@ -169,7 +148,23 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
 
         if (id == R.id.action_tick) {
             if (inRed) {
-                matching();
+                dialog1 = new ProgressDialog(this);
+                dialog1.setMessage(getString(R.string.update));
+                dialog1.setCancelable(false);
+                dialog1.setCanceledOnTouchOutside(false);
+                dialog1.show();
+
+                HelperActivity.HttpGetNeedsPharms service = new HelperActivity.HttpGetNeedsPharms(this, db, pref) {
+                    @Override
+                    public void onResponseReceived(Object result) {
+                        dialog1.dismiss();
+
+                        int error = (int) result;
+                        if (error > 0) HelperActivity.httpErrorToast(getApplicationContext(), error);
+                        else matching();
+                    }
+                };
+                service.execute();
             } else {
                 inRed = true;
                 firstMes.setText(redBuilder, TextView.BufferType.SPANNABLE);

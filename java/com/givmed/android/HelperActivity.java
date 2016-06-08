@@ -1,5 +1,6 @@
 package com.givmed.android;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -50,10 +51,6 @@ public class HelperActivity extends AppCompatActivity
     public static String server = "http://www.givmed.com:81";
     public static int timeoutTime = 10000;
     public int myMenu;
-    private PrefManager pref;
-    private DBHandler db;
-
-
 
     public void setMenu(int myMenu) {
         this.myMenu = myMenu;
@@ -298,19 +295,29 @@ public class HelperActivity extends AppCompatActivity
         return data.toString();
     }
 
-    public  class HttpGetNeedsPharms extends AsyncTask<Object, Void, Integer> {
+    public interface ClientIF {
+        public void onResponseReceived(Object result);
+    }
 
-        private static final String TAG = "HttpGetTask";
+    public static abstract class HttpGetNeedsPharms extends AsyncTask<Object, Void, Integer> implements ClientIF {
+
+        private static final String TAG = "HttpNeedsPharm";
         String data;
         private int error = -1;
+        Activity activity;
+        private DBHandler db;
+        private PrefManager pref;
 
+        HttpGetNeedsPharms(Activity activity, DBHandler db, PrefManager pref) {
+            this.pref = pref;
+            this.db = db;
+            this.activity = activity;
+        }
 
+        public abstract void onResponseReceived(Object result);
 
         @Override
         protected Integer doInBackground(Object... values) {
-            db = (DBHandler) values[0];
-
-            pref = (PrefManager) values[1];
             String needDate = pref.getNeedDate().replaceAll("\\s+","");
             String pharmDate = pref.getPharDate().replaceAll("\\s+", "");
 
@@ -350,7 +357,7 @@ public class HelperActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(Integer result) {
             if (error > 0)
-                HelperActivity.httpErrorToast(getApplicationContext(), error);
+                HelperActivity.httpErrorToast(activity, error);
             else {
                 if (result == 200) {
                     try {
@@ -359,6 +366,14 @@ public class HelperActivity extends AppCompatActivity
                         JSONArray need = obj.getJSONArray("need");
                         pref.setNeedDate(obj.getString("needDate"));
                         pref.setNeedDate(obj.getString("pharmDate"));
+
+                        db.deletePharmacies();
+
+                        for (int i = 0; i < pharm.length(); i++) {
+                            JSONObject json = pharm.getJSONObject(i);
+                            db.addPharmacy(json.getString("pharmacyPhone"), json.getString("pharmacyAddress"),
+                                    json.getString("openTime"), json.getString("pharmacyName"), json.getString("pharmacyNameGen"));
+                        }
 
                         db.deleteNeeds();
 
@@ -369,19 +384,12 @@ public class HelperActivity extends AppCompatActivity
                             needo.setPhone(json.getString("needPhone"));
                             db.addNeed(needo);
                         }
-
-                        db.deletePharmacies();
-
-                        for (int i = 0; i < pharm.length(); i++) {
-                            JSONObject json = pharm.getJSONObject(i);
-                            db.addPharmacy(json.getString("pharmacyPhone"), json.getString("pharmacyAddress"),
-                                    json.getString("openTime"), json.getString("pharmacyName"), json.getString("pharmacyNameGen"));
-                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
+            onResponseReceived(error);
         }
     }
 }

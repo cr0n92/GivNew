@@ -3,24 +3,18 @@
     package="com.givmed.android"
     android:installLocation="preferExternal">
 
-    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="23"/>
     <!-- NORMAL -->
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
-
-
-
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
-    
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-
 
     <!-- [START gcm_permission] -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
@@ -36,7 +30,6 @@
     <!-- Gia to MedAlarm -->
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
 
     <application
         android:allowBackup="false"
@@ -59,6 +52,10 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="http"
+                    android:host="givmed.com"
+                    android:pathPrefix="/android_app" />
+
+                <data android:scheme="https"
                     android:host="givmed.com"
                     android:pathPrefix="/android_app" />
 
@@ -132,10 +129,6 @@
             android:name="com.givmed.android.BlueRedList"
             android:label="blue_red_list"
             android:theme="@style/AppTheme.NoActionBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.givmed.android.Settings"

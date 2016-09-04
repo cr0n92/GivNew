@@ -71,7 +71,7 @@ public class DonationAdapter extends BaseAdapter {
         titleView.setText(don.getName());
 
         final TextView quantity = (TextView) itemLayout.findViewById(R.id.pharView);
-        quantity.setText(don.getPharName());
+        quantity.setText(don.getPharRegion());
 
         final TextView dateView = (TextView) itemLayout.findViewById(R.id.dateView);
         dateView.setText(don.getDate1());

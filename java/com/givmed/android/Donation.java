@@ -3,15 +3,15 @@ package com.givmed.android;
 public class Donation {
     private String mName;
     private String mBarcode;
-    private String mpharmName;
+    private String mpharRegion;
     private String mpharmNameGen;
     private String mDate1;
     private String mVolunteer;
 
-    Donation(String name, String date1, String volunteer, String barcode, String pharmName, String pharmNameGen) {
+    Donation(String name, String date1, String volunteer, String barcode, String pharRegion, String pharmNameGen) {
         this.mName = name;
         this.mBarcode = barcode;
-        this.mpharmName = pharmName;
+        this.mpharRegion = pharRegion;
         this.mpharmNameGen = pharmNameGen;
         this.mDate1 = date1;
         this.mVolunteer = volunteer;
@@ -29,7 +29,7 @@ public class Donation {
 
     public String getBarcode() { return mBarcode; }
 
-    public String getPharName() { return mpharmName; }
+    public String getPharRegion() { return mpharRegion; }
 
     public String getPharNameGen() { return mpharmNameGen; }
 

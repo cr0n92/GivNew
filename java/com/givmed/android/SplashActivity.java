@@ -3,14 +3,12 @@ package com.givmed.android;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
 import java.util.concurrent.ExecutionException;
 
 import io.fabric.sdk.android.Fabric;
-
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -25,10 +23,16 @@ public class SplashActivity extends AppCompatActivity {
         HelperActivity.HttpGetNeedsPharms service = new HelperActivity.HttpGetNeedsPharms(this, db, pref) {
             @Override
             public void onResponseReceived(Object result) {
-                finish();
             }
         };
-        service.execute();
+
+        try {
+            service.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
         Intent intent;
         startService(new Intent(this, AlarmService.class));
@@ -43,5 +47,6 @@ public class SplashActivity extends AppCompatActivity {
                 intent = new Intent(this, TwoButtons.class);
         }
         startActivity(intent);
+        finish();
     }
 }

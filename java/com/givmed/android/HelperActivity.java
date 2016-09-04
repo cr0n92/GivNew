@@ -372,7 +372,7 @@ public class HelperActivity extends AppCompatActivity
                         for (int i = 0; i < pharm.length(); i++) {
                             JSONObject json = pharm.getJSONObject(i);
                             db.addPharmacy(json.getString("pharmacyPhone"), json.getString("pharmacyAddress"),
-                                    json.getString("openTime"), json.getString("pharmacyName"), json.getString("pharmacyNameGen"));
+                                    json.getString("openTime"), json.getString("pharmacyName"), json.getString("pharmacyNameGen"),json.getString("region"));
                         }
 
                         db.deleteNeeds();

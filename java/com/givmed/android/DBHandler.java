@@ -43,6 +43,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String KEY_PHAR_HOURS = "pharHours";
     private static final String KEY_PHAR_NAME = "pharName";
     private static final String KEY_PHAR_NAME_GEN = "pharNameGen";
+    private static final String KEY_PHAR_REG = "pharReg";
 
     // Meds Table Columns names
     private static final String KEY_BARCODE = "barcode";
@@ -94,7 +95,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static final String CREATE_PHARMACIES_TABLE = "CREATE TABLE " + TABLE_PHARMACIES + "("
             + KEY_PHAR_PHONE + " TEXT PRIMARY KEY," + KEY_PHAR_ADDRESS + " TEXT," + KEY_PHAR_HOURS + " TEXT,"
-            + KEY_PHAR_NAME + " TEXT," + KEY_PHAR_NAME_GEN + " TEXT" + ")";
+            + KEY_PHAR_NAME + " TEXT," + KEY_PHAR_NAME_GEN + " TEXT," + KEY_PHAR_REG + " TEXT" + ")";
 
     private static final String CREATE_EOFCODES_TABLE = "CREATE TABLE " + TABLE_EOFCODES + "("
             + KEY_EOFCODE + " TEXT PRIMARY KEY," + KEY_NAME + " TEXT," + KEY_PRICE + " TEXT,"
@@ -213,7 +214,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     /*---------------- pharmacies functions ----------------------------*/
     // Adding new pharmacy
-    public void addPharmacy(String phone, String address, String hours, String name, String nameGen) {
+    public void addPharmacy(String phone, String address, String hours, String name, String nameGen, String region) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -222,6 +223,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(KEY_PHAR_HOURS, hours);
         values.put(KEY_PHAR_NAME, name);
         values.put(KEY_PHAR_NAME_GEN, nameGen);
+        values.put(KEY_PHAR_REG, region);
 
         db.insert(TABLE_PHARMACIES, null, values);
         db.close();
@@ -242,13 +244,14 @@ public class DBHandler extends SQLiteOpenHelper {
             arr[2] = cursor.getString(2);
             arr[3] = cursor.getString(3);
             arr[4] = cursor.getString(4);
+            arr[5] = cursor.getString(5);
             cursor.close();
         }
         db.close();
     }
 
     //get all pharmacies that have a specific need
-    public List<String> getPharmaciesForNeed( String name) {
+    public List<String> getPharmaciesForNeed(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         List<String> list = new ArrayList<String>();
 
@@ -345,7 +348,7 @@ public class DBHandler extends SQLiteOpenHelper {
         Object [] ret;
 
         ret = this.matchExists(Halfname);
-        if (ret[0] != -1) return false;
+        if (((int) ret[0]) != -1) return false;
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -798,7 +801,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT " + KEY_HALF_NAME + "," + KEY_DATE1 +"," + KEY_DATE2 + ","
                 + KEY_DATE3 + "," + KEY_VOLUNTEER + "," + TABLE_MEDS+"."+KEY_BARCODE + ","
-                + KEY_PHAR_NAME + "," + KEY_PHAR_NAME_GEN + " FROM " + TABLE_DONATIONS
+                + KEY_PHAR_REG + "," + KEY_PHAR_NAME_GEN + " FROM " + TABLE_DONATIONS
                 + " LEFT OUTER JOIN " + TABLE_PHARMACIES + " ON donations.pharPhone = pharmacies.pharPhone NATURAL JOIN "
                 + TABLE_MEDS;
 

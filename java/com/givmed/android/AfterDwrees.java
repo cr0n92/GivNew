@@ -18,7 +18,6 @@ import java.util.List;
 
 public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private static String mid_msg = " ";
     private static String selectedPharm = ";", barcode = "", medname = "";
     private static TextView msgView;
     DBHandler db;
@@ -41,12 +40,9 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
         Intent intent = getIntent();
 
         if (intent != null && intent.hasExtra("pharName") && !(intent.getStringExtra("pharName").equals(";"))) {
-            //to selectedpharm tha exei to pharNameGen = pharName
             selectedPharm = intent.getStringExtra("pharName");
             barcode = intent.getStringExtra("barcode");
             medname = intent.getStringExtra("medName");
-
-            mid_msg = " " + getString(R.string.choo_mid_first_msg) + " " + selectedPharm + " ";
 
             chooseMsg.setVisibility(View.GONE);
             spinner.setVisibility(View.GONE);
@@ -67,7 +63,7 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
         }
 
         msgView = (TextView) findViewById(R.id.firstMes);
-        String msg = getString(R.string.choo_left_first_msg) + mid_msg + getString(R.string.choo_right_first_msg);
+        String msg = getString(R.string.choo_left_first_msg) + getString(R.string.choo_right_first_msg);
         msgView.setText(msg);
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
@@ -94,7 +90,7 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
                 // kanonika an to epileksame apo thn lista
                 intent.putExtra("pharName", selectedPharm);
 
-                String[] pharInfo = new String[5];
+                String[] pharInfo = new String[6];
                 db.getPharmacy(selectedPharm, pharInfo);
                 db.updateProgDonation(barcode, pharInfo[0], ";", ";", ";", "U", ";");
                 startActivity(intent);
@@ -111,7 +107,7 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
                 intent.putExtra("medName", medname);
                 intent.putExtra("pharName", selectedPharm);
 
-                String[] pharInfo = new String[5];
+                String[] pharInfo = new String[6];
                 db.getPharmacy(selectedPharm, pharInfo);
                 db.updateProgDonation(barcode, pharInfo[0], ";", ";", ";", "V", ";");
                 startActivity(intent);

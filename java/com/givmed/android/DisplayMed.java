@@ -431,6 +431,9 @@ public class DisplayMed extends AppCompatActivity {
 
 				if (needsCnt == 1)
 					urlParameters += "&donatedPhone=" + pharPhone;
+                else
+                    urlParameters += "&donatedPhone= ";
+
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection

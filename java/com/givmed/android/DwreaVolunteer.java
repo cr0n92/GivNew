@@ -75,7 +75,7 @@ public class DwreaVolunteer extends AppCompatActivity {
         pref = new PrefManager(this);
         db = new DBHandler(getApplicationContext());
 
-        String[] pharInfo = new String[5];
+        String[] pharInfo = new String[6];
         db.getPharmacy(pharName, pharInfo);
         pharPhone = pharInfo[0];
         pharName = pharInfo[3];

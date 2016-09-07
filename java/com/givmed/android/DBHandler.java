@@ -195,7 +195,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         int cnt = 0;
 
-        String selectQuery = "SELECT " + KEY_PHAR_PHONE + "," + KEY_NEED_NAME + "," + KEY_PHAR_NAME
+        String selectQuery = "SELECT " + KEY_PHAR_PHONE + "," + KEY_NEED_NAME + "," + KEY_PHAR_REG
                 + " FROM " + TABLE_NEEDS + " NATURAL JOIN " + TABLE_PHARMACIES + " ORDER BY " + orderingColumn;
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -801,7 +801,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT " + KEY_HALF_NAME + "," + KEY_DATE1 +"," + KEY_DATE2 + ","
                 + KEY_DATE3 + "," + KEY_VOLUNTEER + "," + TABLE_MEDS+"."+KEY_BARCODE + ","
-                + KEY_PHAR_REG + "," + KEY_PHAR_NAME_GEN + " FROM " + TABLE_DONATIONS
+                + KEY_PHAR_REG + "," + KEY_PHAR_NAME + " FROM " + TABLE_DONATIONS
                 + " LEFT OUTER JOIN " + TABLE_PHARMACIES + " ON donations.pharPhone = pharmacies.pharPhone NATURAL JOIN "
                 + TABLE_MEDS;
 

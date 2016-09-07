@@ -81,7 +81,7 @@ public class Dwrees extends HelperActivity {
                 else
                     intent = new Intent(getApplicationContext(), AfterDwrees.class);
 
-                intent.putExtra("pharName", progDonation.getPharNameGen());
+                intent.putExtra("pharName", progDonation.getPharName());
                 intent.putExtra("barcode", progDonation.getBarcode());
                 intent.putExtra("medName", progDonation.getName());
                 startActivity(intent);

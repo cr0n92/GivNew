@@ -34,7 +34,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 public class BlueRedList extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private final String TAG = "BlueRedList";
@@ -218,9 +217,11 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
                 int ret = (int) info[0];
                 pharPhone = (String) info[1];
 
-                if (ret == -1) {
+                if (ret == -1) { //kanena match
                     pharPhone = "-";
-                } else if (ret == 1) {
+                }else if (ret == 2) { //>1 match
+                    pharPhone = " ";
+                } else if (ret == 1) { //1 match
                     matchedMeds++;
                 }
 

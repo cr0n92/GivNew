@@ -107,6 +107,7 @@ public class ConfirmNumber extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra("error")) {
                 Toast.makeText(getApplicationContext(), getString(R.string.conf_wrong_pin), Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
             else {
                 token = intent.getStringExtra("token");

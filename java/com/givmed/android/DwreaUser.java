@@ -76,7 +76,7 @@ public class DwreaUser extends AppCompatActivity {
 
         String[] donationInfo = db.getProgDonation(barcode);
 
-        String[] pharInfo = new String[5];
+        String[] pharInfo = new String[6];
         db.getPharmacy(pharmname, pharInfo);
         pharPhone = pharInfo[0];
         String pharAddress = pharInfo[1];

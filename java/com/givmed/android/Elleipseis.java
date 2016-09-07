@@ -1,39 +1,16 @@
 package com.givmed.android;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -90,7 +67,7 @@ public class Elleipseis extends HelperActivity implements AdapterView.OnItemClic
         });
 
         int count = db.getAllNeeds(nameAdapter, "needName");
-        db.getAllNeeds(pharAdapter, "pharName");
+        db.getAllNeeds(pharAdapter, "pharReg");
         String need_msg = (count == 1) ? left_sin + " " + count + " " + right_sin : left_sin + " " + count + " " + right_plu;
         msgView.setText(need_msg);
     }

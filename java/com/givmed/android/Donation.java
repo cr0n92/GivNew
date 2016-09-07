@@ -4,15 +4,15 @@ public class Donation {
     private String mName;
     private String mBarcode;
     private String mpharRegion;
-    private String mpharmNameGen;
+    private String mpharmName;
     private String mDate1;
     private String mVolunteer;
 
-    Donation(String name, String date1, String volunteer, String barcode, String pharRegion, String pharmNameGen) {
+    Donation(String name, String date1, String volunteer, String barcode, String pharRegion, String pharmName) {
         this.mName = name;
         this.mBarcode = barcode;
         this.mpharRegion = pharRegion;
-        this.mpharmNameGen = pharmNameGen;
+        this.mpharmName = pharmName;
         this.mDate1 = date1;
         this.mVolunteer = volunteer;
     }
@@ -31,7 +31,7 @@ public class Donation {
 
     public String getPharRegion() { return mpharRegion; }
 
-    public String getPharNameGen() { return mpharmNameGen; }
+    public String getPharName() { return mpharmName; }
 
     public String getDate1() {
         return mDate1;

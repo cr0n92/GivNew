@@ -7,9 +7,9 @@
         android:bottomRightRadius="14dp" />
 
     <solid
-        android:color="@android:color/darker_gray" />
+        android:color="@color/colorPrimary" />
 
     <stroke
         android:width="3dp"
-        android:color="@android:color/darker_gray" />
+        android:color="@color/colorPrimary" />
 </shape>

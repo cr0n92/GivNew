@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -251,22 +253,27 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     //get all pharmacies that have a specific need
-    public List<String> getPharmaciesForNeed(String name) {
+    public void getPharmaciesForNeed(RadioGroup group, Context conte, String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        List<String> list = new ArrayList<String>();
+        //List<String> list = new ArrayList<String>();
+        int i = 0;
 
-
-        String selectQuery = "SELECT " + KEY_PHAR_NAME + " FROM " + TABLE_NEEDS + " NATURAL JOIN " + TABLE_PHARMACIES + " WHERE " + KEY_NEED_NAME + " = '" + name + "'";
+        String selectQuery = "SELECT " + KEY_PHAR_NAME + ", " + KEY_PHAR_REG + " FROM " + TABLE_NEEDS + " NATURAL JOIN " + TABLE_PHARMACIES + " WHERE " + KEY_NEED_NAME + " = '" + name + "'";
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
-                list.add(cursor.getString(0));
+                //list.add(cursor.getString(0) + ", " + cursor.getString(1));
+                RadioButton rdbtn = new RadioButton(conte);
+                rdbtn.setId(i++);
+                rdbtn.setText(cursor.getString(0) + ", " + cursor.getString(1));
+                rdbtn.setTextColor(R.color.black);
+                group.addView(rdbtn);
             } while (cursor.moveToNext());
             cursor.close();
         }
 
         db.close();
-        return list;
+        //return list;
     }
 
     /*---------------- meds functions ----------------------------*/

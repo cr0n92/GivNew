@@ -220,6 +220,7 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
                 if (ret == -1) { //kanena match
                     pharPhone = "-";
                 }else if (ret == 2) { //>1 match
+                    matchedMeds++;
                     pharPhone = " ";
                 } else if (ret == 1) { //1 match
                     matchedMeds++;
@@ -349,9 +350,17 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
                         matchAlert.show();
                     }
                     else {
-                        Intent toFarmakeio = new Intent(getApplicationContext(), Farmakeio.class);
-                        startActivity(toFarmakeio);
-                        finish();
+                        builder.setMessage(getString(R.string.after_no_matching))
+                                .setCancelable(false)
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog2, int id) {
+                                        Intent toFarmakeio = new Intent(getApplicationContext(), Farmakeio.class);
+                                        startActivity(toFarmakeio);
+                                        finish();
+                                    }
+                                });
+                        AlertDialog matchAlert = builder.create();
+                        matchAlert.show();
                     }
 
                     return;

@@ -42,7 +42,7 @@ public class DwreaUser extends AppCompatActivity {
 
     private static String barcode="", medname="", pharmname="", todayDate="", todayDateAndroid="", date1 = "";
     private static EditText dateChoose;
-    public static String serverDate, pharPhone;
+    public static String serverDate, pharPhone, pharRegion;
     public ProgressDialog dialog;
     AlertDialog deliveredAlert, deleteAlert, befDoneAlert;
     public static Context mContext;
@@ -81,6 +81,7 @@ public class DwreaUser extends AppCompatActivity {
         pharPhone = pharInfo[0];
         String pharAddress = pharInfo[1];
         String pharHours = pharInfo[2];
+        pharRegion = pharInfo[5];
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -319,17 +320,19 @@ public class DwreaUser extends AppCompatActivity {
             calendar2.set(Calendar.YEAR, year);
             calendar2.set(Calendar.MONTH, monthOfYear);
             calendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            if (calendar2.after(calendar1)) {
+
+            if (calendar2.after(calendar1))
                 return 1;
-            }
+
             calendar1 = Calendar.getInstance();
             calendar2 = Calendar.getInstance();
             calendar2.set(Calendar.YEAR, year);
             calendar2.set(Calendar.MONTH, monthOfYear);
             calendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            if (calendar1.after(calendar2)) {
+
+            if (calendar1.after(calendar2))
                 return 2;
-            }
+
             return 0;
         }
     }
@@ -467,7 +470,7 @@ public class DwreaUser extends AppCompatActivity {
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
                 if (result == 201) {
-                    db.progToDoneDonation(barcode, pharmname, todayDateAndroid, medname);
+                    db.progToDoneDonation(barcode, pharRegion, todayDateAndroid, medname);
                     dialog.dismiss();
                     deliveredAlert.show();
 

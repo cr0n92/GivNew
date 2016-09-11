@@ -284,7 +284,7 @@ public class DisplayMed extends AppCompatActivity {
 
 
                         if (isOpen() && progDonation != null) {
-                            builder.setMessage(getString(R.string.out_unmatched_sirup) + " " + firstName + ".")
+                            builder.setMessage(getString(R.string.out_unmatched_sirup))
                                     .setCancelable(false)
                                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog2, int id) {
@@ -432,8 +432,7 @@ public class DisplayMed extends AppCompatActivity {
 				if (needsCnt == 1)
 					urlParameters += "&donatedPhone=" + pharPhone;
                 else
-                    urlParameters += "&donatedPhone= ";
-
+                    urlParameters += "&donatedPhone=%20";
 
                 byte[] postData = urlParameters.getBytes(Charset.forName("UTF-8"));
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection

@@ -20,17 +20,50 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!--<TextView-->
+                <!--android:id="@+id/firstMes"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:padding="@dimen/padding"-->
+                <!--android:gravity="center_vertical|center_horizontal"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:textSize="20sp"-->
+                <!--android:layout_centerHorizontal="true">-->
+            <!--</TextView>-->
+
             <TextView
-                android:id="@+id/firstMes"
+                android:id="@+id/chooseMsg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding"
                 android:gravity="center_vertical|center_horizontal"
-                android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textColor="@android:color/black"
                 android:textSize="20sp"
                 android:layout_centerHorizontal="true">
             </TextView>
+
+            <!--<Spinner-->
+                <!--android:id="@+id/spinner"-->
+                <!--android:layout_below="@id/chooseMsg"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="30dp"-->
+                <!--android:layout_marginStart="30dp"-->
+                <!--android:layout_marginLeft="30dp"-->
+                <!--android:layout_marginEnd="30dp"-->
+                <!--android:layout_marginRight="30dp" />-->
+
+            <RadioGroup
+                android:id="@+id/radiogroup"
+                android:layout_below="@id/chooseMsg"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                android:layout_marginBottom="30dp"
+                android:color="#000000" />
 
             <TextView
                 android:id="@+id/secondMes"
@@ -38,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding"
                 android:layout_marginBottom="30dp"
-                android:layout_below="@id/firstMes"
+                android:layout_below="@id/radiogroup"
                 android:gravity="center_vertical|center_horizontal"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -46,81 +79,58 @@
                 android:layout_centerHorizontal="true">
             </TextView>
 
-            <TextView
-                android:id="@+id/chooseMsg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/padding"
-                android:layout_below="@id/secondMes"
-                android:gravity="center_vertical|center_horizontal"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="16sp"
-                android:layout_centerHorizontal="true">
-            </TextView>
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user_btn"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/secondMes"
+            android:layout_alignLeft="@+id/button2"
+            android:layout_alignStart="@+id/button2"
+            android:layout_alignRight="@+id/button2"
+            android:layout_alignEnd="@+id/button2"
+            android:background="@drawable/button_simple">
+        </Button>
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_below="@id/chooseMsg"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:layout_marginStart="30dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginRight="30dp" />
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="@string/volu_btn"
+            android:textAllCaps="false"
+            android:layout_below="@id/button1"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_simple">
+        </Button>
 
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/user_btn"
-                android:textAllCaps="false"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:layout_marginBottom="10dp"
-                android:layout_below="@id/spinner"
-                android:layout_alignLeft="@+id/button2"
-                android:layout_alignStart="@+id/button2"
-                android:layout_alignRight="@+id/button2"
-                android:layout_alignEnd="@+id/button2"
-                android:background="@drawable/button_simple">
-            </Button>
+        <TextView
+            android:id="@+id/thirdMes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/button2"
+            android:layout_alignStart="@+id/button2"
+            android:layout_alignRight="@+id/button2"
+            android:layout_alignEnd="@+id/button2"
+            android:padding="@dimen/padding"
+            android:layout_below="@id/button2"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"
+            android:text="@string/choo_cng_msg"
+            android:layout_centerHorizontal="true">
+        </TextView>
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:text="@string/volu_btn"
-                android:textAllCaps="false"
-                android:layout_below="@id/button1"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/button_simple">
-            </Button>
-
-            <TextView
-                android:id="@+id/thirdMes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/button2"
-                android:layout_alignStart="@+id/button2"
-                android:layout_alignRight="@+id/button2"
-                android:layout_alignEnd="@+id/button2"
-                android:padding="@dimen/padding"
-                android:layout_below="@id/button2"
-                android:gravity="center_vertical|center_horizontal"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:text="@string/choo_cng_msg"
-                android:layout_centerHorizontal="true">
-            </TextView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@id/thirdMes" />
-        </RelativeLayout>
-    </ScrollView>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/thirdMes" />
+    </RelativeLayout>
+</ScrollView>
 </RelativeLayout>

@@ -31,7 +31,6 @@ public class Share extends HelperActivity {
                 sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_message));
                 sendIntent.setType("text/plain");
                 startActivity(Intent.createChooser(sendIntent, getString(R.string.share_with)));
-                finish();
             }
         });
     }

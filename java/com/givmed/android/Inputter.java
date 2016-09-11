@@ -155,6 +155,7 @@ public class Inputter extends AppCompatActivity {
                 url = new URL(request);
 
                 conn = (HttpURLConnection) url.openConnection();//Obtain a new HttpURLConnection
+                conn.setConnectTimeout(2 * HelperActivity.timeoutTime);
                 conn.setDoInput(true);
                 conn.setInstanceFollowRedirects(true);
                 conn.setRequestProperty("Host", "services.eof.gr");

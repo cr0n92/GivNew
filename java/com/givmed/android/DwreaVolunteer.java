@@ -43,7 +43,7 @@ public class DwreaVolunteer extends AppCompatActivity {
     private static EditText dateChoose1, dateChoose2, dateChoose3, dateChoosed, mAddress;
     public String medName =  "", barcode = "", pharPhone = "", pharName = "", address = "", pharNameGen = "";
     private String sdate1 = "", sdate2 = "", sdate3 = "", todayDate = "", todayDateAndroid = "";
-    private String date1 = "", date2 = "", date3 = "";
+    private String date1 = "", date2 = "", date3 = "", pharRegion;
     private static int datesCnt = 1;
     private static Context mContext;
     AlertDialog.Builder builder;
@@ -80,6 +80,7 @@ public class DwreaVolunteer extends AppCompatActivity {
         pharPhone = pharInfo[0];
         pharName = pharInfo[3];
         pharNameGen = pharInfo[4];
+        pharRegion = pharInfo[5];
 
         String[] donationInfo = db.getProgDonation(barcode);
         date1 = donationInfo[2];
@@ -101,7 +102,7 @@ public class DwreaVolunteer extends AppCompatActivity {
                 });
         alert = builder.create();
 
-        builder.setMessage(getString(R.string.choo_done_volu_msg) + " " + pharNameGen + "!")
+        builder.setMessage(getString(R.string.choo_done_volu_msg))
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -350,27 +351,36 @@ public class DwreaVolunteer extends AppCompatActivity {
             int datecheck = dateCheck(year, monthOfYear, dayOfMonth);
             if (datecheck == 0)
                 setDateString(year, monthOfYear, dayOfMonth);
+            else if (datecheck == 1)
+                Toast.makeText(mContext, getString(R.string.choo_after3_date), Toast.LENGTH_LONG).show();
             else if (datecheck == 2)
                 Toast.makeText(mContext, getString(R.string.choo_before_date), Toast.LENGTH_LONG).show();
-
         }
 
         public int dateCheck(int year, int monthOfYear, int dayOfMonth) {
-
             Calendar calendar1 = Calendar.getInstance();
             Calendar calendar2 = Calendar.getInstance();
+
+            // koitame an h hmeromhnia pou epele3e einai palia
             calendar2.set(Calendar.YEAR, year);
             calendar2.set(Calendar.MONTH, monthOfYear);
             calendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            if (calendar1.after(calendar2)) {
+
+            if (calendar1.after(calendar2))
                 return 2;
-            }
+
+            // koitame an h hmeromhnia einai 2 meres meta thn shmerinh
+            calendar1.add(Calendar.DATE, 2);
+            calendar2.set(Calendar.YEAR, year);
+            calendar2.set(Calendar.MONTH, monthOfYear);
+            calendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+            if (calendar1.after(calendar2))
+                return 1;
+
             return 0;
         }
-
     }
-
-
 
     public String transformDate(String date) {
         if (date.isEmpty())
@@ -511,7 +521,7 @@ public class DwreaVolunteer extends AppCompatActivity {
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
                 if (result == 201) {
-                    db.progToDoneDonation(barcode, pharName, todayDateAndroid, medName);
+                    db.progToDoneDonation(barcode, pharRegion, todayDateAndroid, medName);
                     dialog.dismiss();
                     doneAlert.show();
                     return;

@@ -7,16 +7,20 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.List;
 
 
-public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AfterDwrees extends AppCompatActivity { // implements AdapterView.OnItemSelectedListener {
 
     private static String selectedPharm = ";", barcode = "", medname = "";
     private static TextView msgView;
@@ -31,7 +35,9 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
 
         db = new DBHandler(getApplicationContext());
         TextView chooseMsg = (TextView) findViewById(R.id.chooseMsg);
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        //Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        RadioGroup ll = new RadioGroup(this);
+        ll.setOrientation(LinearLayout.VERTICAL);
 
         // Pername apo tis programmatismenes dwrees to onoma tou farmakeiou an einai mono ena
         // sto opoio yparxei h elleipsh, alliws den vazoume tipota, deixnoume katalhlo mhnyma
@@ -45,7 +51,8 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
             medname = intent.getStringExtra("medName");
 
             chooseMsg.setVisibility(View.GONE);
-            spinner.setVisibility(View.GONE);
+            ll.setVisibility(View.GONE);
+            //spinner.setVisibility(View.GONE);
         }
         else {
             barcode = intent.getStringExtra("barcode");
@@ -53,18 +60,38 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
 
             chooseMsg.setText(getString(R.string.choo_pharm_msg));
 
-            List<String> list;
-            list = db.getPharmaciesForNeed(medname);
+            db.getPharmaciesForNeed(ll, getApplicationContext(), medname);
+            ((ViewGroup) findViewById(R.id.radiogroup)).addView(ll);
+            ll.check(0);
+            selectedPharm = ((RadioButton) ll.findViewById(0)).getText().toString().split(",")[0];
 
-            spinner.setOnItemSelectedListener(this);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
+            ll.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+            {
+                public void onCheckedChanged(RadioGroup group, int checkedId)
+                {
+                    // This will get the radiobutton that has changed in its check state
+                    RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+                    // This puts the value (true/false) into the variable
+                    boolean isChecked = checkedRadioButton.isChecked();
+                    // If the radiobutton that has changed in check state is now checked...
+                    if (isChecked)
+                        // Changes the textview's text to "Checked: example radiobutton text"
+                        selectedPharm = checkedRadioButton.getText().toString().split(",")[0];
+                }
+            });
+
+            //List<String> list;
+            //list = db.getPharmaciesForNeed(medname);
+
+            //spinner.setOnItemSelectedListener(this);
+            //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+            //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            //spinner.setAdapter(adapter);
         }
 
-        msgView = (TextView) findViewById(R.id.firstMes);
-        String msg = getString(R.string.choo_left_first_msg) + getString(R.string.choo_right_first_msg);
-        msgView.setText(msg);
+//        msgView = (TextView) findViewById(R.id.firstMes);
+//        String msg = getString(R.string.choo_left_first_msg) + " " + getString(R.string.choo_right_first_msg);
+//        msgView.setText(msg);
 
         Toolbar mToolBar = (Toolbar) findViewById(R.id.tool_bar);
         mToolBar.setTitle(R.string.tropos_paradoshs);
@@ -121,12 +148,12 @@ public class AfterDwrees extends AppCompatActivity implements AdapterView.OnItem
         return true;
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        selectedPharm = (String) parent.getItemAtPosition(pos);
-        Log.e("kourampies", selectedPharm);
-    }
+//    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+//        selectedPharm = (String) parent.getItemAtPosition(pos);
+//        Log.e("kourampies", selectedPharm);
+//    }
 
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
-    }
+//    public void onNothingSelected(AdapterView<?> parent) {
+//        // Another interface callback
+//    }
 }

@@ -10,12 +10,20 @@ import java.util.concurrent.ExecutionException;
 
 import io.fabric.sdk.android.Fabric;
 
+
+
 public class SplashActivity extends AppCompatActivity {
+//    static {
+//        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash);
         Fabric.with(this, new Crashlytics());
+
+
 
         DBHandler db = new DBHandler(getApplicationContext());
         PrefManager pref = new PrefManager(this);

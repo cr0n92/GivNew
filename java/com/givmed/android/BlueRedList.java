@@ -232,6 +232,9 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
                 forDonation += (item.getStatus() == R.drawable.ic_tick_in_circle_red) ? "B" : "N";
             }
 
+            // pharphone="-":kanena match
+            //           " " >1 match
+            //           "" 1 match
             dataArray[cnt][0] = pharPhone;
             dataArray[cnt][1] = forDonation;
 
@@ -305,6 +308,7 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
                 HelperActivity.httpErrorToast(getApplicationContext(), error);
             else {
                 if (result == 201) {
+
                     //Kanoume subscribe sta topics gia kathe onoma farmakou sthn mple lista
                     //Kanoume subscribe mono gia ayta pou den exoune ginei match
                     ArrayList<String> topics = new ArrayList<String>();
@@ -315,11 +319,15 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
                         name = ((BlueRedItem) mAdapter.getItem(i)).getName();
 
                         switch (dataArray[i][0]) {
-                            case "":
+                            //kammia elleipsh
+                            case "-":
+
                                 if (db.checkMedSubscribe(name, true)) topics.add(name);
                                 break;
-                            case "-":
-                                break;
+
+//                            case " ":
+//                                break;
+                            //uparxoun ellepseis
                             default:
                                 db.addDonation(barcode, dataArray[i][0], ";", ";", ";", "A", ";");
                                 break;
@@ -328,6 +336,7 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
                     }
 
                     if (!topics.isEmpty()) {
+
                         Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
                         serviceIntent.putExtra("subscribe", true);
                         serviceIntent.putStringArrayListExtra("topic", topics);

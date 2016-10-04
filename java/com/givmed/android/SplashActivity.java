@@ -10,51 +10,51 @@ import java.util.concurrent.ExecutionException;
 
 import io.fabric.sdk.android.Fabric;
 
-
-
 public class SplashActivity extends AppCompatActivity {
-//    static {
-//        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash);
         Fabric.with(this, new Crashlytics());
+        setContentView(R.layout.splash_screen);
 
+        final PrefManager pref = new PrefManager(this);
+        final DBHandler db = new DBHandler(getApplicationContext());
 
-
-        DBHandler db = new DBHandler(getApplicationContext());
-        PrefManager pref = new PrefManager(this);
-
-        HelperActivity.HttpGetNeedsPharms service = new HelperActivity.HttpGetNeedsPharms(this, db, pref) {
+        final HelperActivity.HttpGetNeedsPharms service = new HelperActivity.HttpGetNeedsPharms(this, db, pref) {
             @Override
             public void onResponseReceived(Object result) {
             }
         };
 
-        try {
-            service.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        Thread timer = new Thread() {
+            public void run() {
+                try {
+                    service.execute().get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }finally {
 
-        Intent intent;
-        startService(new Intent(this, AlarmService.class));
-        switch (pref.getNextSplash()) {
-            case "Tutorial":
-                intent = new Intent(this, Tutorial.class);
-                break;
-            case "Register":
-                intent = new Intent(this, Register.class);
-                break;
-            default:
-                intent = new Intent(this, TwoButtons.class);
-        }
-        startActivity(intent);
-        finish();
+                    Intent intent;
+                    startService(new Intent(SplashActivity.this, AlarmService.class));
+                    switch (pref.getNextSplash()) {
+                        case "Tutorial":
+                            intent = new Intent(SplashActivity.this, Tutorial.class);
+                            break;
+                        case "Register":
+                            intent = new Intent(SplashActivity.this, Register.class);
+                            break;
+                        default:
+                            intent = new Intent(SplashActivity.this, TwoButtons.class);
+                    }
+                    startActivity(intent);
+                    SplashActivity.this.finish();
+                }
+            }
+        };
+
+        timer.start();
     }
 }

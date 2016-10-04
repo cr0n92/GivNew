@@ -40,8 +40,8 @@
         android:name="com.givmed.android.GivmedApplication" >
 
         <activity
-            android:name=".SplashActivity"
-            android:theme="@style/SplashTheme">
+            android:name=".SplashActivity">
+            <!--android:theme="@style/SplashTheme">-->
 
         <!--android:theme="@style/Theme.Transparent">-->
 

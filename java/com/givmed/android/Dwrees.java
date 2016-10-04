@@ -38,6 +38,7 @@ public class Dwrees extends HelperActivity {
         db = new DBHandler(getApplicationContext());
 
         Intent pushIntent = getIntent();
+        //otan tou erthei push kanoume unsubscribe apo to antistoixo farmako
         if (pushIntent.hasExtra("fromPush")) {
             ArrayList<String> topics = new ArrayList<String>();
             topics.add(pushIntent.getStringExtra("medName"));

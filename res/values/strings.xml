@@ -75,6 +75,8 @@
     <string name="farmako_caps">ΦΑΡΜΑΚΟ</string>
     <string name="perioxh_caps">ΠΕΡΙΟΧΗ</string>
     <string name="date_caps">ΗΜ/ΝΙΑ</string>
+    <string name="push">Βρέθηκε έλλειψη στο φάρμακο</string>
+
 
     <!-- Τρόπος Παράδοσης -->
     <string name="choo_left_first_msg">Κάποιος συνάνθρωπός σου</string>

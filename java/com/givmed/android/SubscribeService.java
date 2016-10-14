@@ -32,6 +32,7 @@ public class SubscribeService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
+
         topics = intent.getStringArrayListExtra("topic");
         subscribe = intent.getBooleanExtra("subscribe",true);
 

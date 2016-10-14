@@ -367,8 +367,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 + " == '" + Halfname + "' AND ( " + KEY_STATUS + " == 'Y' OR " + KEY_STATUS + " == 'SY')";
         Cursor cursor = db.rawQuery(selectQuery, null);
 
+        //uparxei hdh allo farmako pros amesh dwrea ara exei ginei hdh subscribe
         if (subscribe)
             if (cursor.getCount() > 0) return false;
+        //mporei na svhsei ena farmako alla na xei ki alla ara dn kanoume unsubscribe
         else
             if (cursor.getCount() > 1) return false;
 
@@ -661,6 +663,10 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // Updating and matching
+    //Epistrefei :
+        //(1,phone) an uparxei mia elleipsh
+        //(2,;) an uparxoun perissoteres apo mia elleipseis
+        //(-1,;) an den uparxoun elleipseis
     public Object[] matchExists(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
         int ret = 0;

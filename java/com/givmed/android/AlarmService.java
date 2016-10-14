@@ -49,7 +49,7 @@ public class AlarmService extends Service {
                 if (db.checkMedSubscribe(x,true))
                     topics1.add(x);
             }
-
+            //TODO: na tsekarw an ginetai to subscribe 3 mhnes prin lhksoun kai genika an ginontai amesh dwrea
             if (!topics1.isEmpty()) {
                 Intent serviceIntent = new Intent(getApplicationContext(), SubscribeService.class);
                 serviceIntent.putExtra("subscribe", true);

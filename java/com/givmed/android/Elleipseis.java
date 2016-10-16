@@ -47,6 +47,8 @@ public class Elleipseis extends HelperActivity implements AdapterView.OnItemClic
         list.setFooterDividersEnabled(true);
         list.setOnItemClickListener(this);
         list.setAdapter(nameAdapter);
+        Intent intent = new Intent(this, RegistrationIntentService.class);
+        startService(intent);
 
         nameButton.setOnClickListener(new View.OnClickListener() {
 

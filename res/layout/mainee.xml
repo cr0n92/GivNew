@@ -76,7 +76,7 @@
                             android:id="@+id/scani2"
                             android:layout_width="182dp"
                             android:layout_height="192dp"
-                            android:src="@drawable/svg_scanaro" />
+                            app:srcCompat="@drawable/svg_scanaro" />
                     </LinearLayout>
 
                     <ImageView
@@ -84,7 +84,7 @@
                         android:layout_width="192dp"
                         android:layout_height="196dp"
                         android:layout_weight="1"
-                        android:src="@drawable/svg_grafo" />
+                        app:srcCompat="@drawable/svg_grafo" />
                 </LinearLayout>
 
                 <Button

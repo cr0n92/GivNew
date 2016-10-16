@@ -136,7 +136,7 @@
     <string name="br_exp">3 ΜΗΝΕΣ ΠΡΙΝ ΛΗΞΟΥΝ</string>
     <string name="matching">Γίνεται αντιστοίχηση των φαρμάκων σας με τις υπάρχουσες ελλείψεις...</string>
     <string name="update">Γίνεται αναζήτηση ελλείψεων...</string>
-    <string name="after_no_matching">Κανένα φάρμακό από αυτά που θέλεις να δωρίσεις τώρα δεν υπάρχει σε έλλειψη. Μόλις προστεθεί έλλειψη θα σε ενημερώσουμε.</string>
+    <string name="after_no_matching">Κανένα φάρμακο από αυτά που θέλεις να δωρίσεις τώρα δεν υπάρχει σε έλλειψη. Μόλις προστεθεί έλλειψη θα σε ενημερώσουμε.</string>
     <string name="after_matching_left">Σε ευχαριστούμε!</string>
     <string name="after_matching_right">από τα φάρμακα που καταχώρησες χρειάζονται κάπου! Κανόνισε πως θα φτάσουν στον προορισμό τους!</string>
     
@@ -209,7 +209,7 @@
     <string name="next">ΕΠΟΜΕΝΟ</string>
 
     <!-- Share -->
-    <string name="share_first_msg">Μια ανθρώπινη ζωή μπορεί να σωθεί χάρη στα περισσευούμενα φαρμακά σου!</string>
+    <string name="share_first_msg">Μια ανθρώπινη ζωή μπορεί να σωθεί χάρη στα περισσευούμενα φάρμακά σου!</string>
     <string name="share_seconf_msg">Κάλεσε τους φίλους σου να συμβάλουν και αυτοί!</string>
     <string name="share_message">Όταν έχω φάρμακα που δεν χρειάζομαι πια, τα δωρίζω μέσα από την κοινότητα του GIVMED σε ανθρώπους που τα έχουν ανάγκη! Μπορείς και εσύ να κάνεις το ίδιο, μέσα από το GIVMED app σε Android και iOS! www.givmed.com</string>
     <string name="share_with">Κοινοποίηση με:</string>

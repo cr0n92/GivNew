@@ -49,6 +49,8 @@ public class PrefManager {
     private static final String KEY_OLD_USER = "old_user";
     private static final String KEY_NEXT_SPLASH = "next_splash";
     private static final String KEY_DATA_LOADED = "data_loaded";
+    private static final String KEY_NOTIF_ID = "notification_id";
+
 
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
@@ -104,6 +106,15 @@ public class PrefManager {
 
     public String getCountdown() {
         return pref.getString(KEY_COUNTDOWN, "first");
+    }
+
+    public int getNotID() {
+        return pref.getInt(KEY_NOTIF_ID, 0);
+    }
+
+    public void setNotID(int id) {
+        editor.putInt(KEY_NOTIF_ID, id);
+        editor.commit();
     }
 
     public String getToken() {

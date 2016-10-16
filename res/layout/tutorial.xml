@@ -26,7 +26,7 @@
             android:layout_width="189dp"
             android:layout_height="206dp"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:src="@drawable/ic_givmed_logo_with_msg"
+            app:srcCompat="@drawable/ic_givmed_logo_with_msg"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"/>
 
@@ -88,14 +88,14 @@
                     android:id="@+id/scani2"
                     android:layout_width="150dp"
                     android:layout_height="200dp"
-                    android:src="@drawable/svg_scanaro" />
+                    app:srcCompat="@drawable/svg_scanaro" />
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/typarw2"
                 android:layout_width="150dp"
                 android:layout_height="200dp"
-                android:src="@drawable/svg_grafo" />
+                app:srcCompat="@drawable/svg_grafo" />
         </LinearLayout>
 
         <ImageView
@@ -172,13 +172,13 @@
                 android:id="@+id/scani3"
                 android:layout_width="170dp"
                 android:layout_height="200dp"
-                android:src="@drawable/svg_mple" />
+                app:srcCompat="@drawable/svg_mple" />
 
             <ImageView
                 android:id="@+id/typarw3"
                 android:layout_width="156dp"
                 android:layout_height="200dp"
-                android:src="@drawable/svg_kokkino" />
+                app:srcCompat="@drawable/svg_kokkino" />
         </LinearLayout>
 
         <ImageView
@@ -255,13 +255,13 @@
                 android:id="@+id/scani4"
                 android:layout_width="155dp"
                 android:layout_height="205dp"
-                android:src="@drawable/svg_monos" />
+                app:srcCompat="@drawable/svg_monos" />
 
             <ImageView
                 android:id="@+id/typarw4"
                 android:layout_width="156dp"
                 android:layout_height="200dp"
-                android:src="@drawable/svg_ethelodis" />
+                app:srcCompat="@drawable/svg_ethelodis" />
         </LinearLayout>
 
         <ImageView

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     tools:context="com.givmed.android.Inputter">
@@ -46,7 +47,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:src="@drawable/svg_grafo"
+                app:srcCompat="@drawable/svg_grafo"
                 android:layout_centerHorizontal="true"/>
 
             <EditText

@@ -282,15 +282,12 @@ public class BarcodeScanner extends AppCompatActivity {
         }
     };
 
-    public void onRestart() {
-        super.onRestart();
-        onBackPressed();
-    }
+
 
     public void onPause()
     {
         super.onPause();
-        releaseCamera();
+        onBackPressed();
     }
 
     @Override

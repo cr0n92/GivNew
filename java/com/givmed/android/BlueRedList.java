@@ -213,6 +213,7 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
             forDonation = (item.getSirup()) ? "S" : "";
 
             if (item.getStatus() == R.drawable.ic_tick_in_circle_blue) {
+                //Log.e("WW","TF");
                 Object[] info = db.matchExists(item.getName());
                 int ret = (int) info[0];
                 pharPhone = (String) info[1];
@@ -234,7 +235,7 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
 
             // pharphone="-":kanena match
             //           " " >1 match
-            //           "" 1 match
+            //           "phone" 1 match
             dataArray[cnt][0] = pharPhone;
             dataArray[cnt][1] = forDonation;
 
@@ -325,11 +326,15 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
                                 if (db.checkMedSubscribe(name, true)) topics.add(name);
                                 break;
 
-//                            case " ":
-//                                break;
+                            //den to exei epileksei mple
+                            case "":
+                               //Log.e("Den eimai mple","mple mwre");
+                               break;
                             //uparxoun ellepseis
                             default:
-                                db.addDonation(barcode, dataArray[i][0], ";", ";", ";", "A", ";");
+                                //Log.e("Vazw donations to",""+barcode);
+                                if (dataArray[i][1].equals("Y") || dataArray[i][1].equals("SY"))
+                                    db.addDonation(barcode, dataArray[i][0], ";", ";", ";", "A", ";");
                                 break;
                         }
                         db.updateMedForDonation(barcode, dataArray[i][1]);

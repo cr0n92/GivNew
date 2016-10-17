@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -195,7 +194,7 @@ public class BarcodeScanner extends AppCompatActivity {
             public void onSensorChanged(SensorEvent event) {
                 mLightQuantity = event.values[0];
 
-                if (mLightQuantity < 70) {
+                if (mLightQuantity < 10) {
                     Camera.Parameters param = mCamera.getParameters();
                     param.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
                     mCamera.setParameters(param);

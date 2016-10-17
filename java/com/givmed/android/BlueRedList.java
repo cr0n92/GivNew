@@ -329,7 +329,8 @@ public class BlueRedList extends AppCompatActivity implements AdapterView.OnItem
                                 break;
                             //uparxoun ellepseis
                             default:
-                                db.addDonation(barcode, dataArray[i][0], ";", ";", ";", "A", ";");
+                                if (dataArray[i][1].equals("Y") || dataArray[i][1].equals("SY"))
+                                    db.addDonation(barcode, dataArray[i][0], ";", ";", ";", "A", ";");
                                 break;
                         }
                         db.updateMedForDonation(barcode, dataArray[i][1]);

@@ -175,7 +175,7 @@ public class Dwrees extends HelperActivity {
         getProgrammed();
 
         //edw pairnoume to intent ka8e fora, epeidh kaleite panta h onResume
-        //alla an einai hdh anoixto to Farmakeio.class tote prepei na valoume
+        //alla an einai hdh anoixto to Dwrees.class tote prepei na valoume
         //thn onNewIntent giati den evlepe to intent mesa sthn onResume
         Intent intent = getIntent();
         if (intent.hasExtra("done") && !intent.hasExtra("consumed")) {

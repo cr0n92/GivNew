@@ -258,7 +258,8 @@ public class DBHandler extends SQLiteOpenHelper {
         //List<String> list = new ArrayList<String>();
         int i = 0;
 
-        String selectQuery = "SELECT " + KEY_PHAR_NAME + ", " + KEY_PHAR_REG + " FROM " + TABLE_NEEDS + " NATURAL JOIN " + TABLE_PHARMACIES + " WHERE " + KEY_NEED_NAME + " = '" + name + "'";
+        String selectQuery = "SELECT " + KEY_PHAR_NAME + ", " + KEY_PHAR_REG + " FROM " + TABLE_NEEDS +
+                " NATURAL JOIN " + TABLE_PHARMACIES + " WHERE " + KEY_NEED_NAME + " = '" + name + "'";
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {

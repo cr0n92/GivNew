@@ -65,18 +65,18 @@ public class AfterDwrees extends AppCompatActivity { // implements AdapterView.O
             ll.check(0);
             selectedPharm = ((RadioButton) ll.findViewById(0)).getText().toString().split(",")[0];
 
-            ll.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-            {
-                public void onCheckedChanged(RadioGroup group, int checkedId)
-                {
+            ll.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
                     // This will get the radiobutton that has changed in its check state
-                    RadioButton checkedRadioButton = (RadioButton)group.findViewById(checkedId);
+                    RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
                     // This puts the value (true/false) into the variable
                     boolean isChecked = checkedRadioButton.isChecked();
                     // If the radiobutton that has changed in check state is now checked...
-                    if (isChecked)
+                    if (isChecked) {
                         // Changes the textview's text to "Checked: example radiobutton text"
                         selectedPharm = checkedRadioButton.getText().toString().split(",")[0];
+                        Log.e("koukiou", selectedPharm);
+                    }
                 }
             });
 
